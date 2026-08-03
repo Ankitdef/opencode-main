@@ -1,0 +1,894 @@
+"use client";
+
+import { useState, useEffect, useRef, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import type { Trek } from "@/data/treks";
+import ContactPopup from "@/components/ContactPopup";
+
+const DIFFICULTY_COLORS: Record<string, string> = {
+  Easy: "#22c55e",
+  Moderate: "#f59e0b",
+  Challenging: "#f97316",
+  Strenuous: "#ef4444",
+};
+
+const TABS = ["Overview", "Day by Day", "Photo Gallery", "What's Included", "Make Reservation"] as const;
+type Tab = (typeof TABS)[number];
+
+const GALLERY_IMAGES = [
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80",
+  "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&q=80",
+  "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80",
+  "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&q=80",
+  "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=80",
+  "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=600&q=80",
+  "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&q=80",
+];
+
+const TREK_GALLERIES: Record<string, string[]> = {
+  "valley-of-flowers": [
+    "/assets/valley-of-flowers/IMG_5934.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_1532.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_4735.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_6644.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_6639.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_6626.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_6080.JPG.jpeg",
+    "/assets/valley-of-flowers/IMG_6061.JPG.jpeg",
+  ],
+};
+
+const INCLUDED = ["Accommodation", "Meals during trek", "Experienced Trek Guide", "National Park Entry Fees", "First Aid Kit", "Camping Equipment"];
+const NOT_INCLUDED = ["Flights / Transport", "Travel Insurance", "Personal Trekking Equipment", "Tips for Guide & Porters", "Personal Expenses", "Emergency Evacuation"];
+
+export default function TrekDetailClient({ trek }: { trek: Trek }) {
+  const [activeTab, setActiveTab] = useState<Tab>("Overview");
+  const [showContact, setShowContact] = useState(false);
+  const [wished, setWished] = useState(false);
+  const [shareMsg, setShareMsg] = useState("");
+  const [bookingForm, setBookingForm] = useState({
+    name: "", email: "", phone: "", date: "", groupSize: "1", message: "",
+  });
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const handleBookingSubmit = () => {
+    const text = encodeURIComponent(
+      `Trek: ${trek.name}\nDate: ${bookingForm.date}\nGroup: ${bookingForm.groupSize}\nName: ${bookingForm.name}\nPhone: ${bookingForm.phone}\nMessage: ${bookingForm.message}`
+    );
+    window.open(`https://wa.me/917817912062?text=${text}`, "_blank");
+  };
+
+  const handleShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: `${trek.name} — Expedition Happiness Treks`, text: trek.blurb, url });
+        return;
+      } catch {
+        /* user dismissed the share sheet — fall through to copy */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareMsg("Link copied!");
+    } catch {
+      setShareMsg("Couldn't copy link");
+    }
+    setTimeout(() => setShareMsg(""), 2000);
+  };
+
+  const onTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    let next = index;
+    if (e.key === "ArrowRight") next = (index + 1) % TABS.length;
+    else if (e.key === "ArrowLeft") next = (index - 1 + TABS.length) % TABS.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = TABS.length - 1;
+    setActiveTab(TABS[next]);
+    tabRefs.current[next]?.focus();
+  };
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-background">
+      {/* Breadcrumb */}
+      <div className="bg-gray-50 dark:bg-surface pt-20">
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          <nav className="flex items-center gap-2 text-sm text-muted" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-emerald-600 transition-colors">Home</Link>
+            <span aria-hidden>/</span>
+            <Link href="/treks" className="hover:text-emerald-600 transition-colors">Adventures</Link>
+            <span aria-hidden>/</span>
+            <span className="text-foreground font-medium">{trek.name}</span>
+          </nav>
+        </div>
+      </div>
+
+      {/* Hero Banner */}
+      <section className="relative h-[50vh] min-h-[350px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={trek.image} alt={trek.name} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+
+        {/* Wishlist & Share */}
+        <div className="absolute top-6 right-6 flex items-center gap-3">
+          {shareMsg && (
+            <motion.span
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-gray-800 shadow"
+              role="status"
+            >
+              {shareMsg}
+            </motion.span>
+          )}
+          <button
+            onClick={() => setWished((w) => !w)}
+            aria-pressed={wished}
+            aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+          >
+            <svg className={`w-5 h-5 transition-transform ${wished ? "scale-110 text-red-400" : ""}`} fill={wished ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+          </button>
+          <button
+            onClick={handleShare}
+            aria-label="Share this trek"
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Hero Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center gap-3 mb-3">
+              <span
+                className="px-3 py-1 text-white text-xs font-bold rounded-full"
+                style={{ backgroundColor: DIFFICULTY_COLORS[trek.difficulty] }}
+              >
+                {trek.difficulty}
+              </span>
+              {trek.rating && (
+                <span className="flex items-center gap-1 px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold rounded-full">
+                  <svg className="w-3.5 h-3.5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden>
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  {trek.rating} ({trek.reviewCount} Reviews)
+                </span>
+              )}
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{trek.name}</h1>
+            <p className="flex items-center gap-2 text-white/80">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {trek.location || trek.region}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Trek Statistics Cards */}
+      <section className="bg-white dark:bg-background border-b border-gray-100 dark:border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard icon="clock" label="Duration" value={`${trek.days} Days`} />
+            <StatCard icon="mountain" label="Max Elevation" value={`${trek.maxAltitude}m`} sub={`${Math.round(trek.maxAltitude * 3.28084)} ft`} />
+            <StatCard icon="people" label="Group Size" value={`${trek.groupSize || 15}`} />
+            <StatCard icon="calendar" label="Best Season" value={trek.bestSeason} />
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content + Sticky Sidebar */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left: Tabs Content */}
+          <div className="lg:w-2/3">
+            {/* Tabs */}
+            <div className="border-b border-gray-200 dark:border-white/10 mb-8 relative">
+              <div className="overflow-x-auto">
+                <div role="tablist" aria-label="Trek details" className="flex gap-0 min-w-max">
+                  {TABS.map((tab, index) => (
+                    <button
+                      key={tab}
+                      ref={(el) => {
+                        tabRefs.current[index] = el;
+                      }}
+                      role="tab"
+                      id={`trek-tab-${index}`}
+                      aria-selected={activeTab === tab}
+                      aria-controls="trek-tabpanel"
+                      tabIndex={activeTab === tab ? 0 : -1}
+                      onClick={() => setActiveTab(tab)}
+                      onKeyDown={(e) => onTabKeyDown(e, index)}
+                      className={`px-5 py-3 text-sm font-medium whitespace-nowrap transition-colors relative ${
+                        activeTab === tab ? "text-emerald-600" : "text-muted hover:text-foreground"
+                      }`}
+                    >
+                      {tab}
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="tab-underline"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Mobile scroll hint */}
+              <div className="flex items-center justify-end gap-1 pr-2 pb-2 md:hidden">
+                <span className="text-xs text-emerald-600 font-medium">Swipe for more</span>
+                <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Tab Content */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                id="trek-tabpanel"
+                role="tabpanel"
+                aria-labelledby={`trek-tab-${TABS.indexOf(activeTab)}`}
+                tabIndex={0}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="focus:outline-none"
+              >
+                {activeTab === "Overview" && <OverviewTab trek={trek} />}
+                {activeTab === "Day by Day" && <ItineraryTab trek={trek} />}
+                {activeTab === "Photo Gallery" && <GalleryTab trek={trek} />}
+                {activeTab === "What's Included" && <IncludedTab />}
+                {activeTab === "Make Reservation" && (
+                  <ReservationTab trek={trek} form={bookingForm} setForm={setBookingForm} onSubmit={handleBookingSubmit} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Right: Sticky Sidebar */}
+          <div className="lg:w-1/3">
+            <div className="sticky top-24 space-y-6">
+              {/* Booking Card */}
+              <div className="bg-white dark:bg-card rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg p-6">
+                <div className="mb-4">
+                  <span className="text-3xl font-bold text-foreground">{trek.currency}{trek.price.toLocaleString("en-IN")}</span>
+                  <span className="text-muted text-sm ml-1">per person</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setActiveTab("Make Reservation");
+                    const tabIdx = TABS.indexOf("Make Reservation");
+                    tabRefs.current[tabIdx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                    document.getElementById("trek-tabpanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors mb-3"
+                >
+                  Reserve Your Spot
+                </button>
+                <button
+                  onClick={() => setShowContact(true)}
+                  className="w-full py-3 border-2 border-emerald-600 text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
+                >
+                  Request Information
+                </button>
+                <p className="text-center text-sm text-muted mt-4 flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Free Consultation · No payment required
+                </p>
+              </div>
+
+              {/* Help Planning Card */}
+              <div className="bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl p-5 border border-emerald-100 dark:border-emerald-900/30">
+                <h4 className="font-semibold text-foreground mb-1">Need Help Planning?</h4>
+                <p className="text-sm text-muted mb-3">Talk to a trek specialist for personalized advice.</p>
+                <div className="space-y-2">
+                  <a
+                    href="tel:+917817912062"
+                    className="flex items-center gap-2 text-emerald-700 font-semibold text-sm hover:text-emerald-800"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                    </svg>
+                    +91 78179 12062
+                  </a>
+                  <a
+                    href="tel:+918650561564"
+                    className="flex items-center gap-2 text-emerald-700 font-semibold text-sm hover:text-emerald-800"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                    </svg>
+                    +91 86505 61564
+                  </a>
+                </div>
+              </div>
+
+              {/* Elevation Profile Mini */}
+              <div className="bg-white dark:bg-card rounded-2xl border border-gray-200 dark:border-white/10 p-5">
+                <h4 className="font-semibold text-foreground mb-3 text-sm">Elevation Profile</h4>
+                <MiniElevationChart profile={trek.elevationProfile} itinerary={trek.itinerary} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ContactPopup open={showContact} onClose={() => setShowContact(false)} />
+    </div>
+  );
+}
+
+/* ─── Stat Card ─── */
+function StatCard({ icon, label, value, sub }: { icon: string; label: string; value: string; sub?: string }) {
+  const icons: Record<string, ReactNode> = {
+    clock: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+    mountain: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>,
+    people: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>,
+    calendar: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>,
+  };
+  return (
+    <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-surface rounded-xl">
+      <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+        {icons[icon]}
+      </div>
+      <div>
+        <div className="font-bold text-foreground text-sm">{value}</div>
+        <div className="text-xs text-muted">{label}</div>
+        {sub && <div className="text-[10px] text-muted">{sub}</div>}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Overview Tab ─── */
+function OverviewTab({ trek }: { trek: Trek }) {
+  // Generic, trek-agnostic highlights (avoids showing one trek's specifics on every page).
+  const highlights = [
+    "Alpine meadows & valleys",
+    "Panoramic Himalayan views",
+    "Expert local trek leaders",
+    "Camp under starlit skies",
+    "Rich mountain biodiversity",
+    "Small-group departures",
+    "All permits handled for you",
+    "Daily acclimatisation buffers",
+  ];
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-foreground mb-4">About This Trek</h2>
+      <p className="text-muted leading-relaxed mb-6">{trek.blurb}</p>
+      <p className="text-muted leading-relaxed mb-8">
+        This trek offers an unparalleled experience through some of the most pristine landscapes in the Indian Himalayas.
+        From lush rhododendron forests to high-altitude meadows, every day brings new vistas and cultural encounters.
+        Suitable for trekkers with basic fitness, this journey combines adventure with spiritual tranquility.
+      </p>
+      <h3 className="text-lg font-bold text-foreground mb-4">Highlights</h3>
+      <div className="grid grid-cols-2 gap-3">
+        {highlights.map((h) => (
+          <div key={h} className="flex items-center gap-2 text-foreground">
+            <svg className="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-sm">{h}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Day by Day Tab ─── */
+function ItineraryTab({ trek }: { trek: Trek }) {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-foreground mb-6">Day-by-Day Itinerary</h2>
+      <div className="space-y-4">
+        {trek.itinerary.map((day) => (
+          <div key={day.day} className="bg-white dark:bg-card rounded-xl border border-gray-100 dark:border-white/10 p-5 hover:border-emerald-200 dark:hover:border-emerald-700 hover:shadow-md transition-all">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-11 h-11 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                {day.day}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-foreground">{day.title}</h3>
+                <div className="flex flex-wrap items-center gap-3 text-xs text-muted mt-1.5 mb-2">
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                    {day.altitude.toLocaleString()}m
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {day.hours} hrs
+                  </span>
+                </div>
+                <p className="text-muted text-sm leading-relaxed">{day.description}</p>
+                <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted">
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21" /></svg>
+                    Guesthouse / Lodge
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.126-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265z" /></svg>
+                    Meals: B/L/D
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Photo Gallery Tab (with lightbox) ─── */
+function GalleryTab({ trek }: { trek: Trek }) {
+  const trekGallery = TREK_GALLERIES[trek.slug];
+  const images = trekGallery || [trek.image, ...GALLERY_IMAGES.slice(0, 7)];
+  const [lightbox, setLightbox] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+      else if (e.key === "ArrowRight") setLightbox((i) => (i === null ? i : (i + 1) % images.length));
+      else if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? i : (i - 1 + images.length) % images.length));
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [lightbox, images.length]);
+
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-foreground mb-6">Photo Gallery</h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {images.map((img, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setLightbox(i)}
+            aria-label={`View photo ${i + 1} of ${images.length}`}
+            className="relative aspect-[4/3] rounded-xl overflow-hidden group cursor-pointer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={img} alt={`${trek.name} — photo ${i + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <svg className="w-8 h-8 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 7.5v6m3-3h-6M21 21l-5.2-5.2" />
+              </svg>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {lightbox !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[120] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setLightbox(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${trek.name} photo viewer`}
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              aria-label="Close photo viewer"
+              className="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i === null ? i : (i - 1 + images.length) % images.length)); }}
+              aria-label="Previous photo"
+              className="absolute left-2 sm:left-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+            </button>
+            <motion.img
+              key={lightbox}
+              src={images[lightbox]}
+              alt={`${trek.name} — photo ${lightbox + 1}`}
+              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.25 }}
+              className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain shadow-2xl"
+            />
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i === null ? i : (i + 1) % images.length)); }}
+              aria-label="Next photo"
+              className="absolute right-2 sm:right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm text-white/80">
+              {lightbox + 1} / {images.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ─── What's Included Tab ─── */
+function IncludedTab() {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-foreground mb-6">What&apos;s Included</h2>
+      <div className="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 className="text-lg font-bold text-emerald-600 mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Included
+          </h3>
+          <ul className="space-y-3">
+            {INCLUDED.map((item) => (
+              <li key={item} className="flex items-center gap-3 text-foreground">
+                <span className="w-5 h-5 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-red-500 mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Not Included
+          </h3>
+          <ul className="space-y-3">
+            {NOT_INCLUDED.map((item) => (
+              <li key={item} className="flex items-center gap-3 text-foreground">
+                <span className="w-5 h-5 bg-red-100 text-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Reservation Tab ─── */
+function ReservationTab({
+  trek, form, setForm, onSubmit,
+}: {
+  trek: Trek;
+  form: { name: string; email: string; phone: string; date: string; groupSize: string; message: string };
+  setForm: (f: typeof form) => void;
+  onSubmit: () => void;
+}) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [minDate, setMinDate] = useState("");
+
+  // Set the date floor client-side only, to avoid a hydration mismatch at midnight.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMinDate(new Date().toISOString().slice(0, 10)), []);
+
+  const update = (key: keyof typeof form, value: string) => {
+    setForm({ ...form, [key]: value });
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: "" }));
+  };
+
+  const validate = () => {
+    const next: Record<string, string> = {};
+    if (!form.name.trim()) next.name = "Enter your full name.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) next.email = "Enter a valid email address.";
+    if (form.phone.replace(/\D/g, "").length < 7) next.phone = "Enter a valid phone number.";
+    if (!form.date) next.date = "Pick a preferred date.";
+    else if (minDate && form.date < minDate) next.date = "Choose a date in the future.";
+    return next;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const next = validate();
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
+    setSubmitting(true);
+    setTimeout(() => {
+      onSubmit();
+      setSubmitting(false);
+      setSent(true);
+    }, 900);
+  };
+
+  if (sent) {
+    return (
+      <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
+        <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+        <h3 className="text-xl font-bold text-foreground mb-2">Reservation Request Sent!</h3>
+        <p className="text-muted max-w-sm mx-auto">
+          Thanks{form.name ? `, ${form.name.split(" ")[0]}` : ""} — our team will confirm availability for {trek.name} within 24 hours.
+        </p>
+        <button onClick={() => setSent(false)} className="mt-4 text-emerald-600 font-semibold hover:underline">
+          Make another request
+        </button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-foreground mb-2">Make a Reservation</h2>
+      <p className="text-muted mb-6">Fill out the form below and we&apos;ll get back to you within 24 hours.</p>
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        <div className="grid md:grid-cols-2 gap-5">
+          <Input id="res-name" label="Full Name" value={form.name} onChange={(v) => update("name", v)} required error={errors.name} autoComplete="name" />
+          <Input id="res-email" label="Email" type="email" value={form.email} onChange={(v) => update("email", v)} required error={errors.email} autoComplete="email" />
+          <Input id="res-phone" label="Phone Number" type="tel" value={form.phone} onChange={(v) => update("phone", v)} required error={errors.phone} autoComplete="tel" />
+          <Input id="res-date" label="Preferred Date" type="date" value={form.date} onChange={(v) => update("date", v)} required min={minDate || undefined} error={errors.date} />
+        </div>
+        <div>
+          <label htmlFor="res-group" className="block text-sm font-medium text-muted mb-1.5">Group Size</label>
+          <select
+            id="res-group"
+            value={form.groupSize}
+            onChange={(e) => update("groupSize", e.target.value)}
+            className="w-full px-4 py-2.5 border border-gray-300 dark:border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+              <option key={n} value={n}>{n} {n === 1 ? "Person" : "Persons"}</option>
+            ))}
+            <option value="10+">10+ Persons (Group)</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="res-message" className="block text-sm font-medium text-muted mb-1.5">Additional Message</label>
+          <textarea
+            id="res-message"
+            rows={4}
+            value={form.message}
+            onChange={(e) => update("message", e.target.value)}
+            placeholder="Custom requests, dietary needs, transport questions..."
+            className="w-full px-4 py-2.5 border border-gray-300 dark:border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-none"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {submitting ? (
+            <>
+              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+              Sending…
+            </>
+          ) : (
+            "Send Reservation Request"
+          )}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function Input({ label, id, type = "text", value, onChange, required, min, error, placeholder, autoComplete }: {
+  label: string;
+  id: string;
+  type?: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  min?: string;
+  error?: string;
+  placeholder?: string;
+  autoComplete?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="block text-sm font-medium text-muted mb-1.5">{label}</label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        min={min}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-err` : undefined}
+        className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-colors focus:ring-2 focus:ring-emerald-500 ${
+          error ? "border-red-400 focus:border-red-400" : "border-gray-300 dark:border-white/10 focus:border-emerald-500"
+        }`}
+      />
+      {error && <p id={`${id}-err`} className="mt-1 text-xs text-red-500">{error}</p>}
+    </div>
+  );
+}
+
+/* ─── Interactive Elevation Chart ─── */
+function MiniElevationChart({ profile, itinerary }: { profile: number[]; itinerary: Trek["itinerary"] }) {
+  const [hovered, setHovered] = useState<number | null>(null);
+  const max = Math.max(...profile);
+  const min = Math.min(...profile);
+  const range = max - min || 1;
+  const w = 320;
+  const h = 140;
+  const padL = 8;
+  const padR = 8;
+  const padT = 20;
+  const padB = 28;
+  const denom = profile.length > 1 ? profile.length - 1 : 1;
+
+  const pts = profile.map((v, i) => ({
+    x: padL + (i / denom) * (w - padL - padR),
+    y: padT + (1 - (v - min) / range) * (h - padT - padB),
+    alt: v,
+    day: itinerary[i],
+  }));
+  const line = pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const area = `${line} L ${pts[pts.length - 1].x} ${h - padB} L ${pts[0].x} ${h - padB} Z`;
+  const active = hovered !== null ? pts[hovered] : null;
+
+  return (
+    <div className="relative">
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        className="w-full"
+        onMouseLeave={() => setHovered(null)}
+        role="img"
+        aria-label={`Elevation profile ranging from ${min.toLocaleString()}m to ${max.toLocaleString()}m across ${profile.length} points`}
+      >
+        <defs>
+          <linearGradient id="elevFill" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#10b981" stopOpacity="0.02" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Grid lines */}
+        {[0.25, 0.5, 0.75].map((frac) => {
+          const y = padT + frac * (h - padT - padB);
+          return <line key={frac} x1={padL} y1={y} x2={w - padR} y2={y} stroke="#e2e8f0" strokeWidth="0.5" strokeDasharray="4 3" />;
+        })}
+
+        {/* Area fill */}
+        <path d={area} fill="url(#elevFill)" />
+
+        {/* Line */}
+        <path d={line} fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+
+        {/* Hover vertical line */}
+        {active && (
+          <line x1={active.x} y1={padT} x2={active.x} y2={h - padB} stroke="#10b981" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+        )}
+
+        {/* Data points */}
+        {pts.map((p, i) => {
+          const isHovered = hovered === i;
+          return (
+            <g key={i}>
+              {/* Hover target (invisible larger hitbox) */}
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r="14"
+                fill="transparent"
+                onMouseEnter={() => setHovered(i)}
+                className="cursor-pointer"
+              />
+              {/* Visible dot */}
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={isHovered ? 5 : 3}
+                fill={isHovered ? "#10b981" : "white"}
+                stroke="#10b981"
+                strokeWidth={isHovered ? 2.5 : 2}
+                filter={isHovered ? "url(#glow)" : undefined}
+                className="pointer-events-none transition-all duration-200"
+              />
+              {/* Peak marker (highest point) */}
+              {p.alt === max && !isHovered && (
+                <circle cx={p.x} cy={p.y} r="6" fill="none" stroke="#10b981" strokeWidth="1" opacity="0.4" className="pointer-events-none" />
+              )}
+            </g>
+          );
+        })}
+
+        {/* Min/Max labels */}
+        <text x={padL + 2} y={padT - 6} className="fill-emerald-600 text-[8px] font-semibold">
+          {max.toLocaleString()}m
+        </text>
+        <text x={w - padR - 2} y={h - padB + 14} textAnchor="end" className="fill-gray-400 text-[7px]">
+          Day {pts.length}
+        </text>
+        <text x={padL + 2} y={h - padB + 14} className="fill-gray-400 text-[7px]">
+          Day 1
+        </text>
+      </svg>
+
+      {/* Tooltip */}
+      {active && active.day && (
+        <div
+          className="absolute z-10 pointer-events-none transition-all duration-200"
+          style={{
+            left: `${(active.x / w) * 100}%`,
+            top: `${(active.y / h) * 100 - 8}%`,
+            transform: `translate(${active.x > w * 0.7 ? "-100%" : "0"}, -100%)`,
+          }}
+        >
+          <div className="bg-primary text-white rounded-xl px-3 py-2 shadow-xl min-w-[140px]">
+            <div className="text-[10px] text-white/60 font-medium">Day {active.day.day}</div>
+            <div className="text-xs font-semibold leading-tight mt-0.5">{active.day.title}</div>
+            <div className="flex items-center justify-between mt-1.5 pt-1.5 border-t border-white/15">
+              <span className="text-[10px] text-emerald-300 font-bold">{active.alt.toLocaleString()}m</span>
+              <span className="text-[10px] text-white/50">{active.day.hours}h trek</span>
+            </div>
+            {/* Tooltip arrow */}
+            <div className="absolute -bottom-1.5 left-3 w-3 h-3 bg-primary rotate-45" />
+          </div>
+        </div>
+      )}
+
+      {/* Day labels (first, middle, last) */}
+      <div className="flex justify-between text-[10px] text-muted mt-1 px-1">
+        <span>Start</span>
+        <span className="text-emerald-600 font-semibold">Peak {max.toLocaleString()}m</span>
+        <span>End</span>
+      </div>
+    </div>
+  );
+}
