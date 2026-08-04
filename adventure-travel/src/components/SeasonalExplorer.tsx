@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { treks, DIFFICULTY_COLORS } from "@/data/treks";
 import { FadeUp, StaggerContainer, StaggerItem } from "./MotionWrapper";
+import SmartImage from "./SmartImage";
 
 const seasons = [
   { id: "winter", label: "Winter", icon: "❄️", months: "Dec – Feb", match: ["Dec", "Jan", "Feb"] },
@@ -77,13 +78,10 @@ export default function SeasonalExplorer() {
                     className="group block bg-white dark:bg-card rounded-2xl shadow-lg shadow-black/5 overflow-hidden border border-gray-100 dark:border-white/10 card-premium"
                   >
                     <div className="relative h-40 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <SmartImage
                         src={trek.image}
                         alt={trek.name}
                         className="w-full h-full object-cover card-img-zoom"
-                        loading="lazy"
-                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                       <div className="absolute bottom-3 left-3">

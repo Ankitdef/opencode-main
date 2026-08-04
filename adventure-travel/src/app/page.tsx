@@ -1,22 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import HeroSplit from "@/components/HeroSplit";
 import TrustedBy from "@/components/TrustedBy";
 import PopularTreksV2 from "@/components/PopularTreksV2";
 import FeaturedDestinations from "@/components/FeaturedDestinations";
-import SeasonalExplorer from "@/components/SeasonalExplorer";
 import SplitSections from "@/components/SplitSections";
 import FeaturedAdventuresV2 from "@/components/FeaturedAdventuresV2";
 import HimalayanMap from "@/components/HimalayanMap";
-import PermitTours from "@/components/PermitTours";
-import TestimonialsV2 from "@/components/TestimonialsV2";
-import StatisticsV2 from "@/components/StatisticsV2";
-import AdventureStories from "@/components/AdventureStories";
-import InstagramGallery from "@/components/InstagramGallery";
-import FAQV2 from "@/components/FAQV2";
 import CallToActionV2 from "@/components/CallToActionV2";
 import FooterV2 from "@/components/FooterV2";
+
+const SeasonalExplorer = dynamic(() => import("@/components/SeasonalExplorer"), {
+  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-96 skeleton rounded-2xl" /></div></div>,
+});
+const PermitTours = dynamic(() => import("@/components/PermitTours"), {
+  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
+});
+const TestimonialsV2 = dynamic(() => import("@/components/TestimonialsV2"), {
+  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-48 skeleton rounded-2xl" /></div></div>,
+});
+const StatisticsV2 = dynamic(() => import("@/components/StatisticsV2"), {
+  loading: () => <div className="py-section-sm bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-32 skeleton rounded-2xl" /></div></div>,
+});
+const AdventureStories = dynamic(() => import("@/components/AdventureStories"), {
+  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
+});
+const InstagramGallery = dynamic(() => import("@/components/InstagramGallery"), {
+  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-48 skeleton rounded-2xl" /></div></div>,
+});
+const FAQV2 = dynamic(() => import("@/components/FAQV2"), {
+  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
+});
 
 function ScrollProgress() {
   const [progress, setProgress] = useState(0);

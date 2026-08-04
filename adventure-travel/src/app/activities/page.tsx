@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReveal } from "@/hooks/useReveal";
+import SmartImage from "@/components/SmartImage";
 
 const activities = [
   {
@@ -111,7 +112,7 @@ export default function ActivitiesPage() {
       {/* Hero Banner */}
       <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <div className="absolute inset-0">
-          <img
+          <SmartImage
             src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80"
             alt="Activities Banner"
             className="h-full w-full object-cover"
@@ -151,12 +152,9 @@ export default function ActivitiesPage() {
           >
             <div className="pointer-events-none absolute -inset-4 -z-10 rounded-[2.5rem] bg-gradient-to-br from-sky-300/30 to-blue-400/20 blur-2xl" />
             <div className="group relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl shadow-sky-900/15">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <SmartImage
                 src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1000&q=80"
                 alt="Snowboarding the powder slopes of Auli"
-                loading="lazy"
-                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-sky-950/25 to-transparent" />
@@ -177,12 +175,9 @@ export default function ActivitiesPage() {
               className="absolute -bottom-6 -left-6 hidden w-44 rotate-[-5deg] lg:block"
             >
               <div className="relative aspect-square overflow-hidden rounded-2xl border-[5px] border-white shadow-xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <SmartImage
                   src="https://plus.unsplash.com/premium_photo-1754337730608-59a489f3c9fd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="Backcountry ski touring in the Himalayas"
-                  loading="lazy"
-                  decoding="async"
                   className="h-full w-full object-cover"
                 />
                 <span className="absolute bottom-2 left-2 rounded-full bg-sky-600/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
@@ -317,7 +312,7 @@ export default function ActivitiesPage() {
                 >
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
-                    <img
+                    <SmartImage
                       src={act.image}
                       alt={act.name}
                       className="h-full w-full object-cover trek-card-img"
@@ -448,10 +443,9 @@ export default function ActivitiesPage() {
                 className="group relative rounded-3xl overflow-hidden h-80 block"
                 style={{ animationDelay: `${i * 0.15}s` }}
               >
-                <img
+                <SmartImage
                   src={place.image}
                   alt={place.name}
-                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { stories } from "@/data/stories";
 import { StaggerContainer, StaggerItem } from "./MotionWrapper";
+import SmartImage from "./SmartImage";
 
 export default function AdventureStories() {
   const featured = stories.find((s) => s.featured) || stories[0];
@@ -38,13 +39,10 @@ export default function AdventureStories() {
                 className="group relative rounded-3xl overflow-hidden bg-white dark:bg-card shadow-lg shadow-black/5 h-full"
               >
               <div className="relative h-64 md:h-80 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <SmartImage
                   src={featured.image}
                   alt={featured.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
@@ -97,13 +95,10 @@ export default function AdventureStories() {
                 className="group relative rounded-3xl overflow-hidden bg-white dark:bg-card shadow-lg shadow-black/5 flex-1 h-full"
               >
                 <div className="relative h-40 overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <SmartImage
                     src={story.image}
                     alt={story.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 

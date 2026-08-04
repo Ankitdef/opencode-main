@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { treks } from "@/data/treks";
 import { StaggerContainer, StaggerItem } from "./MotionWrapper";
+import SmartImage from "./SmartImage";
 
 const featuredTreks = treks
   .filter((t) => [9, 11, 13, 14].includes(t.id))
@@ -45,13 +46,10 @@ export default function FeaturedAdventuresV2() {
                 href={`/treks/${trek.slug}`}
                 className="group relative overflow-hidden rounded-3xl cursor-pointer block h-80 card-premium"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <SmartImage
                   src={trek.image}
                   alt={trek.name}
                   className="w-full h-full object-cover card-img-zoom"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 

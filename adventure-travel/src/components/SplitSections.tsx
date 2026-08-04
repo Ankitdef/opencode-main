@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import SmartImage from "./SmartImage";
 
 type Split = {
   id: string;
@@ -165,12 +166,9 @@ function SplitPanel({ data }: { data: Split }) {
         >
           <div className="pointer-events-none absolute -inset-4 -z-10 rounded-[2.5rem] bg-gradient-to-br from-primary/15 to-secondary/15 blur-2xl" />
           <div className="group relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl shadow-black/10">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <SmartImage
               src={data.image}
               alt={data.imageAlt}
-              loading="lazy"
-              decoding="async"
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />

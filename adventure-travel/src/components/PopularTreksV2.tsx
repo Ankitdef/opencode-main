@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { treks, DIFFICULTY_COLORS } from "@/data/treks";
 import { StaggerContainer, StaggerItem } from "./MotionWrapper";
+import SmartImage from "./SmartImage";
 
 type Badge = {
   text: string;
@@ -68,13 +69,10 @@ export default function PopularTreksV2() {
                   <Link href={`/treks/${trek.slug}`} className="block">
                     {/* Image */}
                     <div className="relative h-44 sm:h-52 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <SmartImage
                         src={trek.image}
                         alt={trek.name}
                         className="w-full h-full object-cover card-img-zoom"
-                        loading="lazy"
-                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 

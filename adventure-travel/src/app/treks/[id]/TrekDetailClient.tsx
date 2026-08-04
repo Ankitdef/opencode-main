@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { Trek } from "@/data/treks";
 import ContactPopup from "@/components/ContactPopup";
+import SmartImage from "@/components/SmartImage";
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Easy: "#22c55e",
@@ -37,6 +38,60 @@ const TREK_GALLERIES: Record<string, string[]> = {
     "/assets/valley-of-flowers/IMG_6626.JPG.jpeg",
     "/assets/valley-of-flowers/IMG_6080.JPG.jpeg",
     "/assets/valley-of-flowers/IMG_6061.JPG.jpeg",
+  ],
+  "satopanth-lake": [
+    "/assets/satopanth-lake/IMG_4732.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_4733.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_4746.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_4748.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_4752.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_5914.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_5925.JPG.jpeg",
+    "/assets/satopanth-lake/IMG_5931.JPG.jpeg",
+  ],
+  "hampta-pass": [
+    "/assets/hampta-pass/IMG_7578.PNG",
+    "/assets/hampta-pass/IMG_7579.PNG",
+    "/assets/hampta-pass/IMG_7580.PNG",
+    "/assets/hampta-pass/IMG_7581.PNG",
+  ],
+  "kedarkantha": [
+    "/assets/kedarkantha-trek/IMG_1267.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_1268.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_1269.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_1270.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_4137.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_4139.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_4141.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_4142.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_4143.JPG.jpeg",
+    "/assets/kedarkantha-trek/IMG_4144.JPG.jpeg",
+  ],
+  "pangarchula-peak": [
+    "/assets/pangarchula-peak-trek/IMG_3734.jpeg",
+    "/assets/pangarchula-peak-trek/IMG_3735.jpeg",
+    "/assets/pangarchula-peak-trek/IMG_3737.jpeg",
+    "/assets/pangarchula-peak-trek/IMG_3741.jpeg",
+    "/assets/pangarchula-peak-trek/IMG_3746.jpeg",
+    "/assets/pangarchula-peak-trek/IMG_3747.jpeg",
+    "/assets/pangarchula-peak-trek/IMG_3751.jpeg",
+    "/assets/pangarchula-peak-trek/af2701a5-b67d-4691-af78-627834f8c0a8.jpeg",
+    "/assets/pangarchula-peak-trek/0834c6e9-e382-426a-894b-6d7af316cda5.mp4",
+  ],
+  "kuari-pass": [
+    "/assets/kuari-pass-trek/017bfe93-d6e9-4c29-841d-e55ba276be2b.jpeg",
+    "/assets/kuari-pass-trek/1d41b58f-ea07-4213-b575-da947e8c33c0.jpeg",
+    "/assets/kuari-pass-trek/340648ba-f46c-4dae-9ba6-d48a6a1d91f9.jpeg",
+    "/assets/kuari-pass-trek/3a32bc72-b94d-46f5-a2b3-9a47fd31ffd1.jpeg",
+    "/assets/kuari-pass-trek/43025720-b05f-48e4-91cd-9d6783d428b2.jpeg",
+    "/assets/kuari-pass-trek/564c4289-af50-4c8b-be21-3e209be853cc.jpeg",
+    "/assets/kuari-pass-trek/7d28235d-0d49-4998-9bc7-3304ad6c33e2.jpeg",
+    "/assets/kuari-pass-trek/7ec049fb-c7cd-4864-8489-01856a209ae0.jpeg",
+    "/assets/kuari-pass-trek/886a82c1-6760-4244-9124-ac856341552c.jpeg",
+    "/assets/kuari-pass-trek/8a7f3f68-76f9-4945-98cc-8734fc98063c.jpeg",
+    "/assets/kuari-pass-trek/9f773586-9c67-460f-bdd5-30d7737e3c80.jpeg",
+    "/assets/kuari-pass-trek/f7d8168c-15e8-4766-946e-74358e954af2.jpeg",
+    "/assets/kuari-pass-trek/f14f4fc5-7c11-4e21-abcf-e12bf021e6dc.mov",
   ],
 };
 
@@ -426,7 +481,7 @@ function ItineraryTab({ trek }: { trek: Trek }) {
                   </span>
                   <span className="flex items-center gap-1">
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.126-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265z" /></svg>
-                    Meals: B/L/D
+                    Meals: {day.meals || "B/L/D"}
                   </span>
                 </div>
               </div>
@@ -471,13 +526,20 @@ function GalleryTab({ trek }: { trek: Trek }) {
             aria-label={`View photo ${i + 1} of ${images.length}`}
             className="relative aspect-[4/3] rounded-xl overflow-hidden group cursor-pointer"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img} alt={`${trek.name} — photo ${i + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            {/\.(mp4|mov)$/i.test(img) ? (
+              <video src={img} muted className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            ) : (
+              <SmartImage src={img} alt={`${trek.name} — photo ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-              <svg className="w-8 h-8 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 7.5v6m3-3h-6M21 21l-5.2-5.2" />
-              </svg>
+              {/\.(mp4|mov)$/i.test(img) ? (
+                <svg className="w-10 h-10 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+              ) : (
+                <svg className="w-8 h-8 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 7.5v6m3-3h-6M21 21l-5.2-5.2" />
+                </svg>
+              )}
             </div>
           </button>
         ))}
@@ -513,16 +575,36 @@ function GalleryTab({ trek }: { trek: Trek }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </button>
-            <motion.img
-              key={lightbox}
-              src={images[lightbox]}
-              alt={`${trek.name} — photo ${lightbox + 1}`}
-              onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.25 }}
-              className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain shadow-2xl"
-            />
+            {/\.(mp4|mov)$/i.test(images[lightbox]) ? (
+              /* eslint-disable-next-line jsx-a11y/media-has-caption */
+              <motion.div
+                key={lightbox}
+                onClick={(e) => e.stopPropagation()}
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.25 }}
+                className="max-h-[85vh] max-w-[92vw]"
+              >
+                <video
+                  src={images[lightbox]}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain shadow-2xl"
+                />
+              </motion.div>
+            ) : (
+              <motion.img
+                key={lightbox}
+                src={images[lightbox]}
+                alt={`${trek.name} — photo ${lightbox + 1}`}
+                onClick={(e) => e.stopPropagation()}
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.25 }}
+                className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain shadow-2xl"
+              />
+            )}
             <button
               onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i === null ? i : (i + 1) % images.length)); }}
               aria-label="Next photo"

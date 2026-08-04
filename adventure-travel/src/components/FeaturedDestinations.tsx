@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { StaggerContainer, StaggerItem } from "./MotionWrapper";
+import SmartImage from "./SmartImage";
 
 const destinations = [
   {
@@ -77,13 +78,10 @@ export default function FeaturedDestinations() {
                 href={hrefFor(dest.name)}
                 className="group relative overflow-hidden rounded-3xl block h-96 card-premium"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <SmartImage
                   src={dest.image}
                   alt={dest.name}
                   className="w-full h-full object-cover card-img-zoom"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 

@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { destinations, sortOptions } from "@/data/destinations";
+import SmartImage from "@/components/SmartImage";
 
 const difficultyRanges = ["All Categories", "Himalayan Range", "Mountain Region", "Glacial Lakes", "Easy Access", "Summit Climbs", "State Region", "Seasonal"];
 
@@ -146,7 +147,7 @@ export default function DestinationsPage() {
                 >
                   {/* Image */}
                   <div className="relative h-64 overflow-hidden">
-                    <img
+                    <SmartImage
                       src={dest.image}
                       alt={dest.name}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"

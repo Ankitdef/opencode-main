@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, StaggerItem } from "./MotionWrapper";
+import SmartImage from "./SmartImage";
 
 const images = [
   { src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80", alt: "Mountain peak", likes: "2.4K" },
@@ -42,13 +43,10 @@ export default function InstagramGallery() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="group relative block rounded-2xl overflow-hidden"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <SmartImage
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <div className="flex items-center gap-2 text-white">

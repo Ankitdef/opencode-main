@@ -4,6 +4,7 @@ import { useState, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { treks, REGIONS } from "@/data/treks";
+import SmartImage from "@/components/SmartImage";
 
 const DIFFICULTIES = ["All Levels", "Easy", "Moderate", "Challenging", "Strenuous"] as const;
 const DURATION_OPTIONS = [
@@ -28,10 +29,41 @@ const DIFF_BADGE: Record<string, { bg: string; text: string }> = {
   Strenuous: { bg: "bg-red-100 dark:bg-red-900/30", text: "text-red-600 dark:text-red-400" },
 };
 
-export default function TreksPage() {
-  // useSearchParams() needs a Suspense boundary on a statically-rendered route.
+function TrekSkeleton() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-white dark:bg-background pt-20" />}>
+    <div className="bg-white dark:bg-card rounded-2xl shadow-lg overflow-hidden">
+      <div className="relative h-64 skeleton" />
+      <div className="p-6 space-y-3">
+        <div className="h-3 skeleton rounded w-1/3" />
+        <div className="h-5 skeleton rounded w-2/3" />
+        <div className="h-3 skeleton rounded w-full" />
+        <div className="h-3 skeleton rounded w-1/2" />
+        <div className="flex justify-between items-center pt-4">
+          <div className="h-6 skeleton rounded w-1/4" />
+          <div className="h-8 skeleton rounded w-1/4" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function TreksPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white dark:bg-background pt-20">
+        <section className="bg-gradient-to-r from-emerald-50 to-blue-50 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="h-10 skeleton rounded w-1/3 mx-auto mb-4" />
+            <div className="h-5 skeleton rounded w-1/2 mx-auto" />
+          </div>
+        </section>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => <TrekSkeleton key={i} />)}
+          </div>
+        </section>
+      </div>
+    }>
       <TreksCatalogue />
     </Suspense>
   );
@@ -212,12 +244,9 @@ function TrekCard({ trek }: { trek: (typeof treks)[0] }) {
     <div className="bg-white dark:bg-card rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 group">
       {/* Image */}
       <div className="relative overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <SmartImage
           src={trek.image}
           alt={trek.name}
-          loading="lazy"
-          decoding="async"
           className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
