@@ -41,7 +41,9 @@ function Rig({
   useFrame(() => {
     if (document.hidden) return;
     const sec = sectionRef.current;
-    if (sec && sec.getBoundingClientRect().top > window.innerHeight) return; // scrolled past
+    if (!sec) return;
+    const r = sec.getBoundingClientRect();
+    if (r.top > window.innerHeight || r.bottom < 0) return; // not yet in / scrolled fully past
 
     const p = staticView ? 0 : progressRef.current;
     camera.position.copy(CAMERA_PATH.getPoint(p));
@@ -89,7 +91,15 @@ function Forest({ count }: { count: number }) {
   return <primitive object={inst} />;
 }
 
-function SnowDrift({ count, height }: { count: number; height: number }) {
+function SnowDrift({
+  count,
+  height,
+  sectionRef,
+}: {
+  count: number;
+  height: number;
+  sectionRef: React.RefObject<HTMLElement | null>;
+}) {
   const points = useMemo(() => {
     /* eslint-disable react-hooks/purity -- procedural particle field samples Math.random during render (R3F pattern) */
     const pos = new Float32Array(count * 3);
@@ -111,8 +121,13 @@ function SnowDrift({ count, height }: { count: number; height: number }) {
     return new THREE.Points(geo, mat);
   }, [count]);
 
+  // eslint-disable-next-line react-hooks/immutability -- R3F frame loop mutates the buffer attr imperatively
   useFrame((_, delta) => {
     if (document.hidden) return;
+    const sec = sectionRef.current;
+    if (!sec) return;
+    const r = sec.getBoundingClientRect();
+    if (r.top > window.innerHeight || r.bottom < 0) return; // not yet in / scrolled fully past
     const attr = points.geometry.attributes.position as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       let y = attr.getY(i) - delta * 3;
@@ -170,7 +185,7 @@ export default function ValleyScene({
       <primitive object={terrain} />
       <primitive object={trail} />
       <Forest count={forestCount} />
-      <SnowDrift count={snowCount} height={40} />
+      <SnowDrift count={snowCount} height={40} sectionRef={sectionRef} />
       <Rig sectionRef={sectionRef} progressRef={progressRef} staticView={staticView} />
     </Canvas>
   );
