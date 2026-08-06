@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import HeroSplit from "@/components/HeroSplit";
+import ValleyHero from "@/components/ValleyHero";
 import TrustedBy from "@/components/TrustedBy";
 import PopularTreksV2 from "@/components/PopularTreksV2";
 import HimalayanMap from "@/components/HimalayanMap";
@@ -75,7 +75,7 @@ export default function Home() {
         <ScrollProgress />
         <SnowParticles />
         <ElevationGauge />
-        <HeroSplit />
+        <ValleyHero />
         <MountainPass />
         <TrustedBy />
         <ScrollDepth><PopularTreksV2 /></ScrollDepth>
