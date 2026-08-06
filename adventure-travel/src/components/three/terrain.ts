@@ -18,7 +18,7 @@ const PERM = (() => {
   return perm;
 })();
 
-function simplex2(xin: number, yin: number): number {
+export function simplex2(xin: number, yin: number): number {
   const F2 = 0.5 * (Math.sqrt(3) - 1);
   const G2 = (3 - Math.sqrt(3)) / 6;
   const s = (xin + yin) * F2;
