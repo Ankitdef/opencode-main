@@ -52,7 +52,7 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
   const badge = variant === "scene" ? "bg-primary/20 text-white" : "bg-primary/10 text-primary";
 
   return (
-    <div className="w-full lg:w-[46%]">
+    <div className={variant === "scene" ? "w-full" : "w-full lg:w-[46%]"}>
       <motion.span {...rise(0)} className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-widest ${badge}`}>
         <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
         Himalayan Alpine Expeditions
