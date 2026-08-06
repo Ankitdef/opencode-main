@@ -52,7 +52,7 @@ export default function SnowParticles() {
     }
 
     const draw = () => {
-      if (document.hidden) {
+      if (document.hidden || document.documentElement.dataset.hero3d === "true") {
         animId = requestAnimationFrame(draw);
         return;
       }
