@@ -13,16 +13,24 @@ const SCROLL_HEIGHT = "300vh";
 export default function ValleyHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
-  const [webgl] = useState(isWebGLAvailable);
+  const [webgl, setWebgl] = useState(false);
 
   useEffect(() => {
+    // ponytail: mount-gate so SSR (no WebGL) and first client render both output HeroSplit, avoiding a hydration mismatch
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-gate after hydration is the intended post-SSR capability check
+    if (isWebGLAvailable()) setWebgl(true);
+  }, []);
+
+  useEffect(() => {
+    if (!webgl) return;
     document.documentElement.dataset.hero3d = "true";
     return () => {
       delete document.documentElement.dataset.hero3d;
     };
-  }, []);
+  }, [webgl]);
 
   useEffect(() => {
+    if (!webgl) return;
     const sec = sectionRef.current;
     const fade = fadeRef.current;
     if (!sec || !fade) return;
@@ -36,7 +44,7 @@ export default function ValleyHero() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [webgl]);
 
   if (!webgl) return <HeroSplit />;
 
