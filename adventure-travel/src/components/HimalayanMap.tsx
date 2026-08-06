@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeUp } from "./MotionWrapper";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const regions = [
   {
@@ -50,6 +54,34 @@ const regions = [
 
 export default function HimalayanMap() {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+  const mapWrapRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+    if (!mapRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        mapRef.current,
+        { rotateX: 0, rotateY: -5, transformPerspective: 1200 },
+        {
+          rotateX: 12,
+          rotateY: 5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: mapWrapRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1,
+          },
+        }
+      );
+    }, mapWrapRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section className="py-section-sm bg-gradient-to-b from-background to-accent/5">
@@ -64,10 +96,10 @@ export default function HimalayanMap() {
           </p>
         </FadeUp>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-center">
+        <div ref={mapWrapRef} className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-center">
           {/* Map SVG */}
           <FadeUp className="lg:col-span-2">
-            <div className="relative bg-white dark:bg-card rounded-3xl p-8 shadow-lg shadow-black/5 border border-gray-100 dark:border-white/10">
+            <div ref={mapRef} className="relative bg-white dark:bg-card rounded-3xl p-8 shadow-lg shadow-black/5 border border-gray-100 dark:border-white/10" style={{ transformStyle: "preserve-3d" }}>
               <svg viewBox="0 0 450 250" className="w-full h-auto">
                 {/* Background Grid */}
                 <defs>

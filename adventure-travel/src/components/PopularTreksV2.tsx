@@ -1,11 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { treks, DIFFICULTY_COLORS } from "@/data/treks";
 import { StaggerContainer, StaggerItem } from "./MotionWrapper";
 import SmartImage from "./SmartImage";
+
+function TiltCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  const handlePointer = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) scale3d(1.02,1.02,1.02)`;
+  };
+
+  const reset = () => {
+    if (ref.current) ref.current.style.transform = "perspective(800px) rotateY(0) rotateX(0) scale3d(1,1,1)";
+  };
+
+  return (
+    <div
+      ref={ref}
+      onPointerMove={handlePointer}
+      onPointerUp={reset}
+      onPointerLeave={reset}
+      onPointerCancel={reset}
+      className={className}
+      style={{ transition: "transform 0.2s ease-out", transformStyle: "preserve-3d" }}
+    >
+      {children}
+    </div>
+  );
+}
 
 type Badge = {
   text: string;
@@ -63,6 +96,7 @@ export default function PopularTreksV2() {
 
             return (
               <StaggerItem key={trek.id}>
+                <TiltCard>
                 {/* Wrapper is the hover/positioning context so the wishlist button
                     can be a SIBLING of the Link (never an anchor-in-anchor). */}
                 <div className="relative group card-premium bg-white dark:bg-card rounded-2xl shadow-lg shadow-black/5 overflow-hidden border border-gray-100 dark:border-white/10">
@@ -180,6 +214,7 @@ export default function PopularTreksV2() {
                     </svg>
                   </button>
                 </div>
+                </TiltCard>
               </StaggerItem>
             );
           })}

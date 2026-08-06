@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOut } from "@/lib/auth";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -54,12 +56,16 @@ const activities = [
 ];
 
 export default function Navbar() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activityOpen, setActivityOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+
+  const handleLogout = async () => { await signOut(); router.push("/"); };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -202,15 +208,25 @@ export default function Navbar() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-4">
-              <a
-                href="#"
-                className={`text-sm font-medium transition-colors ${
-                  scrolled ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"
-                }`}
-              >
-                Sign In
-              </a>
-              
+              {user ? (
+                <>
+                  <Link href="/dashboard" className={`text-sm font-medium transition-colors ${scrolled ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"}`}>
+                    {user.user_metadata?.full_name?.split(" ")[0] || user.email}
+                  </Link>
+                  <button onClick={handleLogout} className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+                    Log Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className={`text-sm font-medium transition-colors ${scrolled ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"}`}>
+                    Log In
+                  </Link>
+                  <Link href="/signup" className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors">
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Toggle */}
@@ -289,6 +305,26 @@ export default function Navbar() {
             >
               Contact Us
             </Link>
+
+            {user ? (
+              <>
+                <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="text-xl font-heading font-semibold text-white py-2.5 border-b border-white/10">
+                  My Dashboard
+                </Link>
+                <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="text-left text-xl font-heading font-semibold text-white/60 py-2.5">
+                  Log Out
+                </button>
+              </>
+            ) : (
+              <div className="flex gap-3 mt-2">
+                <Link href="/login" onClick={() => setMobileOpen(false)} className="flex-1 text-center rounded-xl border border-white/20 px-5 py-3 text-base font-semibold text-white">
+                  Log In
+                </Link>
+                <Link href="/signup" onClick={() => setMobileOpen(false)} className="flex-1 text-center rounded-xl bg-emerald-600 px-5 py-3 text-base font-semibold text-white">
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

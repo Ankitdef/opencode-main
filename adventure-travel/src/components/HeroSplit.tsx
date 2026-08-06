@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { treks } from "@/data/treks";
 import ContactPopup from "./ContactPopup";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
@@ -27,6 +31,51 @@ export default function HeroSplit() {
   const [destination, setDestination] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const reduceMotion = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const imgRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      // Hero image parallax — slides up slower than scroll (mountain depth)
+      if (imgRef.current) {
+        gsap.to(imgRef.current, {
+          yPercent: 20,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
+
+      // Content panel — subtle 3D tilt as user scrolls past
+      if (contentRef.current) {
+        gsap.fromTo(
+          contentRef.current,
+          { rotateX: 0, transformPerspective: 1200 },
+          {
+            rotateX: -5,
+            ease: "none",
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: 1,
+            },
+          }
+        );
+      }
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, [reduceMotion]);
 
   // Compose a deep link into the treks catalogue from the search selections.
   const searchQuery = new URLSearchParams();
@@ -47,9 +96,9 @@ export default function HeroSplit() {
     "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30 cursor-pointer";
 
   return (
-    <section className="relative isolate min-h-[100svh] overflow-hidden bg-white">
+    <section ref={heroRef} className="relative isolate min-h-[100svh] overflow-hidden bg-white">
       {/* Mountain scene: full-bleed on mobile, right half on desktop */}
-      <div className="absolute inset-0 lg:left-1/2">
+      <div ref={imgRef} className="absolute inset-0 lg:left-1/2 will-change-transform">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={HERO_IMAGE}
@@ -77,7 +126,7 @@ export default function HeroSplit() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-6 pb-14 pt-28 lg:px-8">
+      <div ref={contentRef} className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-6 pb-14 pt-28 lg:px-8" style={{ transformStyle: "preserve-3d" }}>
         <div className="w-full lg:w-[46%]">
           <motion.span
             {...rise(0)}

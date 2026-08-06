@@ -26,6 +26,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis smooth scroll must disable the browser's native smooth scroll, or the
+   two fight on every wheel/trackpad event and the page feels janky. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

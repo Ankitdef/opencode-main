@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -18,7 +19,14 @@ const inter = Inter({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#10B981",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://expeditionhappiness.com"),
   title: {
     default: "Expedition Happiness Treks | Premium Himalayan Adventures in Uttarakhand & Himachal",
     template: "%s | Expedition Happiness Treks",
@@ -80,8 +88,15 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
+  alternates: {
+    canonical: "https://expeditionhappiness.com",
+  },
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
+    other: [
+      { rel: "manifest", url: "/site.webmanifest" },
+    ],
   },
 };
 
@@ -90,12 +105,60 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    name: "Expedition Happiness Treks",
+    url: "https://expeditionhappiness.com",
+    logo: "https://expeditionhappiness.com/favicon.svg",
+    description: "Premium guided Himalayan treks in Uttarakhand and Himachal Pradesh. Certified trek leaders, small groups, safety-first approach.",
+    email: "expeditionhappiness07@gmail.com",
+    telephone: "+917817912062",
+    address: [
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Gurugram",
+        addressRegion: "Haryana",
+        addressCountry: "IN",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Joshimath",
+        addressRegion: "Uttarakhand",
+        addressCountry: "IN",
+      },
+    ],
+    sameAs: [
+      "https://www.instagram.com/expeditionhappiness",
+      "https://www.youtube.com/@expeditionhappiness",
+    ],
+    areaServed: ["Uttarakhand", "Himachal Pradesh"],
+    priceRange: "₹5000–₹65000",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      reviewCount: "692",
+    },
+  };
+
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${poppins.variable} ${inter.variable}`}>
+      <head>
+        <meta name="X-Content-Type-Options" content="nosniff" />
+        <meta name="X-Frame-Options" content="DENY" />
+        <meta name="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta name="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <Preloader />
-        <Navbar />
-        {children}
+        <AuthProvider>
+          <Preloader />
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

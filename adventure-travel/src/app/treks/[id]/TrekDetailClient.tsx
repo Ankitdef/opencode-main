@@ -6,6 +6,8 @@ import Link from "next/link";
 import type { Trek } from "@/data/treks";
 import ContactPopup from "@/components/ContactPopup";
 import SmartImage from "@/components/SmartImage";
+import { useAuth } from "@/contexts/AuthContext";
+import { createTrekBooking } from "@/lib/auth";
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Easy: "#22c55e",
@@ -50,10 +52,10 @@ const TREK_GALLERIES: Record<string, string[]> = {
     "/assets/satopanth-lake/IMG_5931.JPG.jpeg",
   ],
   "hampta-pass": [
-    "/assets/hampta-pass/IMG_7578.PNG",
-    "/assets/hampta-pass/IMG_7579.PNG",
-    "/assets/hampta-pass/IMG_7580.PNG",
-    "/assets/hampta-pass/IMG_7581.PNG",
+    "/assets/hampta-pass/IMG_7578.jpeg",
+    "/assets/hampta-pass/IMG_7579.jpeg",
+    "/assets/hampta-pass/IMG_7580.jpeg",
+    "/assets/hampta-pass/IMG_7581.jpeg",
   ],
   "kedarkantha": [
     "/assets/kedarkantha-trek/IMG_1267.JPG.jpeg",
@@ -78,6 +80,29 @@ const TREK_GALLERIES: Record<string, string[]> = {
     "/assets/pangarchula-peak-trek/af2701a5-b67d-4691-af78-627834f8c0a8.jpeg",
     "/assets/pangarchula-peak-trek/0834c6e9-e382-426a-894b-6d7af316cda5.mp4",
   ],
+  "nandi-kund": [
+    "/assets/nandi-kund-trek/2c72f839-1d03-4194-829a-0cb0e953eb8a.jpeg",
+    "/assets/nandi-kund-trek/32abfdc3-ad09-48a0-b15b-6da2e0d3dffc.jpeg",
+    "/assets/nandi-kund-trek/5ea3adc5-d375-4a7f-ab3a-17224fcd463c.jpeg",
+    "/assets/nandi-kund-trek/65a896f6-83b2-41aa-9726-171f369a2b12.jpeg",
+    "/assets/nandi-kund-trek/74d946e2-9a04-4881-b830-0579948647b8.jpeg",
+    "/assets/nandi-kund-trek/b0e62e4f-a4ec-40ce-9808-2ee87c0bf2cd.jpeg",
+    "/assets/nandi-kund-trek/d39028ef-4d93-4a91-b087-2f40237fc124.jpeg",
+    "/assets/nandi-kund-trek/feb980a9-026c-4e20-8207-d16c640983d6.mov",
+  ],
+  "panpatia-col": [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+    "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&q=80",
+    "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=80",
+    "/assets/panpatia-col-trek/9ecb69c4-00c7-4116-a312-ad393182f10e.jpeg",
+    "/assets/panpatia-col-trek/a8c14f1d-60a2-4e5a-b38b-17d5c74cfb9e.jpeg",
+    "/assets/panpatia-col-trek/IMG_6013.jpeg",
+    "/assets/panpatia-col-trek/IMG_6015.jpeg",
+    "/assets/panpatia-col-trek/IMG_6059.jpeg",
+    "/assets/panpatia-col-trek/IMG_6060.jpeg",
+    "/assets/panpatia-col-trek/IMG_6079.jpeg",
+    "/assets/panpatia-col-trek/Panpateya.mov",
+  ],
   "kuari-pass": [
     "/assets/kuari-pass-trek/017bfe93-d6e9-4c29-841d-e55ba276be2b.jpeg",
     "/assets/kuari-pass-trek/1d41b58f-ea07-4213-b575-da947e8c33c0.jpeg",
@@ -99,6 +124,7 @@ const INCLUDED = ["Accommodation", "Meals during trek", "Experienced Trek Guide"
 const NOT_INCLUDED = ["Flights / Transport", "Travel Insurance", "Personal Trekking Equipment", "Tips for Guide & Porters", "Personal Expenses", "Emergency Evacuation"];
 
 export default function TrekDetailClient({ trek }: { trek: Trek }) {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>("Overview");
   const [showContact, setShowContact] = useState(false);
   const [wished, setWished] = useState(false);
@@ -108,7 +134,23 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
   });
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const handleBookingSubmit = () => {
+  const handleBookingSubmit = async () => {
+    if (!user) {
+      window.location.href = "/login";
+      return;
+    }
+    try {
+      await createTrekBooking({
+        user_id: user.id,
+        trek_name: trek.name,
+        trek_slug: trek.slug,
+        trek_date: bookingForm.date,
+        group_size: bookingForm.groupSize,
+        message: bookingForm.message,
+      });
+    } catch {
+      // Supabase insert failed — still open WhatsApp
+    }
     const text = encodeURIComponent(
       `Trek: ${trek.name}\nDate: ${bookingForm.date}\nGroup: ${bookingForm.groupSize}\nName: ${bookingForm.name}\nPhone: ${bookingForm.phone}\nMessage: ${bookingForm.message}`
     );

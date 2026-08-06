@@ -5,12 +5,18 @@ import dynamic from "next/dynamic";
 import HeroSplit from "@/components/HeroSplit";
 import TrustedBy from "@/components/TrustedBy";
 import PopularTreksV2 from "@/components/PopularTreksV2";
-import FeaturedDestinations from "@/components/FeaturedDestinations";
-import SplitSections from "@/components/SplitSections";
-import FeaturedAdventuresV2 from "@/components/FeaturedAdventuresV2";
 import HimalayanMap from "@/components/HimalayanMap";
+import SplitSections from "@/components/SplitSections";
+import FeaturedDestinations from "@/components/FeaturedDestinations";
 import CallToActionV2 from "@/components/CallToActionV2";
 import FooterV2 from "@/components/FooterV2";
+import FeaturedAdventuresV2 from "@/components/FeaturedAdventuresV2";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import SnowParticles from "@/components/SnowParticles";
+import ScrollDepth from "@/components/ScrollDepth";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import MountainPass from "@/components/MountainPass";
+import ElevationGauge from "@/components/ElevationGauge";
 
 const SeasonalExplorer = dynamic(() => import("@/components/SeasonalExplorer"), {
   loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-96 skeleton rounded-2xl" /></div></div>,
@@ -64,24 +70,30 @@ function ScrollProgress() {
 
 export default function Home() {
   return (
-    <main className="relative overflow-x-hidden">
-      <ScrollProgress />
-      <HeroSplit />
-      <SplitSections />
-      <HimalayanMap />
-      <PopularTreksV2 />
-      <FeaturedDestinations />
-      <SeasonalExplorer />
-      <FeaturedAdventuresV2 />
-      <PermitTours />
-      <AdventureStories />
-      <InstagramGallery />
-      <FAQV2 />
-      <CallToActionV2 />
-      <TestimonialsV2 />
-      <StatisticsV2 />
-      <TrustedBy />
-      <FooterV2 />
-    </main>
+    <SmoothScrollProvider>
+      <main className="relative overflow-x-hidden">
+        <ScrollProgress />
+        <SnowParticles />
+        <ElevationGauge />
+        <HeroSplit />
+        <MountainPass />
+        <TrustedBy />
+        <ScrollDepth><PopularTreksV2 /></ScrollDepth>
+        <ScrollDepth depth={40} rotateX={2}><HimalayanMap /></ScrollDepth>
+        <ScrollDepth><SplitSections /></ScrollDepth>
+        <ScrollDepth depth={30}><FeaturedDestinations /></ScrollDepth>
+        <ScrollDepth><SeasonalExplorer /></ScrollDepth>
+        <ScrollDepth depth={40} rotateX={2}><FeaturedAdventuresV2 /></ScrollDepth>
+        <ScrollDepth><PermitTours /></ScrollDepth>
+        <ScrollDepth depth={30}><AdventureStories /></ScrollDepth>
+        <ScrollDepth><InstagramGallery /></ScrollDepth>
+        <ScrollDepth depth={20}><StatisticsV2 /></ScrollDepth>
+        <ScrollDepth><TestimonialsV2 /></ScrollDepth>
+        <ScrollDepth><FAQV2 /></ScrollDepth>
+        <ScrollDepth><CallToActionV2 /></ScrollDepth>
+        <FooterV2 />
+        <FloatingWhatsApp />
+      </main>
+    </SmoothScrollProvider>
   );
 }
