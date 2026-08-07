@@ -19,25 +19,25 @@ import MountainPass from "@/components/MountainPass";
 import ElevationGauge from "@/components/ElevationGauge";
 
 const SeasonalExplorer = dynamic(() => import("@/components/SeasonalExplorer"), {
-  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-96 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-96 skeleton rounded-2xl" /></div></div>,
 });
 const PermitTours = dynamic(() => import("@/components/PermitTours"), {
-  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
 });
 const TestimonialsV2 = dynamic(() => import("@/components/TestimonialsV2"), {
-  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-48 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-48 skeleton rounded-2xl" /></div></div>,
 });
 const StatisticsV2 = dynamic(() => import("@/components/StatisticsV2"), {
-  loading: () => <div className="py-section-sm bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-32 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section-sm bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-32 skeleton rounded-2xl" /></div></div>,
 });
 const AdventureStories = dynamic(() => import("@/components/AdventureStories"), {
-  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
 });
 const InstagramGallery = dynamic(() => import("@/components/InstagramGallery"), {
-  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-48 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-48 skeleton rounded-2xl" /></div></div>,
 });
 const FAQV2 = dynamic(() => import("@/components/FAQV2"), {
-  loading: () => <div className="py-section bg-background"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
+  loading: () => <div className="py-section bg-background/70 backdrop-blur-md"><div className="mx-auto max-w-7xl px-6"><div className="h-64 skeleton rounded-2xl" /></div></div>,
 });
 
 function ScrollProgress() {

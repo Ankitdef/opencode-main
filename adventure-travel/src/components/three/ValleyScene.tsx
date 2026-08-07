@@ -84,7 +84,15 @@ function Forest({ count }: { count: number }) {
   return <primitive object={inst} />;
 }
 
-function SnowDrift({ count, height }: { count: number; height: number }) {
+function SnowDrift({
+  count,
+  height,
+  staticView,
+}: {
+  count: number;
+  height: number;
+  staticView: boolean;
+}) {
   const points = useMemo(() => {
     /* eslint-disable react-hooks/purity -- procedural particle field samples Math.random during render (R3F pattern) */
     const pos = new Float32Array(count * 3);
@@ -108,6 +116,7 @@ function SnowDrift({ count, height }: { count: number; height: number }) {
 
   useFrame((_, delta) => {
     if (document.hidden) return;
+    if (staticView) return;
     const attr = points.geometry.attributes.position as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       let y = attr.getY(i) - delta * 3;
@@ -159,7 +168,7 @@ export default function ValleyScene() {
       <primitive object={terrain} />
       <primitive object={trail} />
       <Forest count={forestCount} />
-      <SnowDrift count={snowCount} height={40} />
+      <SnowDrift count={snowCount} height={40} staticView={staticView} />
       <Rig progressRef={progressRef} staticView={staticView} />
     </Canvas>
   );
