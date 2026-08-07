@@ -76,22 +76,24 @@ export default function Home() {
         <SnowParticles />
         <ElevationGauge />
         <ValleyHero />
-        <MountainPass />
-        <TrustedBy />
-        <ScrollDepth><PopularTreksV2 /></ScrollDepth>
-        <ScrollDepth depth={40} rotateX={2}><HimalayanMap /></ScrollDepth>
-        <ScrollDepth><SplitSections /></ScrollDepth>
-        <ScrollDepth depth={30}><FeaturedDestinations /></ScrollDepth>
-        <ScrollDepth><SeasonalExplorer /></ScrollDepth>
-        <ScrollDepth depth={40} rotateX={2}><FeaturedAdventuresV2 /></ScrollDepth>
-        <ScrollDepth><PermitTours /></ScrollDepth>
-        <ScrollDepth depth={30}><AdventureStories /></ScrollDepth>
-        <ScrollDepth><InstagramGallery /></ScrollDepth>
-        <ScrollDepth depth={20}><StatisticsV2 /></ScrollDepth>
-        <ScrollDepth><TestimonialsV2 /></ScrollDepth>
-        <ScrollDepth><FAQV2 /></ScrollDepth>
-        <ScrollDepth><CallToActionV2 /></ScrollDepth>
-        <FooterV2 />
+        <div className="relative z-10">
+          <TrustedBy />
+          <ScrollDepth><PopularTreksV2 /></ScrollDepth>
+          <ScrollDepth depth={40} rotateX={2}><HimalayanMap /></ScrollDepth>
+          <ScrollDepth><SplitSections /></ScrollDepth>
+          <ScrollDepth depth={30}><FeaturedDestinations /></ScrollDepth>
+          <ScrollDepth><SeasonalExplorer /></ScrollDepth>
+          <ScrollDepth depth={40} rotateX={2}><FeaturedAdventuresV2 /></ScrollDepth>
+          <ScrollDepth><PermitTours /></ScrollDepth>
+          <ScrollDepth depth={30}><AdventureStories /></ScrollDepth>
+          <ScrollDepth><InstagramGallery /></ScrollDepth>
+          <ScrollDepth depth={20}><StatisticsV2 /></ScrollDepth>
+          <ScrollDepth><TestimonialsV2 /></ScrollDepth>
+          <ScrollDepth><FAQV2 /></ScrollDepth>
+          <ScrollDepth><CallToActionV2 /></ScrollDepth>
+          <MountainPass />
+          <FooterV2 />
+        </div>
         <FloatingWhatsApp />
       </main>
     </SmoothScrollProvider>
