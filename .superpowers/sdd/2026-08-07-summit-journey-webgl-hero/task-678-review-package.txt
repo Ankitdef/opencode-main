@@ -1,0 +1,176 @@
+=== git log 3e34a7b..HEAD ===
+96663e8 fix: mount-gate WebGL hero to prevent hydration mismatch
+e140247 feat: use WebGL valley hero on homepage
+c5d7ffe feat: WebGL valley hero with overlay and HeroSplit fallback
+789dc25 perf: pause DOM snow during WebGL hero
+
+=== git diff --stat ===
+ adventure-travel/src/app/page.tsx                 |  4 +-
+ adventure-travel/src/components/HeroContent.tsx   |  2 +-
+ adventure-travel/src/components/SnowParticles.tsx |  2 +-
+ adventure-travel/src/components/ValleyHero.tsx    | 72 +++++++++++++++++++++++
+ 4 files changed, 76 insertions(+), 4 deletions(-)
+
+=== git diff -U8 ===
+diff --git a/adventure-travel/src/app/page.tsx b/adventure-travel/src/app/page.tsx
+index 897d891..a152d71 100644
+--- a/adventure-travel/src/app/page.tsx
++++ b/adventure-travel/src/app/page.tsx
+@@ -1,13 +1,13 @@
+ "use client";
+ 
+ import { useEffect, useState } from "react";
+ import dynamic from "next/dynamic";
+-import HeroSplit from "@/components/HeroSplit";
++import ValleyHero from "@/components/ValleyHero";
+ import TrustedBy from "@/components/TrustedBy";
+ import PopularTreksV2 from "@/components/PopularTreksV2";
+ import HimalayanMap from "@/components/HimalayanMap";
+ import SplitSections from "@/components/SplitSections";
+ import FeaturedDestinations from "@/components/FeaturedDestinations";
+ import CallToActionV2 from "@/components/CallToActionV2";
+ import FooterV2 from "@/components/FooterV2";
+ import FeaturedAdventuresV2 from "@/components/FeaturedAdventuresV2";
+@@ -70,17 +70,17 @@ function ScrollProgress() {
+ 
+ export default function Home() {
+   return (
+     <SmoothScrollProvider>
+       <main className="relative overflow-x-hidden">
+         <ScrollProgress />
+         <SnowParticles />
+         <ElevationGauge />
+-        <HeroSplit />
++        <ValleyHero />
+         <MountainPass />
+         <TrustedBy />
+         <ScrollDepth><PopularTreksV2 /></ScrollDepth>
+         <ScrollDepth depth={40} rotateX={2}><HimalayanMap /></ScrollDepth>
+         <ScrollDepth><SplitSections /></ScrollDepth>
+         <ScrollDepth depth={30}><FeaturedDestinations /></ScrollDepth>
+         <ScrollDepth><SeasonalExplorer /></ScrollDepth>
+         <ScrollDepth depth={40} rotateX={2}><FeaturedAdventuresV2 /></ScrollDepth>
+diff --git a/adventure-travel/src/components/HeroContent.tsx b/adventure-travel/src/components/HeroContent.tsx
+index cfc6dfa..000eb02 100644
+--- a/adventure-travel/src/components/HeroContent.tsx
++++ b/adventure-travel/src/components/HeroContent.tsx
+@@ -47,17 +47,17 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
+   const metricValue = "text-white" + (variant === "scene" ? "" : " lg:text-foreground");
+   const metricLabel = "text-white/70" + (variant === "scene" ? "" : " lg:text-muted");
+   const panel = variant === "scene"
+     ? "rounded-2xl border border-white/20 bg-white/10 p-3 shadow-xl shadow-black/20 ring-0 backdrop-blur-sm"
+     : "rounded-2xl bg-white p-3 shadow-xl shadow-black/10 ring-1 ring-black/5";
+   const badge = variant === "scene" ? "bg-primary/20 text-white" : "bg-primary/10 text-primary";
+ 
+   return (
+-    <div className="w-full lg:w-[46%]">
++    <div className={variant === "scene" ? "w-full" : "w-full lg:w-[46%]"}>
+       <motion.span {...rise(0)} className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-widest ${badge}`}>
+         <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+         Himalayan Alpine Expeditions
+       </motion.span>
+ 
+       <motion.h1 {...rise(0.08)} className={`mt-5 font-heading text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl ${headline}`}>
+         Surreal Summits &amp;
+         <br className="hidden sm:block" /> <span className="text-gradient">Wild Frontiers</span>
+diff --git a/adventure-travel/src/components/SnowParticles.tsx b/adventure-travel/src/components/SnowParticles.tsx
+index 4c72682..14192df 100644
+--- a/adventure-travel/src/components/SnowParticles.tsx
++++ b/adventure-travel/src/components/SnowParticles.tsx
+@@ -47,17 +47,17 @@ export default function SnowParticles() {
+         speed: Math.random() * 0.5 + 0.15,
+         wobble: Math.random() * Math.PI * 2,
+         wobbleSpeed: Math.random() * 0.015 + 0.003,
+         opacity: Math.random() * 0.4 + 0.15,
+       });
+     }
+ 
+     const draw = () => {
+-      if (document.hidden) {
++      if (document.hidden || document.documentElement.dataset.hero3d === "true") {
+         animId = requestAnimationFrame(draw);
+         return;
+       }
+       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+       for (const p of particles) {
+         p.y += p.speed;
+         p.wobble += p.wobbleSpeed;
+         p.x += Math.sin(p.wobble) * 0.4;
+diff --git a/adventure-travel/src/components/ValleyHero.tsx b/adventure-travel/src/components/ValleyHero.tsx
+new file mode 100644
+index 0000000..ede1052
+--- /dev/null
++++ b/adventure-travel/src/components/ValleyHero.tsx
+@@ -0,0 +1,72 @@
++"use client";
++
++import { useEffect, useRef, useState } from "react";
++import dynamic from "next/dynamic";
++import HeroSplit from "./HeroSplit";
++import HeroContent from "./HeroContent";
++import { isWebGLAvailable } from "@/lib/webgl";
++
++const ValleyScene = dynamic(() => import("./three/ValleyScene"), { ssr: false });
++
++const SCROLL_HEIGHT = "300vh";
++
++export default function ValleyHero() {
++  const sectionRef = useRef<HTMLElement>(null);
++  const fadeRef = useRef<HTMLDivElement>(null);
++  const [webgl, setWebgl] = useState(false);
++
++  useEffect(() => {
++    // ponytail: mount-gate so SSR (no WebGL) and first client render both output HeroSplit, avoiding a hydration mismatch
++    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-gate after hydration is the intended post-SSR capability check
++    if (isWebGLAvailable()) setWebgl(true);
++  }, []);
++
++  useEffect(() => {
++    if (!webgl) return;
++    document.documentElement.dataset.hero3d = "true";
++    return () => {
++      delete document.documentElement.dataset.hero3d;
++    };
++  }, [webgl]);
++
++  useEffect(() => {
++    if (!webgl) return;
++    const sec = sectionRef.current;
++    const fade = fadeRef.current;
++    if (!sec || !fade) return;
++    const onScroll = () => {
++      const r = sec.getBoundingClientRect();
++      const total = r.height - window.innerHeight;
++      const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
++      const opacity = Math.min(1, Math.max(0, (p - 0.85) / 0.15));
++      fade.style.opacity = String(opacity);
++    };
++    onScroll();
++    window.addEventListener("scroll", onScroll, { passive: true });
++    return () => window.removeEventListener("scroll", onScroll);
++  }, [webgl]);
++
++  if (!webgl) return <HeroSplit />;
++
++  return (
++    <section ref={sectionRef} className="relative" style={{ height: SCROLL_HEIGHT }}>
++      <div className="sticky top-0 h-screen overflow-hidden">
++        <ValleyScene sectionRef={sectionRef} />
++
++        {/* Handoff fade GÇö blends the canvas into the MountainPass section below */}
++        <div
++          ref={fadeRef}
++          className="pointer-events-none absolute inset-0 z-20 bg-background"
++          style={{ opacity: 0 }}
++        />
++
++        {/* Overlay content */}
++        <div className="absolute inset-0 z-10 flex items-center">
++          <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
++            <HeroContent variant="scene" />
++          </div>
++        </div>
++      </div>
++    </section>
++  );
++}

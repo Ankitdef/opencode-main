@@ -1,3 +1,15 @@
+### Task 3: SkiHero fixed backdrop with gradient fallback
+
+**Files:**
+- Create: `adventure-travel/src/components/SkiHero.tsx`
+
+**Interfaces:**
+- Consumes: `isWebGLAvailable` from `@/lib/webgl`, `dynamic` from `next/dynamic`, `SkiScene` default export.
+- Produces: `SkiHero()` — default export, **no props**. Sets `document.documentElement.dataset.snow3d = "true"` when the scene mounts. Renders the fixed `z-0` scene container (WebGL only) plus the first `min-h-screen` hero section with the "Activities" title.
+
+- [ ] **Step 1: Write `adventure-travel/src/components/SkiHero.tsx`**
+
+```tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -54,3 +66,17 @@ export default function SkiHero() {
     </>
   );
 }
+```
+
+- [ ] **Step 2: Verify typecheck + lint + build**
+
+Run (workdir `adventure-travel/`): `npx tsc --noEmit` — expected exit 0.
+Run: `npx eslint src/components/SkiHero.tsx` — expected 0 errors, 0 warnings.
+Run: `npm run build` — expected success.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add adventure-travel/src/components/SkiHero.tsx
+git commit -m "feat: SkiHero fixed backdrop with gradient fallback"
+```

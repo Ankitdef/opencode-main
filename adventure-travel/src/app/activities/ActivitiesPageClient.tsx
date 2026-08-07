@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useReveal } from "@/hooks/useReveal";
 import SmartImage from "@/components/SmartImage";
-import SkiHero from "@/components/SkiHero";
 import SkiingCourseModal from "@/components/SkiingCourseModal";
 
 const activities = [
@@ -110,13 +109,34 @@ export default function ActivitiesPage() {
   const [showCourse, setShowCourse] = useState(false);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      <SkiHero />
-
-      <div className="relative z-10">
+    <div className="min-h-screen bg-white dark:bg-background">
+      {/* Hero Banner */}
+      <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+        <div className="absolute inset-0">
+          <SmartImage
+            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80"
+            alt="Activities Banner"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/80" />
+        </div>
+        <div className="relative z-10 flex h-full items-center justify-center">
+          <div className="text-center px-6">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+              Choose Your Adventure
+            </p>
+            <h1 className="mb-6 text-5xl md:text-7xl font-heading font-bold text-white">
+              Activities
+            </h1>
+            <p className="max-w-2xl text-lg text-white/80">
+              From Himalayan treks to snow-covered slopes, riverside camps to tandem flights — find your perfect adventure in the Indian Himalayas.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Skiing & Snowboarding feature banner */}
-      <section id="skiing" className="relative overflow-hidden bg-gradient-to-br from-sky-50/60 via-blue-50/50 to-sky-100/60 backdrop-blur-md">
+      <section id="skiing" className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-blue-50 to-sky-100">
         {/* Flowing ribbon accent (echoes the airy landing-page look) */}
         <svg className="pointer-events-none absolute -top-16 left-0 w-2/3 text-sky-200/70" viewBox="0 0 600 300" fill="none" aria-hidden>
           <path d="M0,130 C 150,40 300,210 460,90 C 540,35 600,90 600,90" stroke="currentColor" strokeWidth="90" strokeLinecap="round" />
@@ -633,8 +653,6 @@ export default function ActivitiesPage() {
           </div>
         </div>
       </section>
-
-      </div>
 
       <SkiingCourseModal open={showCourse} onClose={() => setShowCourse(false)} />
     </div>

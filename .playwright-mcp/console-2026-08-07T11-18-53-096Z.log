@@ -1,0 +1,52 @@
+[     226ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[     966ms] [LOG] [Fast Refresh] done in 850ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    2558ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    2780ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    4874ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   24482ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   24859ms] [LOG] [Fast Refresh] done in 502ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   99562ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   99952ms] [LOG] [Fast Refresh] done in 502ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  100170ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  100632ms] [LOG] [Fast Refresh] done in 586ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  101282ms] [LOG] THREE.WebGLRenderer: Context Lost. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  112084ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  164361ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  164573ms] [LOG] [Fast Refresh] done in 314ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  164888ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  164942ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  166317ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  184426ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  184870ms] [LOG] [Fast Refresh] done in 570ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  189714ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  190228ms] [LOG] [Fast Refresh] done in 617ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  302710ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  302727ms] [LOG] [Fast Refresh] done in 119ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  560846ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  563089ms] [LOG] [Fast Refresh] done in 1927ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  563251ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  563926ms] [LOG] [Fast Refresh] done in 801ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  564082ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  564349ms] [LOG] [Fast Refresh] done in 402ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  565263ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  567127ms] [LOG] [Fast Refresh] done in 1959ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  567253ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  567749ms] [LOG] [Fast Refresh] done in 614ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  578974ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  580041ms] [LOG] [Fast Refresh] done in 890ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  580182ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  580948ms] [LOG] [Fast Refresh] done in 876ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  581073ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  581393ms] [LOG] [Fast Refresh] done in 432ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  581652ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  582936ms] [LOG] [Fast Refresh] done in 1150ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  583062ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  583999ms] [LOG] [Fast Refresh] done in 1045ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  687666ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  687721ms] [LOG] [Fast Refresh] done in 157ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  723509ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  723511ms] [LOG] [Fast Refresh] done in 102ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  730146ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  732839ms] [LOG] [Fast Refresh] done in 2797ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  732947ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  735890ms] [LOG] [Fast Refresh] done in 3050ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477

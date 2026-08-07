@@ -1,3 +1,19 @@
+### Task 1: Ski slope geometry helpers
+
+**Files:**
+- Create: `adventure-travel/src/components/three/ski.ts`
+
+**Interfaces:**
+- Consumes: `simplex2(x: number, y: number): number` from `./terrain`.
+- Produces:
+  - `slopeHeight(x: number, z: number): number` — slope height at (x, z); ridge (~44) at `z = 180`, base (~1) at `z = -120`, with an S-shaped run groove.
+  - `runCurve(): THREE.CatmullRomCurve3` — the skier's carve path from ridge `(z = 180)` to base `(z = -120)`, S-turning ±8 in x.
+  - `buildSkiSlope(): THREE.Mesh` — vertex-colored descending plane spanning `x ∈ [-70, 70]`, `z ∈ [-120, 180]`.
+  - `buildPines(count: number): THREE.InstancedMesh` — instanced cone pines on the flanks (run kept clear).
+
+- [ ] **Step 1: Write `adventure-travel/src/components/three/ski.ts`**
+
+```ts
 import * as THREE from "three";
 import { simplex2 } from "./terrain";
 
@@ -81,3 +97,16 @@ export function buildPines(count: number): THREE.InstancedMesh {
   mesh.frustumCulled = false;
   return mesh;
 }
+```
+
+- [ ] **Step 2: Verify typecheck + lint**
+
+Run (workdir `adventure-travel/`): `npx tsc --noEmit` — expected exit 0.
+Run: `npx eslint src/components/three/ski.ts` — expected 0 errors, 0 warnings.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add adventure-travel/src/components/three/ski.ts
+git commit -m "feat: ski slope geometry helpers for activities 3D scene"
+```

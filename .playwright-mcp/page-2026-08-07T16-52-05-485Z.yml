@@ -1,0 +1,281 @@
+- generic [active] [ref=f33e1]:
+  - navigation [ref=f33e2]:
+    - generic [ref=f33e4]:
+      - link "Expedition Happiness Treks" [ref=f33e5] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f33e10]:
+        - link "Home" [ref=f33e11] [cursor=pointer]:
+          - /url: /
+        - link "Adventures" [ref=f33e12] [cursor=pointer]:
+          - /url: /treks
+        - link "Destinations" [ref=f33e13] [cursor=pointer]:
+          - /url: /destinations
+        - button "Activities" [ref=f33e15]
+        - link "Contact" [ref=f33e18] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=f33e19]:
+        - link "Log In" [ref=f33e20] [cursor=pointer]:
+          - /url: /login
+        - link "Sign Up" [ref=f33e21] [cursor=pointer]:
+          - /url: /signup
+  - generic [ref=f33e23]:
+    - generic [ref=f33e24]:
+      - img "Activities Banner" [ref=f33e26]
+      - generic [ref=f33e29]:
+        - paragraph [ref=f33e30]: Choose Your Adventure
+        - heading "Activities" [level=1] [ref=f33e31]
+        - paragraph [ref=f33e32]: From Himalayan treks to snow-covered slopes, riverside camps to tandem flights — find your perfect adventure in the Indian Himalayas.
+    - generic [ref=f33e33]:
+      - generic [ref=f33e34]:
+        - generic [ref=f33e35]:
+          - img "Snowboarding the powder slopes of Auli" [ref=f33e37]
+          - generic [ref=f33e40]:
+            - img "Backcountry ski touring in the Himalayas" [ref=f33e41]
+            - generic [ref=f33e42]: Backcountry
+        - generic [ref=f33e43]:
+          - generic [ref=f33e44]: Skiing & Snowboarding · Auli
+          - heading "Enjoy the Journey" [level=2] [ref=f33e46]
+          - paragraph [ref=f33e47]: Certified 7-day courses on the powder slopes of Auli.
+          - paragraph [ref=f33e48]: Learn to ski or snowboard with certified instructors — complete equipment provided, from beginner nursery slopes to intermediate runs, all beneath the gaze of Nanda Devi.
+          - button "View Courses" [ref=f33e50]
+      - generic [ref=f33e53]:
+        - generic [ref=f33e54]:
+          - heading "Skills Academy" [level=2] [ref=f33e55]
+          - paragraph [ref=f33e56]: From first-timers to seasoned adventurers — structured progression tracks taught by certified mountain guides. Learn at your pace, earn your level.
+          - generic [ref=f33e57]:
+            - generic [ref=f33e58]: Beginner
+            - generic [ref=f33e60]: Intermediate
+            - generic [ref=f33e62]: Advanced
+        - generic [ref=f33e64]:
+          - generic [ref=f33e65]:
+            - generic [ref=f33e71]:
+              - heading "Alpine Skiing" [level=3] [ref=f33e72]
+              - paragraph [ref=f33e73]: Auli · 7-day certified course
+            - generic [ref=f33e74]:
+              - generic [ref=f33e75]:
+                - generic [ref=f33e76]: 🟢 Snowplough
+                - generic [ref=f33e77]: 🔵 Parallel Turns
+                - generic [ref=f33e78]: 🔴 Off-Piste
+              - paragraph [ref=f33e79]: Master stance, balance, and stopping on nursery slopes. Progress through linked turns to chairlift runs with an instructor at your side.
+              - generic [ref=f33e80]:
+                - paragraph [ref=f33e81]: ₹30,000 / 7 days
+                - link "Book" [ref=f33e82] [cursor=pointer]:
+                  - /url: https://wa.me/917817912062?text=Hi!%20I'm%20interested%20in%20the%20Skiing%20course%20in%20Auli.
+          - generic [ref=f33e83]:
+            - generic [ref=f33e89]:
+              - heading "Snowboarding" [level=3] [ref=f33e90]
+              - paragraph [ref=f33e91]: Auli · 7-day certified course
+            - generic [ref=f33e92]:
+              - generic [ref=f33e93]:
+                - generic [ref=f33e94]: 🟢 Balance & Sliding
+                - generic [ref=f33e95]: 🔵 Heel/Toe Turns
+                - generic [ref=f33e96]: 🔴 Freestyle Basics
+              - paragraph [ref=f33e97]: From first slides to linking turns on blue runs. Build confidence with progressive coaching and all equipment included.
+              - generic [ref=f33e98]:
+                - paragraph [ref=f33e99]: ₹35,000 / 7 days
+                - link "Book" [ref=f33e100] [cursor=pointer]:
+                  - /url: https://wa.me/917817912062?text=Hi!%20I'm%20interested%20in%20the%20Snowboarding%20course%20in%20Auli.
+          - generic [ref=f33e101]:
+            - generic [ref=f33e107]:
+              - heading "Mountaineering" [level=3] [ref=f33e108]
+              - paragraph [ref=f33e109]: Himalayas · Multi-day expeditions
+            - generic [ref=f33e110]:
+              - generic [ref=f33e111]:
+                - generic [ref=f33e112]: 🟢 Day Hikes
+                - generic [ref=f33e113]: 🔵 Peak Bidding
+                - generic [ref=f33e114]: 🔴 High Altitude
+              - paragraph [ref=f33e115]: Start with guided day hikes, progress to multi-day treks with technical sections. Rope work, crampon technique, and glacier travel.
+              - generic [ref=f33e116]:
+                - paragraph [ref=f33e117]: ₹18,000+ / trek
+                - link "Enquire" [ref=f33e118] [cursor=pointer]:
+                  - /url: https://wa.me/917817912062?text=Hi!%20I'm%20interested%20in%20mountaineering%20courses.
+          - generic [ref=f33e119]:
+            - generic [ref=f33e126]:
+              - heading "Rock Climbing" [level=3] [ref=f33e127]
+              - paragraph [ref=f33e128]: Rishikesh & Himalayas · Day courses
+            - generic [ref=f33e129]:
+              - generic [ref=f33e130]:
+                - generic [ref=f33e131]: 🟢 Top-Rope Basics
+                - generic [ref=f33e132]: 🔵 Lead Climbing
+                - generic [ref=f33e133]: 🔴 Multi-Pitch
+              - paragraph [ref=f33e134]: Learn belaying, footwork, and route reading on natural rock. Progress from gym-style top-rope to outdoor multi-pitch routes.
+              - generic [ref=f33e135]:
+                - paragraph [ref=f33e136]: ₹5,000+ / session
+                - link "Enquire" [ref=f33e137] [cursor=pointer]:
+                  - /url: https://wa.me/917817912062?text=Hi!%20I'm%20interested%20in%20rock%20climbing%20courses.
+      - generic [ref=f33e138]:
+        - generic [ref=f33e139]:
+          - heading "See the Slopes in Action" [level=2] [ref=f33e140]
+          - paragraph [ref=f33e141]: Real footage from our courses — see what your first day on snow actually looks like.
+        - generic [ref=f33e142]:
+          - generic [ref=f33e143]:
+            - iframe [ref=f33e145]:
+              - generic "YouTube Video Player" [ref=f36e3]:
+                - alert [ref=f36e4]:
+                  - generic [ref=f36e7]:
+                    - generic [ref=f36e8]: Video unavailable
+                    - generic [ref=f36e9]: This video is unavailable
+                  - link "Visit YouTube to search for more videos" [ref=f36e10] [cursor=pointer]:
+                    - /url: https://www.youtube.com
+            - generic [ref=f33e146]:
+              - heading "Skiing in Auli — Your First Day" [level=3] [ref=f33e147]
+              - paragraph [ref=f33e148]: Nursery slopes, cable car views, and what beginner lessons look like.
+          - generic [ref=f33e149]:
+            - iframe [ref=f33e151]:
+              - generic "YouTube Video Player" [ref=f37e3]:
+                - alert [ref=f37e4]:
+                  - generic [ref=f37e7]:
+                    - generic [ref=f37e8]: Video unavailable
+                    - generic [ref=f37e9]: This video is unavailable
+                  - link "Visit YouTube to search for more videos" [ref=f37e10] [cursor=pointer]:
+                    - /url: https://www.youtube.com
+            - generic [ref=f33e152]:
+              - heading "Snowboarding — Balance to Turns" [level=3] [ref=f33e153]
+              - paragraph [ref=f33e154]: From first slides to linked turns on Auli's blue runs.
+    - generic [ref=f33e156]:
+      - generic [ref=f33e157]:
+        - heading "What Adventure Calls You?" [level=2] [ref=f33e158]
+        - paragraph [ref=f33e159]: Every activity is guided, insured, and designed for unforgettable experiences. Pick your passion — we handle the rest.
+      - generic [ref=f33e160]:
+        - generic [ref=f33e161]:
+          - generic [ref=f33e162]:
+            - img "Trekking" [ref=f33e163]
+            - generic [ref=f33e165]: Trekking
+            - paragraph [ref=f33e170]: Walk the Himalayas
+          - generic [ref=f33e171]:
+            - paragraph [ref=f33e172]: From gentle valley walks to challenging high-altitude expeditions, discover 17 handcrafted treks across Uttarakhand and Himachal Pradesh.
+            - generic [ref=f33e173]:
+              - generic [ref=f33e174]: Valley of Flowers — 6 days through alpine meadows
+              - generic [ref=f33e178]: Kedarkantha — perfect beginner winter summit
+              - generic [ref=f33e182]: Roopkund — mysterious high-altitude lake trek
+              - generic [ref=f33e186]: Har Ki Dun — ancient valley with panoramic peaks
+            - generic [ref=f33e190]:
+              - generic [ref=f33e191]: 9+
+              - generic [ref=f33e192]: Easy to Expert
+              - generic [ref=f33e193]: 4-12 Days
+            - link "Explore Treks" [ref=f33e194] [cursor=pointer]:
+              - /url: /treks
+        - generic [ref=f33e197]:
+          - generic [ref=f33e198]:
+            - img "Skiing & Snowboarding" [ref=f33e199]
+            - generic [ref=f33e201]: Skiing & Snowboarding
+            - paragraph [ref=f33e206]: Carve the slopes of Auli
+          - generic [ref=f33e207]:
+            - paragraph [ref=f33e208]: Professional 7-day courses in Auli, Uttarakhand. Learn from certified instructors with complete equipment provided.
+            - generic [ref=f33e209]:
+              - generic [ref=f33e210]: Certified ski & snowboard instructors
+              - generic [ref=f33e214]: Complete equipment included
+              - generic [ref=f33e218]: Beginner to intermediate slopes
+              - generic [ref=f33e222]: Stunning Himalayan backdrop
+            - generic [ref=f33e226]:
+              - generic [ref=f33e227]: "2"
+              - generic [ref=f33e228]: ₹30K-35K
+              - generic [ref=f33e229]: 7 Days
+            - button "Explore Skills" [ref=f33e230]
+        - generic [ref=f33e233]:
+          - generic [ref=f33e234]:
+            - img "Camping" [ref=f33e235]
+            - generic [ref=f33e237]: Camping
+            - paragraph [ref=f33e242]: Under the Himalayan stars
+          - generic [ref=f33e243]:
+            - paragraph [ref=f33e244]: Riverside camps in Rishikesh, mountain camps in Uttarakhand, and basecamp setups for treks. Sleep under a billion stars.
+            - generic [ref=f33e245]:
+              - generic [ref=f33e246]: Rishikesh riverside camps with bonfires
+              - generic [ref=f33e250]: Mountain basecamp experiences
+              - generic [ref=f33e254]: Swiss tents with modern amenities
+              - generic [ref=f33e258]: Stargazing & nature walks
+            - generic [ref=f33e262]:
+              - generic [ref=f33e263]: 5+
+              - generic [ref=f33e264]: Riverside & Mountain
+              - generic [ref=f33e265]: Year-round
+            - link "View Camps" [ref=f33e266] [cursor=pointer]:
+              - /url: /contact
+        - generic [ref=f33e269]:
+          - generic [ref=f33e270]:
+            - img "Paragliding" [ref=f33e271]
+            - generic [ref=f33e273]: Paragliding
+            - paragraph [ref=f33e278]: Soar over the valleys
+          - generic [ref=f33e279]:
+            - paragraph [ref=f33e280]: Tandem paragliding flights in Bir Billing and Mussoorie. Experience the Himalayas from above with certified pilots.
+            - generic [ref=f33e281]:
+              - generic [ref=f33e282]: Tandem flights for beginners
+              - generic [ref=f33e286]: Certified & experienced pilots
+              - generic [ref=f33e290]: GoPro footage included
+              - generic [ref=f33e294]: Bir Billing — world's best site
+            - generic [ref=f33e298]:
+              - generic [ref=f33e299]: 15-30 min
+              - generic [ref=f33e300]: 2,000m+
+              - generic [ref=f33e301]: Bir & Mussoorie
+            - link "Book Flight" [ref=f33e302] [cursor=pointer]:
+              - /url: /contact
+    - generic [ref=f33e309]:
+      - generic [ref=f33e310]:
+        - generic [ref=f33e311]: Inner Line Permit Required
+        - heading "Unlock Restricted Uttarakhand" [level=2] [ref=f33e315]
+        - paragraph [ref=f33e316]: These forbidden border regions are off-limits without a permit. We handle the paperwork — you explore the unexplored.
+      - generic [ref=f33e317]:
+        - link "Mana Pass Restricted — ILP Required Mana Pass 5,616m Chamoli, Uttarakhand India's highest motorable pass. Ancient Indo-Tibetan trade route. Raw, desolate, breathtaking." [ref=f33e318] [cursor=pointer]:
+          - /url: /treks/mana-pass
+          - img "Mana Pass" [ref=f33e319]
+          - generic [ref=f33e324]:
+            - generic [ref=f33e325]: Restricted — ILP Required
+            - heading "Mana Pass" [level=3] [ref=f33e326]
+            - generic [ref=f33e327]:
+              - generic [ref=f33e328]: 5,616m
+              - generic [ref=f33e330]: Chamoli, Uttarakhand
+            - paragraph: India's highest motorable pass. Ancient Indo-Tibetan trade route. Raw, desolate, breathtaking.
+        - link "Niti Pass Restricted — ILP Required Niti Pass 5,360m Chamoli, Uttarakhand Ancient Himalayan trade route at the Indo-Tibetan border. Pristine glacial landscapes untouched by tourism." [ref=f33e331] [cursor=pointer]:
+          - /url: /treks/niti-pass
+          - img "Niti Pass" [ref=f33e332]
+          - generic [ref=f33e337]:
+            - generic [ref=f33e338]: Restricted — ILP Required
+            - heading "Niti Pass" [level=3] [ref=f33e339]
+            - generic [ref=f33e340]:
+              - generic [ref=f33e341]: 5,360m
+              - generic [ref=f33e343]: Chamoli, Uttarakhand
+            - paragraph: Ancient Himalayan trade route at the Indo-Tibetan border. Pristine glacial landscapes untouched by tourism.
+        - link "Rimkhim Restricted — ILP Required Rimkhim 4,500m+ Chamoli, Uttarakhand Remote border village near the Tibet frontier. Untouched wilderness, zero crowds, pure Himalayan solitude." [ref=f33e344] [cursor=pointer]:
+          - /url: /treks/rimkhim
+          - img "Rimkhim" [ref=f33e345]
+          - generic [ref=f33e350]:
+            - generic [ref=f33e351]: Restricted — ILP Required
+            - heading "Rimkhim" [level=3] [ref=f33e352]
+            - generic [ref=f33e353]:
+              - generic [ref=f33e354]: 4,500m+
+              - generic [ref=f33e356]: Chamoli, Uttarakhand
+            - paragraph: Remote border village near the Tibet frontier. Untouched wilderness, zero crowds, pure Himalayan solitude.
+      - generic [ref=f33e358]:
+        - generic [ref=f33e363]:
+          - paragraph [ref=f33e364]: We handle the ILP permit for you
+          - paragraph [ref=f33e365]: Proper guidelines, hassle-free entry to restricted areas
+        - link "Get Permit Now" [ref=f33e366] [cursor=pointer]:
+          - /url: https://wa.me/918650561564?text=Hi!%20I'm%20interested%20in%20restricted%20area%20trekking%20(Mana/Niti/Rimkhim).
+    - generic [ref=f33e368]:
+      - heading "Why Adventure With Us?" [level=2] [ref=f33e370]
+      - generic [ref=f33e371]:
+        - generic [ref=f33e372]:
+          - generic [ref=f33e373]: 👥
+          - paragraph [ref=f33e374]: 5,000+
+          - paragraph [ref=f33e375]: Happy Adventurers
+        - generic [ref=f33e376]:
+          - generic [ref=f33e377]: 🛡️
+          - paragraph [ref=f33e378]: 100%
+          - paragraph [ref=f33e379]: Safety Record
+        - generic [ref=f33e380]:
+          - generic [ref=f33e381]: ⭐
+          - paragraph [ref=f33e382]: 4.8/5
+          - paragraph [ref=f33e383]: Average Rating
+        - generic [ref=f33e384]:
+          - generic [ref=f33e385]: 📞
+          - paragraph [ref=f33e386]: 24/7
+          - paragraph [ref=f33e387]: Support
+    - generic [ref=f33e390]:
+      - heading "Ready to Start Your Adventure?" [level=2] [ref=f33e391]
+      - paragraph [ref=f33e392]: Whether it's your first trek or your fiftieth, we'll make it unforgettable. Talk to our team to plan your perfect trip.
+      - generic [ref=f33e393]:
+        - link "Plan My Trip" [ref=f33e394] [cursor=pointer]:
+          - /url: /contact
+        - link "Chat on WhatsApp" [ref=f33e395] [cursor=pointer]:
+          - /url: https://wa.me/917817912062?text=Hi!%20I'm%20interested%20in%20an%20adventure.
+  - button "Open Next.js Dev Tools" [ref=f33e401] [cursor=pointer]
+  - alert [ref=f33e405]

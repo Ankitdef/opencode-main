@@ -1,0 +1,163 @@
+[     989ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    1157ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    2507ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    6325ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    6347ms] [LOG] [Fast Refresh] done in 123ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  272170ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  276271ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js?id=%255Bproject%255D%252Fadventure-travel%252Fsrc%252Fcomponents%252Fthree%252FSkiScene.tsx+%255Bapp-client%255D+%2528ecmascript%2529:402:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10179:316)
+    at flushSyncWork$1 (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9230:86)
+    at Object.scheduleRefresh (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:299:13)
+    at http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:391:33
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:384:38)
+    at applyUpdate (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:878:31)
+    at http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:886:13
+[  276353ms] [LOG] [Fast Refresh] done in 3960ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  276899ms] [LOG] THREE.WebGLRenderer: Context Lost. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  276900ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  277566ms] [LOG] [Fast Refresh] done in 850ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  288852ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  288957ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  289451ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js?id=%255Bproject%255D%252Fadventure-travel%252Fsrc%252Fcomponents%252Fthree%252FSkiScene.tsx+%255Bapp-client%255D+%2528ecmascript%2529:402:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:2647:64)
+[  289449ms] [LOG] [Fast Refresh] done in 217ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  289557ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  290331ms] [LOG] [Fast Refresh] done in 880ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  290442ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  290501ms] [LOG] [Fast Refresh] done in 168ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  290988ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  291105ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  291585ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://fonts.gstatic.com/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2 @ https://www.youtube.com/embed/sqK0ngy9vWg:0
+[  291619ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://fonts.gstatic.com/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2 @ https://www.youtube.com/embed/2NnC4kFzEcM:0
+[  292495ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js:671:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:2647:64)
+[  292911ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  293135ms] [LOG] [Fast Refresh] done in 335ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  304176ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  304326ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  304349ms] [LOG] [Fast Refresh] done in 260ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  304472ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  305042ms] [LOG] [Fast Refresh] done in 674ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  306335ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  306476ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  306582ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://fonts.gstatic.com/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2 @ https://www.youtube.com/embed/2NnC4kFzEcM:0
+[  306655ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://fonts.gstatic.com/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2 @ https://www.youtube.com/embed/sqK0ngy9vWg:0
+[  308347ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  308355ms] [LOG] [Fast Refresh] done in 295ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  308968ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js:671:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:2647:64)
+[  317955ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  318333ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  318367ms] [LOG] [Fast Refresh] done in 497ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  318528ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  319113ms] [LOG] [Fast Refresh] done in 690ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  319969ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  320172ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  320634ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  320638ms] [LOG] [Fast Refresh] done in 208ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  321339ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js:671:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:2647:64)
+[  339667ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  339803ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  339839ms] [LOG] [Fast Refresh] done in 234ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  344747ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  345233ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  346464ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js:672:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:2647:64)
+[  354821ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  354902ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  354931ms] [LOG] [Fast Refresh] done in 188ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  355056ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  355448ms] [LOG] [Fast Refresh] done in 500ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  357273ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  357330ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  359039ms] ReferenceError: Skier is not defined
+    at SkiScene (http://localhost:3000/_next/static/chunks/adventure-travel_src_components_three_1kx-16l._.js:672:239)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_react-dom_07k9bb0._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/1498_next_dist_compiled_0btyahn._.js:2647:64)
+[  368026ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  368368ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  368380ms] [LOG] [Fast Refresh] done in 444ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  368546ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  368877ms] [LOG] [Fast Refresh] done in 434ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  369553ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  369682ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  370201ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  370215ms] [LOG] [Fast Refresh] done in 167ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  371950ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477

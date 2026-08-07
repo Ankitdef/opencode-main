@@ -1,0 +1,170 @@
+[     380ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    4021ms] [LOG] [Fast Refresh] done in 3742ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    4795ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    5123ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[    7454ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   27523ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   29330ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:343:57
+Expected ';', '}' or <eof>
+  341 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  342 |       pos[i * 3 + 1] = Math.random() * 44;
+> 343 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  344 |     }
+  345 |     /* eslint-enable react-hooks/purity */
+  346 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[   29819ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:343:57
+Expected ';', '}' or <eof>
+  341 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  342 |       pos[i * 3 + 1] = Math.random() * 44;
+> 343 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  344 |     }
+  345 |     /* eslint-enable react-hooks/purity */
+  346 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[   30635ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   52208ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   52210ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:343:57
+Expected ';', '}' or <eof>
+  341 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  342 |       pos[i * 3 + 1] = Math.random() * 44;
+> 343 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  344 |     }
+  345 |     /* eslint-enable react-hooks/purity */
+  346 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[   52491ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:343:57
+Expected ';', '}' or <eof>
+  341 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  342 |       pos[i * 3 + 1] = Math.random() * 44;
+> 343 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  344 |     }
+  345 |     /* eslint-enable react-hooks/purity */
+  346 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[   52530ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[   52627ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:343:57
+Expected ';', '}' or <eof>
+  341 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  342 |       pos[i * 3 + 1] = Math.random() * 44;
+> 343 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  344 |     }
+  345 |     /* eslint-enable react-hooks/purity */
+  346 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[   52721ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:343:57
+Expected ';', '}' or <eof>
+  341 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  342 |       pos[i * 3 + 1] = Math.random() * 44;
+> 343 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  344 |     }
+  345 |     /* eslint-enable react-hooks/purity */
+  346 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[   52753ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  117830ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  119383ms] [ERROR] ./adventure-travel/src/components/three/SkiScene.tsx:468:57
+Expected ';', '}' or <eof>
+  466 |       pos[i * 3] = (Math.random() - 0.5) * 120;
+  467 |       pos[i * 3 + 1] = Math.random() * 44;
+> 468 | adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      |                                                         ^^^
+  469 |     }
+  470 |     /* eslint-enable react-hooks/purity */
+  471 |     const geo = new THREE.BufferGeometry();
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Client Component Browser:
+    ./adventure-travel/src/components/three/SkiScene.tsx [Client Component Browser]
+    ./adventure-travel/src/components/SkiHero.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Client Component Browser]
+    ./adventure-travel/src/app/activities/ActivitiesPageClient.tsx [Server Component]
+    ./adventure-travel/src/app/activities/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:3318
+[  179990ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  180978ms] [LOG] [Fast Refresh] done in 997ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  181287ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  181711ms] [LOG] [Fast Refresh] done in 731ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  181883ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  182811ms] [LOG] [Fast Refresh] done in 1029ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  186933ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  187111ms] [LOG] [Fast Refresh] done in 279ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  190669ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  190839ms] [LOG] [Fast Refresh] done in 299ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  192544ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  193676ms] [LOG] THREE.WebGLRenderer: Context Lost. @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  300778ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  302111ms] [LOG] [Fast Refresh] done in 1222ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  342400ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  343283ms] [LOG] [Fast Refresh] done in 899ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  384225ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  384702ms] [LOG] [Fast Refresh] done in 494ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  432722ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  433255ms] [LOG] [Fast Refresh] done in 539ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  559915ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  560796ms] [LOG] [Fast Refresh] done in 874ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  681194ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  681303ms] [LOG] [Fast Refresh] done in 193ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  681641ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477
+[  684366ms] [LOG] [Fast Refresh] done in 2838ms @ http://localhost:3000/_next/static/chunks/1498_next_dist_17ru1ex._.js:2477

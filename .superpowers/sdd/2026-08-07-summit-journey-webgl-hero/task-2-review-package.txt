@@ -1,0 +1,29 @@
+=== git log (8ee540b..4e792e8) ===
+4e792e8 feat: add WebGL availability helper
+
+=== git diff --stat ===
+ adventure-travel/src/lib/webgl.ts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+=== git diff -U10 ===
+diff --git a/adventure-travel/src/lib/webgl.ts b/adventure-travel/src/lib/webgl.ts
+new file mode 100644
+index 0000000..d76cd44
+--- /dev/null
++++ b/adventure-travel/src/lib/webgl.ts
+@@ -0,0 +1,15 @@
++export function isWebGLAvailable(): boolean {
++  if (typeof window === "undefined" || typeof WebGLRenderingContext === "undefined") {
++    return false;
++  }
++  try {
++    const canvas = document.createElement("canvas");
++    return Boolean(
++      canvas.getContext("webgl2") ||
++        canvas.getContext("webgl") ||
++        canvas.getContext("experimental-webgl"),
++    );
++  } catch {
++    return false;
++  }
++}
