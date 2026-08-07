@@ -50,7 +50,7 @@ export default function PermitTours() {
   if (permitTours.length === 0) return null;
 
   return (
-    <section id="permit-tours" className="py-section bg-gradient-to-b from-background to-primary/5">
+    <section id="permit-tours" className="py-section bg-gradient-to-b from-background/70 via-background/40 to-primary/5 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <FadeUp className="max-w-3xl">

@@ -11,7 +11,7 @@ export default function AdventureStories() {
   const secondary = stories.filter((s) => s.id !== featured.id).slice(0, 2);
 
   return (
-    <section className="py-section bg-background">
+    <section className="py-section bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -28,7 +28,7 @@ export default function SeasonalExplorer() {
   const seasonTreks = getSeasonTreks(activeSeason);
 
   return (
-    <section className="py-section-sm bg-background">
+    <section className="py-section-sm bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeUp className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <span className="text-sm font-semibold tracking-widest uppercase text-accent">Seasonal Adventures</span>

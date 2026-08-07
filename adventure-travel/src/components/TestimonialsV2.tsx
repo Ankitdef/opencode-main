@@ -65,7 +65,7 @@ export default function TestimonialsV2() {
   };
 
   return (
-    <section className="py-section-sm relative overflow-hidden bg-gradient-to-b from-emerald-50/50 to-background">
+    <section className="py-section-sm relative overflow-hidden bg-gradient-to-b from-emerald-50/40 via-background/30 to-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

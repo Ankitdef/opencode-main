@@ -19,7 +19,7 @@ const INSTAGRAM_URL = "https://instagram.com/expedition_happiness07";
 
 export default function InstagramGallery() {
   return (
-    <section className="py-section bg-background">
+    <section className="py-section bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <FadeUp className="text-center mb-12">
           <span className="text-sm font-semibold tracking-widest uppercase text-accent">@expedition_happiness07</span>

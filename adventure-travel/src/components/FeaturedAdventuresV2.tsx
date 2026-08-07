@@ -21,7 +21,7 @@ const featuredTreks = treks
 
 export default function FeaturedAdventuresV2() {
   return (
-    <section id="gallery" className="py-section bg-background">
+    <section id="gallery" className="py-section bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

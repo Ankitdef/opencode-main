@@ -113,7 +113,7 @@ function SplitPanel({ data }: { data: Split }) {
   const reverse = !!data.reverse;
 
   return (
-    <section id={data.id} className={`relative overflow-hidden ${data.tint ? "bg-surface" : "bg-white"}`}>
+    <section id={data.id} className={`relative overflow-hidden ${data.tint ? "bg-surface/70" : "bg-white/70"} backdrop-blur-md`}>
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8">
         {/* Text */}
         <motion.div
@@ -175,7 +175,7 @@ function SplitPanel({ data }: { data: Split }) {
             {/* Curved edge on the side that faces the text, filled with the section colour */}
             <div
               className={`pointer-events-none absolute inset-y-0 z-10 hidden w-14 lg:block ${reverse ? "right-0" : "left-0"} ${
-                data.tint ? "text-surface" : "text-white"
+                data.tint ? "text-surface/70" : "text-white/70"
               }`}
             >
               <svg className="h-full w-full" viewBox="0 0 56 100" preserveAspectRatio="none" fill="currentColor" aria-hidden>

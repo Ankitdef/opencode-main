@@ -53,7 +53,7 @@ const hrefFor = (name: string) => {
 
 export default function FeaturedDestinations() {
   return (
-    <section className="py-section-sm bg-background">
+    <section className="py-section-sm bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
