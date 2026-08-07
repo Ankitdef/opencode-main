@@ -10,7 +10,6 @@ const SKIER_STATIC_P = 0.35;
 
 // ─── Jump timing (as fraction of run progress) ───
 const JUMP_START = 0.55;
-const JUMP_PEAK = 0.62;
 const JUMP_END = 0.70;
 const JUMP_HEIGHT = 6;
 const JUMP_SPINS = 1; // full 360s during airtime
@@ -70,36 +69,224 @@ function weatherAt(p: number) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Skier (unchanged)
+// Snowboarder — realistic human, connected limbs, detailed face
 // ─────────────────────────────────────────────────────────
 function Skier({ groupRef }: { groupRef: React.RefObject<THREE.Group | null> }) {
   const parts = useMemo(() => {
     const g = new THREE.Group();
-    const skiMat = new THREE.MeshStandardMaterial({ color: "#1f2b45", roughness: 0.6 });
-    const jacketMat = new THREE.MeshStandardMaterial({ color: "#f59e0b", roughness: 0.8 });
-    const darkMat = new THREE.MeshStandardMaterial({ color: "#333a47", roughness: 0.9 });
-    const helmetMat = new THREE.MeshStandardMaterial({ color: "#0ea5e9", roughness: 0.5 });
-    for (const sx of [-0.42, 0.42]) {
-      const ski = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.08, 3.1), skiMat);
-      ski.position.set(sx, 0.06, 0);
-      g.add(ski);
-      const boot = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.5, 0.55), darkMat);
-      boot.position.set(sx, 0.45, 0.15);
+
+    // Materials — muted realistic tones
+    const boardMat = new THREE.MeshStandardMaterial({ color: "#1a1a2e", roughness: 0.55, metalness: 0.1 });
+    const jacketMat = new THREE.MeshStandardMaterial({ color: "#c0392b", roughness: 0.85 });
+    const pantsMat = new THREE.MeshStandardMaterial({ color: "#2c3e50", roughness: 0.9 });
+    const skinMat = new THREE.MeshStandardMaterial({ color: "#c9a07a", roughness: 0.82 });
+    const helmetMat = new THREE.MeshStandardMaterial({ color: "#ecf0f1", roughness: 0.35, metalness: 0.12 });
+    const goggleMat = new THREE.MeshStandardMaterial({ color: "#1a1a2e", roughness: 0.15, metalness: 0.6 });
+    const bootMat = new THREE.MeshStandardMaterial({ color: "#1a1a2e", roughness: 0.7 });
+    const gloveMat = new THREE.MeshStandardMaterial({ color: "#2c3e50", roughness: 0.8 });
+    const bindingMat = new THREE.MeshStandardMaterial({ color: "#7f8c8d", roughness: 0.6, metalness: 0.3 });
+    const soleMat = new THREE.MeshStandardMaterial({ color: "#e74c3c", roughness: 0.5 });
+
+    // ── Snowboard ──
+    const board = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.05, 2.5), boardMat);
+    board.position.set(0, 0.05, 0);
+    g.add(board);
+    for (const sz of [-1.2, 1.2]) {
+      const tip = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.04, 0.3), boardMat);
+      tip.position.set(0, 0.09, sz);
+      tip.rotation.x = sz > 0 ? -0.25 : 0.25;
+      g.add(tip);
+    }
+    // Board graphic stripe
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 2.3), soleMat);
+    stripe.position.set(0, 0.08, 0);
+    g.add(stripe);
+
+    // ── Bindings ──
+    for (const sz of [-0.5, 0.5]) {
+      const binding = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.1, 0.32), bindingMat);
+      binding.position.set(0, 0.13, sz);
+      g.add(binding);
+      // Binding straps
+      const strap = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.03, 0.08), bindingMat);
+      strap.position.set(0, 0.2, sz);
+      g.add(strap);
+    }
+
+    // ── Boots ──
+    for (const sz of [-0.5, 0.5]) {
+      // Boot shell
+      const boot = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.28, 0.36), bootMat);
+      boot.position.set(0, 0.32, sz);
       g.add(boot);
+      // Boot sole
+      const sole = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.06, 0.38), soleMat);
+      sole.position.set(0, 0.18, sz);
+      g.add(sole);
     }
-    const body = new THREE.Mesh(new THREE.BoxGeometry(0.85, 1.1, 0.6), jacketMat);
-    body.position.set(0, 1.15, -0.1);
-    body.rotation.x = 0.25;
-    g.add(body);
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 16, 16), helmetMat);
-    head.position.set(0, 1.9, -0.25);
-    g.add(head);
-    for (const sx of [-0.55, 0.55]) {
-      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.4, 6), darkMat);
-      pole.position.set(sx, 0.8, 0.5);
-      pole.rotation.x = 0.7;
-      g.add(pole);
+
+    // ── Legs — continuous chain from boot to hip ──
+    for (const sz of [-0.5, 0.5]) {
+      // Shin (lower leg)
+      const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 0.5, 12), pantsMat);
+      shin.position.set(0, 0.65, sz);
+      shin.rotation.x = 0.1;
+      g.add(shin);
+
+      // Knee joint
+      const knee = new THREE.Mesh(new THREE.SphereGeometry(0.085, 12, 12), pantsMat);
+      knee.position.set(0, 0.9, sz);
+      g.add(knee);
+
+      // Thigh (upper leg)
+      const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.075, 0.48, 12), pantsMat);
+      thigh.position.set(0, 1.16, sz);
+      thigh.rotation.x = -0.08;
+      g.add(thigh);
     }
+
+    // ── Hips / pelvis ──
+    const hips = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.2, 0.36), pantsMat);
+    hips.position.set(0, 1.38, 0);
+    g.add(hips);
+
+    // ── Torso — single tapered cylinder for natural silhouette ──
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.21, 0.85, 14), jacketMat);
+    torso.position.set(0, 1.82, -0.03);
+    torso.rotation.x = 0.12;
+    g.add(torso);
+
+    // Jacket collar
+    const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 0.08, 12), jacketMat);
+    collar.position.set(0, 2.22, -0.04);
+    g.add(collar);
+
+    // ── Shoulders + Arms — properly attached, connected chain ──
+    for (const sx of [-1, 1]) {
+      const side = sx;
+      // Shoulder joint — at the torso edge
+      const shoulderX = side * 0.18;
+      const shoulderY = 2.18;
+      const shoulderZ = -0.03;
+
+      const shoulder = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 12), jacketMat);
+      shoulder.position.set(shoulderX, shoulderY, shoulderZ);
+      g.add(shoulder);
+
+      // Upper arm — extends outward and slightly forward
+      const upperArmLen = 0.38;
+      const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, upperArmLen, 10), jacketMat);
+      const uaAngleZ = side * 0.7; // outward
+      const uaAngleX = -0.25; // forward
+      upperArm.position.set(
+        shoulderX + Math.sin(uaAngleZ) * upperArmLen * 0.5,
+        shoulderY - Math.cos(uaAngleZ) * upperArmLen * 0.5,
+        shoulderZ + Math.sin(uaAngleX) * upperArmLen * 0.5,
+      );
+      upperArm.rotation.set(uaAngleX, 0, uaAngleZ);
+      g.add(upperArm);
+
+      // Elbow — at the end of upper arm
+      const elbowX = shoulderX + Math.sin(uaAngleZ) * upperArmLen;
+      const elbowY = shoulderY - Math.cos(uaAngleZ) * upperArmLen;
+      const elbowZ = shoulderZ + Math.sin(uaAngleX) * upperArmLen;
+
+      const elbow = new THREE.Mesh(new THREE.SphereGeometry(0.055, 10, 10), jacketMat);
+      elbow.position.set(elbowX, elbowY, elbowZ);
+      g.add(elbow);
+
+      // Lower arm — hangs down and slightly forward
+      const lowerArmLen = 0.35;
+      const laAngleZ = side * 0.35; // less outward than upper
+      const laAngleX = -0.15;
+      const lowerArm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, lowerArmLen, 10), jacketMat);
+      lowerArm.position.set(
+        elbowX + Math.sin(laAngleZ) * lowerArmLen * 0.5,
+        elbowY - Math.cos(laAngleZ) * lowerArmLen * 0.5,
+        elbowZ + Math.sin(laAngleX) * lowerArmLen * 0.5,
+      );
+      lowerArm.rotation.set(laAngleX, 0, laAngleZ);
+      g.add(lowerArm);
+
+      // Wrist
+      const wristX = elbowX + Math.sin(laAngleZ) * lowerArmLen;
+      const wristY = elbowY - Math.cos(laAngleZ) * lowerArmLen;
+      const wristZ = elbowZ + Math.sin(laAngleX) * lowerArmLen;
+
+      // Glove — slightly larger, rounded
+      const glove = new THREE.Mesh(new THREE.SphereGeometry(0.06, 10, 10), gloveMat);
+      glove.position.set(wristX, wristY, wristZ);
+      g.add(glove);
+    }
+
+    // ── Neck ──
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.075, 0.1, 12), skinMat);
+    neck.position.set(0, 2.28, -0.04);
+    g.add(neck);
+
+    // ── Head — realistic skull proportions ──
+    // Main cranium — slightly elongated vertically
+    const cranium = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 18), skinMat);
+    cranium.position.set(0, 2.44, -0.02);
+    cranium.scale.set(0.95, 1.02, 0.92);
+    g.add(cranium);
+
+    // Jaw / chin — defined square jaw
+    const jaw = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 0.1), skinMat);
+    jaw.position.set(0, 2.36, 0.06);
+    jaw.rotation.x = 0.1;
+    g.add(jaw);
+
+    // Chin
+    const chin = new THREE.Mesh(new THREE.SphereGeometry(0.04, 10, 10), skinMat);
+    chin.position.set(0, 2.33, 0.1);
+    g.add(chin);
+
+    // Nose — small triangular hint
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.07, 8), skinMat);
+    nose.position.set(0, 2.42, 0.13);
+    nose.rotation.x = Math.PI / 2;
+    g.add(nose);
+
+    // Ears — small bumps on sides
+    for (const ex of [-1, 1]) {
+      const ear = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 8), skinMat);
+      ear.position.set(ex * 0.14, 2.43, -0.02);
+      ear.scale.set(0.5, 1, 0.7);
+      g.add(ear);
+    }
+
+    // ── Helmet — snug fit over cranium ──
+    const helmet = new THREE.Mesh(
+      new THREE.SphereGeometry(0.17, 20, 20, 0, Math.PI * 2, 0, Math.PI * 0.55),
+      helmetMat,
+    );
+    helmet.position.set(0, 2.47, -0.02);
+    g.add(helmet);
+
+    // Helmet vent lines
+    for (let i = -1; i <= 1; i++) {
+      const vent = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.01, 0.08), helmetMat);
+      vent.position.set(i * 0.05, 2.56, 0.02);
+      g.add(vent);
+    }
+
+    // ── Goggles — wrap-around lens ──
+    const goggleLens = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.07, 0.04), goggleMat);
+    goggleLens.position.set(0, 2.44, 0.12);
+    g.add(goggleLens);
+    // Goggle frame
+    const goggleFrame = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.09, 0.02), helmetMat);
+    goggleFrame.position.set(0, 2.44, 0.11);
+    g.add(goggleFrame);
+    // Strap — wraps around helmet
+    const strap = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.035, 0.34), goggleMat);
+    strap.position.set(0, 2.46, -0.02);
+    g.add(strap);
+
+    // Bake sideways snowboarding orientation
+    g.rotation.y = Math.PI / 2;
+
     return g;
   }, []);
   return <primitive object={parts} ref={groupRef} />;
@@ -168,6 +355,7 @@ function SlalomGates({ progressRef }: { progressRef: React.MutableRefObject<numb
   }, []);
 
   const burstVelocities = useMemo(() => {
+    /* eslint-disable react-hooks/purity -- procedural particle velocities (R3F pattern) */
     const vels: THREE.Vector3[] = [];
     for (let i = 0; i < 30; i++) {
       vels.push(
@@ -179,10 +367,12 @@ function SlalomGates({ progressRef }: { progressRef: React.MutableRefObject<numb
       );
     }
     return vels;
+    /* eslint-enable react-hooks/purity */
   }, []);
 
   const burstLife = useRef(0);
 
+  /* eslint-disable react-hooks/immutability -- R3F frame loop mutates burst + burstVelocities imperatively */
   useFrame((_, delta) => {
     if (document.hidden) return;
     const p = progressRef.current;
@@ -340,7 +530,7 @@ function SnowDrift({
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 120;
       pos[i * 3 + 1] = Math.random() * 44;
-adventure-travel/src/components/three/SkiScene.tsx      pos[i * 3 + 2] = -120 + Math.random() * 300;
+      pos[i * 3 + 2] = -120 + Math.random() * 300;
     }
     /* eslint-enable react-hooks/purity */
     const geo = new THREE.BufferGeometry();
