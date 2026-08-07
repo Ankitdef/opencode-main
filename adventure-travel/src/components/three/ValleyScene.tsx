@@ -16,11 +16,9 @@ const CAMERA_PATH = new THREE.CatmullRomCurve3([
 ]);
 
 function Rig({
-  sectionRef,
   progressRef,
   staticView,
 }: {
-  sectionRef: React.RefObject<HTMLElement | null>;
   progressRef: React.MutableRefObject<number>;
   staticView: boolean;
 }) {
@@ -40,11 +38,6 @@ function Rig({
   // eslint-disable-next-line react-hooks/immutability -- R3F frame loop drives the camera imperatively by design
   useFrame(() => {
     if (document.hidden) return;
-    const sec = sectionRef.current;
-    if (!sec) return;
-    const r = sec.getBoundingClientRect();
-    if (r.top > window.innerHeight || r.bottom < 0) return; // not yet in / scrolled fully past
-
     const p = staticView ? 0 : progressRef.current;
     camera.position.copy(CAMERA_PATH.getPoint(p));
     look.current.copy(CAMERA_PATH.getPoint(Math.min(1, p + 0.06)));
@@ -91,15 +84,7 @@ function Forest({ count }: { count: number }) {
   return <primitive object={inst} />;
 }
 
-function SnowDrift({
-  count,
-  height,
-  sectionRef,
-}: {
-  count: number;
-  height: number;
-  sectionRef: React.RefObject<HTMLElement | null>;
-}) {
+function SnowDrift({ count, height }: { count: number; height: number }) {
   const points = useMemo(() => {
     /* eslint-disable react-hooks/purity -- procedural particle field samples Math.random during render (R3F pattern) */
     const pos = new Float32Array(count * 3);
@@ -124,10 +109,6 @@ function SnowDrift({
   // eslint-disable-next-line react-hooks/immutability -- R3F frame loop mutates the buffer attr imperatively
   useFrame((_, delta) => {
     if (document.hidden) return;
-    const sec = sectionRef.current;
-    if (!sec) return;
-    const r = sec.getBoundingClientRect();
-    if (r.top > window.innerHeight || r.bottom < 0) return; // not yet in / scrolled fully past
     const attr = points.geometry.attributes.position as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       let y = attr.getY(i) - delta * 3;
@@ -140,11 +121,7 @@ function SnowDrift({
   return <primitive object={points} />;
 }
 
-export default function ValleyScene({
-  sectionRef,
-}: {
-  sectionRef: React.RefObject<HTMLElement | null>;
-}) {
+export default function ValleyScene() {
   const progressRef = useRef(0);
   const [staticView, setStaticView] = useState(false);
   const terrain = useMemo(() => buildTerrain(), []);
@@ -159,17 +136,15 @@ export default function ValleyScene({
   }, []);
 
   useEffect(() => {
-    const sec = sectionRef.current;
-    if (!sec) return;
     const onScroll = () => {
-      const r = sec.getBoundingClientRect();
-      const total = r.height - window.innerHeight;
-      progressRef.current = total > 0 ? THREE.MathUtils.clamp(-r.top / total, 0, 1) : 0;
+      const doc = document.documentElement;
+      const total = doc.scrollHeight - window.innerHeight;
+      progressRef.current = total > 0 ? THREE.MathUtils.clamp(window.scrollY / total, 0, 1) : 0;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [sectionRef]);
+  }, []);
 
   return (
     <Canvas
@@ -185,8 +160,8 @@ export default function ValleyScene({
       <primitive object={terrain} />
       <primitive object={trail} />
       <Forest count={forestCount} />
-      <SnowDrift count={snowCount} height={40} sectionRef={sectionRef} />
-      <Rig sectionRef={sectionRef} progressRef={progressRef} staticView={staticView} />
+      <SnowDrift count={snowCount} height={40} />
+      <Rig progressRef={progressRef} staticView={staticView} />
     </Canvas>
   );
 }
