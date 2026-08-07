@@ -106,7 +106,6 @@ function SnowDrift({ count, height }: { count: number; height: number }) {
     return new THREE.Points(geo, mat);
   }, [count]);
 
-  // eslint-disable-next-line react-hooks/immutability -- R3F frame loop mutates the buffer attr imperatively
   useFrame((_, delta) => {
     if (document.hidden) return;
     const attr = points.geometry.attributes.position as THREE.BufferAttribute;
