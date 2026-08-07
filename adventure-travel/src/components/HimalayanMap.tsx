@@ -84,7 +84,7 @@ export default function HimalayanMap() {
   }, []);
 
   return (
-    <section className="py-section-sm bg-gradient-to-b from-background to-accent/5">
+    <section className="py-section-sm bg-gradient-to-b from-background/70 via-background/40 to-accent/10 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeUp className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <span className="text-sm font-semibold tracking-widest uppercase text-accent">Explore</span>

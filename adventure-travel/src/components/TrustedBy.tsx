@@ -13,7 +13,7 @@ const partners = [
 
 export default function TrustedBy() {
   return (
-    <section className="py-section-sm bg-background border-b border-gray-100 dark:border-white/5">
+    <section className="py-section-sm bg-background/70 backdrop-blur-md border-b border-gray-100 dark:border-white/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeUp className="text-center mb-8">
           <span className="text-sm font-semibold tracking-widest uppercase text-muted">Trusted By</span>

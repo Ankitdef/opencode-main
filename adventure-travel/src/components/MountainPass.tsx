@@ -48,7 +48,7 @@ export default function MountainPass() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[110vh] overflow-hidden bg-gradient-to-b from-white via-secondary/10 to-background"
+      className="relative h-[110vh] overflow-hidden bg-gradient-to-b from-white/70 via-secondary/10 to-background/80"
     >
       {/* Back range — light, distant, slowest */}
       <svg

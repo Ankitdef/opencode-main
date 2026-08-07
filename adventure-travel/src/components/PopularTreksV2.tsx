@@ -71,7 +71,7 @@ export default function PopularTreksV2() {
   };
 
   return (
-    <section id="treks" className="py-section-sm bg-background">
+    <section id="treks" className="py-section-sm bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 20 }}
