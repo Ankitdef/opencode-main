@@ -118,6 +118,20 @@ const TREK_GALLERIES: Record<string, string[]> = {
     "/assets/kuari-pass-trek/f7d8168c-15e8-4766-946e-74358e954af2.jpeg",
     "/assets/kuari-pass-trek/f14f4fc5-7c11-4e21-abcf-e12bf021e6dc.mov",
   ],
+  "bhrigu-lake": [
+    "/assets/birgu-lake/22e5257b-854d-4722-9ad9-4f63715455e0.jpeg",
+    "/assets/birgu-lake/5c300a48-3471-4dc2-90d0-dce291830158.jpeg",
+    "/assets/birgu-lake/64bc3481-a48c-41b4-953e-b53aa486c316.jpeg",
+    "/assets/birgu-lake/6964c690-5520-4da2-8cc3-dffff4846b4c.jpeg",
+    "/assets/birgu-lake/787e70f8-b61c-4f19-a2a7-551cadf0dc80.jpeg",
+    "/assets/birgu-lake/cb3e743b-1cdd-4977-aa99-3f494072cb9a.jpeg",
+    "/assets/birgu-lake/d4044abb-3f2d-4334-a52a-4048f82b359c.jpeg",
+    "/assets/birgu-lake/d9f3c584-2fd9-497d-9ee0-a9c30ee52888.jpeg",
+    "/assets/birgu-lake/3551faed-4e8b-48a1-8d7c-3009f2af7229.mov",
+    "/assets/birgu-lake/96aa6578-8641-4b71-88af-a4892d9060f7.mov",
+    "/assets/birgu-lake/9b1e5436-c884-4453-b06b-3c29651bbbcc.mov",
+    "/assets/birgu-lake/c45c1e10-d795-4622-9afe-9aa19b3b325c.mov",
+  ],
 };
 
 const INCLUDED = ["Accommodation", "Meals during trek", "Experienced Trek Guide", "National Park Entry Fees", "First Aid Kit", "Camping Equipment"];
@@ -618,7 +632,6 @@ function GalleryTab({ trek }: { trek: Trek }) {
               </svg>
             </button>
             {/\.(mp4|mov)$/i.test(images[lightbox]) ? (
-              /* eslint-disable-next-line jsx-a11y/media-has-caption */
               <motion.div
                 key={lightbox}
                 onClick={(e) => e.stopPropagation()}
@@ -631,7 +644,9 @@ function GalleryTab({ trek }: { trek: Trek }) {
                   src={images[lightbox]}
                   controls
                   autoPlay
+                  muted
                   playsInline
+                  preload="metadata"
                   className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain shadow-2xl"
                 />
               </motion.div>
@@ -893,7 +908,7 @@ function MiniElevationChart({ profile, itinerary }: { profile: number[]; itinera
     x: padL + (i / denom) * (w - padL - padR),
     y: padT + (1 - (v - min) / range) * (h - padT - padB),
     alt: v,
-    day: itinerary[i],
+    day: itinerary[Math.min(i, itinerary.length - 1)],
   }));
   const line = pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
   const area = `${line} L ${pts[pts.length - 1].x} ${h - padB} L ${pts[0].x} ${h - padB} Z`;

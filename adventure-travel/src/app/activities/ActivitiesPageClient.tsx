@@ -249,7 +249,7 @@ export default function ActivitiesPage() {
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
                   </div>
                   <div>
-                    <h3 className="font-heading text-xl font-bold">Alpine Skiing</h3>
+                    <Link href="/courses/skiing-course" className="font-heading text-xl font-bold underline-offset-4 hover:underline">Alpine Skiing</Link>
                     <p className="text-sm text-white/70">Auli · 7-day certified course</p>
                   </div>
                 </div>
@@ -263,7 +263,10 @@ export default function ActivitiesPage() {
                 <p className="mt-4 text-sm text-muted">Master stance, balance, and stopping on nursery slopes. Progress through linked turns to chairlift runs with an instructor at your side.</p>
                 <div className="mt-5 flex items-center justify-between">
                   <p className="font-heading text-xl font-bold text-foreground">₹30,000 <span className="text-xs font-normal text-muted">/ 7 days</span></p>
-                  <a href={`https://wa.me/917817912062?text=${encodeURIComponent("Hi! I'm interested in the Skiing course in Auli.")}`} target="_blank" rel="noopener noreferrer" className="rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-sky-600 hover:scale-105">Book</a>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href="/courses/skiing-course" className="rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-sky-600 hover:scale-105">View Course</Link>
+                    <a href={`https://wa.me/917817912062?text=${encodeURIComponent("Hi! I'm interested in the Skiing course in Auli.")}`} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-sky-500 px-4 py-2.5 text-sm font-semibold text-sky-600 transition-all hover:bg-sky-50">Book</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -276,7 +279,7 @@ export default function ActivitiesPage() {
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>
                   </div>
                   <div>
-                    <h3 className="font-heading text-xl font-bold">Snowboarding</h3>
+                    <Link href="/courses/snowboarding-course" className="font-heading text-xl font-bold underline-offset-4 hover:underline">Snowboarding</Link>
                     <p className="text-sm text-white/70">Auli · 7-day certified course</p>
                   </div>
                 </div>
@@ -290,7 +293,10 @@ export default function ActivitiesPage() {
                 <p className="mt-4 text-sm text-muted">From first slides to linking turns on blue runs. Build confidence with progressive coaching and all equipment included.</p>
                 <div className="mt-5 flex items-center justify-between">
                   <p className="font-heading text-xl font-bold text-foreground">₹35,000 <span className="text-xs font-normal text-muted">/ 7 days</span></p>
-                  <a href={`https://wa.me/917817912062?text=${encodeURIComponent("Hi! I'm interested in the Snowboarding course in Auli.")}`} target="_blank" rel="noopener noreferrer" className="rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-indigo-600 hover:scale-105">Book</a>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href="/courses/snowboarding-course" className="rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-indigo-600 hover:scale-105">View Course</Link>
+                    <a href={`https://wa.me/917817912062?text=${encodeURIComponent("Hi! I'm interested in the Snowboarding course in Auli.")}`} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-indigo-400 px-4 py-2.5 text-sm font-semibold text-indigo-600 transition-all hover:bg-indigo-50">Book</a>
+                  </div>
                 </div>
               </div>
             </div>

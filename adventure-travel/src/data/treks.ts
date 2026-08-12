@@ -618,6 +618,31 @@ export const treks: Trek[] = [
     image: "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=800&q=80",
     groupSize: 10,
   },
+  {
+    id: 27,
+    name: "Bhrigu Lake Trek",
+    slug: "bhrigu-lake",
+    region: "Himachal Pradesh",
+    country: "India",
+    location: "Kulang Village, Manali, Himachal Pradesh, India",
+    difficulty: "Moderate",
+    price: 11000,
+    currency: "Rs.",
+    rating: 4.8,
+    reviewCount: 156,
+    blurb: "A perfect Himalayan weekend escape through forests, alpine meadows, and the sacred Bhrigu Lake.",
+    bestSeason: "Mid-May to October",
+    days: 3,
+    maxAltitude: 4300,
+    elevationProfile: [2050, 3300, 4300, 3300, 2050],
+    itinerary: [
+      { day: 1, title: "Manali – Kulang Village – Moridugh Campsite", altitude: 3300, hours: 5, description: "Report at the designated meeting point in Manali and drive 8 km to Kulang Village (20-30 min). After a short trek briefing and equipment check, begin your ascent through traditional village trails, dense forests, and beautiful mountain meadows. Reach Moridugh campsite by afternoon. Relax with hot tea while enjoying spectacular sunset views before dinner.", meals: "Lunch, Evening Tea & Snacks, Dinner" },
+      { day: 2, title: "Moridugh – Bhrigu Lake – Moridugh", altitude: 4300, hours: 8, description: "Wake up early for breakfast and begin the climb above the tree line (10-12 km, 7-8 hrs). Walk across rolling alpine meadows before reaching the pristine Bhrigu Lake at 4,300 m. Spend time exploring the lake, capturing photographs, and enjoying panoramic Himalayan views before descending to Moridugh Camp.", meals: "Breakfast, Packed Lunch, Evening Tea & Snacks, Dinner" },
+      { day: 3, title: "Moridugh – Kulang Village – Manali", altitude: 2050, hours: 4, description: "After breakfast, descend gradually through forests back to Kulang Village (6-7 km, 3-4 hrs). Drive 20-30 minutes to Manali, where the trek concludes.", meals: "Breakfast" },
+    ],
+    image: "/assets/birgu-lake/22e5257b-854d-4722-9ad9-4f63715455e0.jpeg",
+    groupSize: 12,
+  },
 ];
 
 export const processSteps = [

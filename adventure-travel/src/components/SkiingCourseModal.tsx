@@ -72,6 +72,12 @@ const courses = [
   },
 ];
 
+const COURSE_PAGE_SLUGS: Record<string, string> = {
+  Skiing: "/courses/skiing-course",
+  Snowboarding: "/courses/snowboarding-course",
+  Backcountry: "/courses/backcountry-skiing",
+};
+
 const testimonials = [
   { name: "Priya M.", location: "Mumbai", text: "Best week of my life! The instructors were patient and I went from zero to linking turns in 5 days. Nanda Devi views are unreal." },
   { name: "Arjun K.", location: "Delhi", text: "The backcountry touring course was incredible. Professional setup, great gear, and the guides know every inch of these mountains." },
@@ -403,11 +409,15 @@ export default function SkiingCourseModal({ open, onClose, initialTab = "overvie
                 </p>
                 <p className="text-sm text-gray-500">per person · 7-day course</p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <a href={SKIING_WA} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-8 py-3.5 text-base font-semibold text-white transition-all hover:bg-sky-600 hover:shadow-lg hover:shadow-sky-500/25">
                   Book on WhatsApp
                 </a>
+                <Link href={COURSE_PAGE_SLUGS[selectedCourse]} onClick={onClose}
+                  className="inline-flex items-center justify-center rounded-xl border border-sky-500 px-6 py-3.5 text-base font-semibold text-sky-600 transition-colors hover:bg-sky-50">
+                  View Course
+                </Link>
                 <Link href="/contact" onClick={onClose}
                   className="inline-flex items-center justify-center rounded-xl border border-gray-200 px-6 py-3.5 text-base font-semibold text-gray-700 transition-colors hover:bg-white">
                   Contact Us
