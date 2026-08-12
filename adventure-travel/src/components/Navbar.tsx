@@ -125,7 +125,7 @@ export default function Navbar() {
                 >
                   {link.label}
                   <span
-                    className={`absolute bottom-0 h-0.5 bg-accent transition-all duration-300 ${
+                    className={`absolute bottom-0 h-0.5 bg-cyan-400 transition-all duration-300 ${
                       isActive(link.href)
                         ? "left-4 w-[calc(100%-2rem)]"
                         : "left-1/2 w-0 group-hover:left-4 group-hover:w-[calc(100%-2rem)]"
@@ -151,7 +151,7 @@ export default function Navbar() {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                   </svg>
-                  <span className="absolute bottom-0 left-1/2 h-0.5 w-0 bg-accent transition-all duration-300 group-hover:left-4 group-hover:w-[calc(100%-2rem)]" />
+                  <span className="absolute bottom-0 left-1/2 h-0.5 w-0 bg-cyan-400 transition-all duration-300 group-hover:left-4 group-hover:w-[calc(100%-2rem)]" />
                 </button>
 
                 {activityOpen && (
@@ -161,13 +161,13 @@ export default function Navbar() {
                         key={act.label}
                         href={act.href}
                         onClick={() => setActivityOpen(false)}
-                        className="flex items-center gap-4 px-5 py-3 hover:bg-accent/5 transition-colors group"
+                        className="flex items-center gap-4 px-5 py-3 hover:bg-cyan-50 transition-colors group"
                       >
-                        <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
                           {act.icon}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-primary group-hover:text-accent transition-colors">{act.label}</p>
+                          <p className="text-sm font-semibold text-primary group-hover:text-cyan-500 transition-colors">{act.label}</p>
                           <p className="text-xs text-muted">{act.description}</p>
                         </div>
                       </Link>
@@ -176,7 +176,7 @@ export default function Navbar() {
                       <Link
                         href="/activities"
                         onClick={() => setActivityOpen(false)}
-                        className="flex items-center gap-2 px-5 py-3 text-sm font-semibold text-accent hover:bg-accent/5 transition-colors"
+                        className="flex items-center gap-2 px-5 py-3 text-sm font-semibold text-cyan-500 hover:bg-cyan-50 transition-colors"
                       >
                         View All Activities
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -196,13 +196,13 @@ export default function Navbar() {
                 }`}
               >
                 Contact
-                <span
-                  className={`absolute bottom-0 h-0.5 bg-accent transition-all duration-300 ${
-                    isActive("/contact")
-                      ? "left-4 w-[calc(100%-2rem)]"
-                      : "left-1/2 w-0 group-hover:left-4 group-hover:w-[calc(100%-2rem)]"
-                  }`}
-                />
+<span
+                    className={`absolute bottom-0 h-0.5 bg-cyan-400 transition-all duration-300 ${
+                      isActive("/contact")
+                        ? "left-4 w-[calc(100%-2rem)]"
+                        : "left-1/2 w-0 group-hover:left-4 group-hover:w-[calc(100%-2rem)]"
+                    }`}
+                  />
               </Link>
             </div>
 
@@ -273,14 +273,14 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3 text-base text-white/80 hover:text-white py-1.5 transition-colors"
                   >
-                    <span className="text-accent">{act.icon}</span>
+                    <span className="text-cyan-400">{act.icon}</span>
                     {act.label}
                   </Link>
                 ))}
                 <Link
                   href="/activities"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 text-base text-accent font-semibold py-1.5"
+                  className="flex items-center gap-2 text-base text-cyan-400 font-semibold py-1.5"
                 >
                   View All Activities
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -301,7 +301,7 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className="mt-3 rounded-xl bg-accent px-5 py-3.5 text-center text-base font-semibold text-white"
+              className="mt-3 rounded-xl bg-cyan-500 px-5 py-3.5 text-center text-base font-semibold text-white"
             >
               Contact Us
             </Link>
