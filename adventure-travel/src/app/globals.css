@@ -284,6 +284,21 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
+/* Mountain-brown gradient text with a sweeping shine (reuses @keyframes shimmer). */
+.text-shine-mountain {
+  background: linear-gradient(110deg, #8a5a2b 0%, #c68a4e 22%, #f4d9a3 50%, #c68a4e 78%, #8a5a2b 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-shine-mountain { animation: none; }
+}
+
 /* ========== BACKGROUND GRADIENTS ========== */
 
 .bg-gradient-hero {

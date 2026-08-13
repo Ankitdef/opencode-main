@@ -138,13 +138,13 @@ export default function SkiingCourseModal({ open, onClose, initialTab = "overvie
     <AnimatePresence>
       {open && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+          className="fixed inset-0 z-[110] flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true">
           <motion.div initial={{ opacity: 0, scale: 0.96, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: 20 }}
             transition={{ type: "spring", damping: 26, stiffness: 300 }} onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+            className="relative my-auto flex max-h-[92dvh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
 
             {/* ─── Hero Header ─── */}
-            <div className="relative bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 p-8 text-white sm:p-10 flex-shrink-0 overflow-hidden">
+            <div className="relative bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 p-5 sm:p-7 text-white flex-shrink-0 overflow-hidden">
               <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/5" />
               <div className="pointer-events-none absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-white/5" />
               <button onClick={onClose} aria-label="Close"
@@ -152,17 +152,17 @@ export default function SkiingCourseModal({ open, onClose, initialTab = "overvie
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
 
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-200">Auli Snow Sports Academy</p>
-              <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl leading-tight">Skiing &amp; Snowboarding<br />in the Himalayas</h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-200">Auli Snow Sports Academy</p>
+              <h2 className="mt-1.5 font-heading text-xl font-bold sm:text-2xl leading-tight">Skiing &amp; Snowboarding<br className="hidden sm:block" /> in the Himalayas</h2>
 
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {[
                   { label: "7 Days", icon: "📅" },
                   { label: "Auli, Uttarakhand", icon: "📍" },
                   { label: "All Levels", icon: "🏔" },
                   { label: "Certified", icon: "✅" },
                 ].map((b) => (
-                  <span key={b.label} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur-sm">
+                  <span key={b.label} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-sm">
                     <span>{b.icon}</span> {b.label}
                   </span>
                 ))}
@@ -180,7 +180,7 @@ export default function SkiingCourseModal({ open, onClose, initialTab = "overvie
             </div>
 
             {/* ─── Body ─── */}
-            <div className="flex-1 overflow-y-auto p-6 sm:p-8">
+            <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
 
               {/* ═══ Overview Tab ═══ */}
               {tab === "overview" && (
@@ -402,24 +402,24 @@ export default function SkiingCourseModal({ open, onClose, initialTab = "overvie
             </div>
 
             {/* ─── Footer ─── */}
-            <div className="flex flex-col gap-4 border-t border-gray-100 p-6 sm:p-8 sm:flex-row sm:items-center sm:justify-between flex-shrink-0 bg-gray-50/50">
+            <div className="flex flex-col gap-3 border-t border-gray-100 p-4 sm:p-6 sm:flex-row sm:items-center sm:justify-between flex-shrink-0 bg-gray-50/50">
               <div>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                   {selected.price}
                 </p>
-                <p className="text-sm text-gray-500">per person · 7-day course</p>
+                <p className="text-xs sm:text-sm text-gray-500">per person · 7-day course</p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <a href={SKIING_WA} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-8 py-3.5 text-base font-semibold text-white transition-all hover:bg-sky-600 hover:shadow-lg hover:shadow-sky-500/25">
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-5 py-2.5 text-sm sm:px-8 sm:py-3.5 sm:text-base font-semibold text-white transition-all hover:bg-sky-600 hover:shadow-lg hover:shadow-sky-500/25">
                   Book on WhatsApp
                 </a>
                 <Link href={COURSE_PAGE_SLUGS[selectedCourse]} onClick={onClose}
-                  className="inline-flex items-center justify-center rounded-xl border border-sky-500 px-6 py-3.5 text-base font-semibold text-sky-600 transition-colors hover:bg-sky-50">
+                  className="inline-flex items-center justify-center rounded-xl border border-sky-500 px-4 py-2.5 text-sm sm:px-6 sm:py-3.5 sm:text-base font-semibold text-sky-600 transition-colors hover:bg-sky-50">
                   View Course
                 </Link>
                 <Link href="/contact" onClick={onClose}
-                  className="inline-flex items-center justify-center rounded-xl border border-gray-200 px-6 py-3.5 text-base font-semibold text-gray-700 transition-colors hover:bg-white">
+                  className="inline-flex items-center justify-center rounded-xl border border-gray-200 px-4 py-2.5 text-sm sm:px-6 sm:py-3.5 sm:text-base font-semibold text-gray-700 transition-colors hover:bg-white">
                   Contact Us
                 </Link>
               </div>

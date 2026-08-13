@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, type ReactNode } from "react";
+import { useState, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { Trek } from "@/data/treks";
@@ -8,6 +8,7 @@ import ContactPopup from "@/components/ContactPopup";
 import SmartImage from "@/components/SmartImage";
 import { useAuth } from "@/contexts/AuthContext";
 import { createTrekBooking } from "@/lib/auth";
+import { getDepartures, type Departure, type Availability, type MonthGroup } from "./trekContent";
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   Easy: "#22c55e",
@@ -16,7 +17,13 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   Strenuous: "#ef4444",
 };
 
-const TABS = ["Overview", "Day by Day", "Photo Gallery", "What's Included", "Make Reservation"] as const;
+const AVAIL: Record<Availability, { color: string; label: string }> = {
+  available: { color: "#16A34A", label: "Available" },
+  few: { color: "#D97706", label: "Few Seats Left" },
+  sold: { color: "#DC2626", label: "Sold Out" },
+};
+
+const TABS = ["Overview", "Dates", "Day by Day", "Photo Gallery", "What's Included", "Make Reservation"] as const;
 type Tab = (typeof TABS)[number];
 
 const GALLERY_IMAGES = [
@@ -57,7 +64,7 @@ const TREK_GALLERIES: Record<string, string[]> = {
     "/assets/hampta-pass/IMG_7580.jpeg",
     "/assets/hampta-pass/IMG_7581.jpeg",
   ],
-  "kedarkantha": [
+  kedarkantha: [
     "/assets/kedarkantha-trek/IMG_1267.JPG.jpeg",
     "/assets/kedarkantha-trek/IMG_1268.JPG.jpeg",
     "/assets/kedarkantha-trek/IMG_1269.JPG.jpeg",
@@ -148,9 +155,25 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
   });
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  const departures = useMemo(() => getDepartures(trek), [trek]);
+
+  const goToTab = (tab: Tab) => {
+    setActiveTab(tab);
+    const idx = TABS.indexOf(tab);
+    tabRefs.current[idx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    document.getElementById("trek-tabpanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // Register CTA on an active departure → prefill the date and open the reservation tab.
+  const registerForDate = (iso: string) => {
+    setBookingForm((f) => ({ ...f, date: iso }));
+    goToTab("Make Reservation");
+  };
+
   const handleBookingSubmit = async () => {
     if (!user) {
-      window.location.href = "/login";
+      // new / signed-out visitors go straight to sign-up to create an account
+      window.location.href = "/signup";
       return;
     }
     try {
@@ -301,12 +324,12 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
       </section>
 
       {/* Main Content + Sticky Sidebar */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 pt-8 pb-28 lg:pb-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left: Tabs Content */}
           <div className="lg:w-2/3">
             {/* Tabs */}
-            <div className="border-b border-gray-200 dark:border-white/10 mb-8 relative">
+            <div className="sticky top-16 z-30 mb-8 border-b border-gray-200 dark:border-white/10 bg-white/90 dark:bg-background/90 backdrop-blur-md relative">
               <div className="overflow-x-auto">
                 <div role="tablist" aria-label="Trek details" className="flex gap-0 min-w-max">
                   {TABS.map((tab, index) => (
@@ -320,9 +343,9 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
                       aria-selected={activeTab === tab}
                       aria-controls="trek-tabpanel"
                       tabIndex={activeTab === tab ? 0 : -1}
-                      onClick={() => setActiveTab(tab)}
+                      onClick={() => goToTab(tab)}
                       onKeyDown={(e) => onTabKeyDown(e, index)}
-                      className={`px-5 py-3 text-sm font-medium whitespace-nowrap transition-colors relative ${
+                      className={`px-3 py-2.5 text-xs sm:px-5 sm:py-3 sm:text-sm font-medium whitespace-nowrap transition-colors relative active:scale-95 ${
                         activeTab === tab ? "text-emerald-600" : "text-muted hover:text-foreground"
                       }`}
                     >
@@ -358,9 +381,10 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="focus:outline-none"
+                className="scroll-mt-36 focus:outline-none"
               >
                 {activeTab === "Overview" && <OverviewTab trek={trek} />}
+                {activeTab === "Dates" && <DatesTab departures={departures} currency={trek.currency} onRegister={registerForDate} />}
                 {activeTab === "Day by Day" && <ItineraryTab trek={trek} />}
                 {activeTab === "Photo Gallery" && <GalleryTab trek={trek} />}
                 {activeTab === "What's Included" && <IncludedTab />}
@@ -381,15 +405,10 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
                   <span className="text-muted text-sm ml-1">per person</span>
                 </div>
                 <button
-                  onClick={() => {
-                    setActiveTab("Make Reservation");
-                    const tabIdx = TABS.indexOf("Make Reservation");
-                    tabRefs.current[tabIdx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-                    document.getElementById("trek-tabpanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
+                  onClick={() => goToTab("Dates")}
                   className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors mb-3"
                 >
-                  Reserve Your Spot
+                  View Dates &amp; Register
                 </button>
                 <button
                   onClick={() => setShowContact(true)}
@@ -438,6 +457,31 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Fixed mobile details band */}
+      <div
+        className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-background/95 backdrop-blur border-t border-gray-200 dark:border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
+        <div className="flex items-center gap-3 px-4 py-3">
+          <div className="flex-shrink-0">
+            <div className="text-[11px] leading-none text-muted">From</div>
+            <div className="text-lg font-bold leading-tight text-foreground">{trek.currency}{trek.price.toLocaleString("en-IN")}</div>
+          </div>
+          <button
+            onClick={() => setShowContact(true)}
+            className="flex-shrink-0 rounded-full border-2 border-emerald-600 px-4 py-2.5 text-sm font-semibold text-emerald-600 active:scale-95 transition"
+          >
+            Info
+          </button>
+          <button
+            onClick={() => goToTab("Dates")}
+            className="flex-1 rounded-full bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white shadow-md active:scale-95 transition"
+          >
+            View Dates &amp; Register →
+          </button>
         </div>
       </div>
 
@@ -500,6 +544,112 @@ function OverviewTab({ trek }: { trek: Trek }) {
             <span className="text-sm">{h}</span>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Dates / Availability Tab ─── */
+function DatesTab({
+  departures,
+  currency,
+  onRegister,
+}: {
+  departures: MonthGroup[];
+  currency: string;
+  onRegister: (iso: string) => void;
+}) {
+  const [open, setOpen] = useState<string | null>(departures[0]?.key ?? null);
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-foreground mb-2">Select a Date to Register</h2>
+      <p className="text-muted mb-6">Live availability for upcoming departures — pick a batch and reserve your spot.</p>
+
+      {/* Availability legend */}
+      <div className="flex flex-wrap items-center gap-4 mb-5 text-xs">
+        {(Object.keys(AVAIL) as Availability[]).map((k) => (
+          <span key={k} className="inline-flex items-center gap-1.5 text-muted">
+            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: AVAIL[k].color }} />
+            {AVAIL[k].label}
+          </span>
+        ))}
+      </div>
+
+      <div className="space-y-3">
+        {departures.map((m) => {
+          const isOpen = open === m.key;
+          return (
+            <div key={m.key} className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden bg-white dark:bg-card">
+              <button
+                onClick={() => setOpen(isOpen ? null : m.key)}
+                aria-expanded={isOpen}
+                aria-controls={`month-${m.key}`}
+                className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <span className="font-semibold text-foreground">{m.month} {m.year}</span>
+                  {m.note && <span className="text-xs text-muted truncate hidden sm:inline">{m.note}</span>}
+                </span>
+                <svg className={`w-5 h-5 text-muted flex-shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    id={`month-${m.key}`}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 pb-4 pt-1 space-y-2.5 border-t border-gray-100 dark:border-white/5">
+                      {m.departures.map((d) => (
+                        <DepartureRow key={d.id} d={d} currency={currency} onRegister={onRegister} />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function DepartureRow({ d, currency, onRegister }: { d: Departure; currency: string; onRegister: (iso: string) => void }) {
+  const a = AVAIL[d.availability];
+  const sold = d.availability === "sold";
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg bg-gray-50 dark:bg-surface p-3">
+      <div className="flex-1 min-w-0">
+        <div className="font-semibold text-foreground text-sm">{d.label}</div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted mt-1">
+          <span>{d.days} Days</span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: a.color }} />
+            <span style={{ color: a.color }} className="font-medium">{a.label}</span>
+          </span>
+        </div>
+      </div>
+      <div className="flex items-center justify-between sm:justify-end gap-3">
+        <div className="text-right">
+          <div className="font-bold text-foreground text-sm">{currency}{d.price.toLocaleString("en-IN")}</div>
+          <div className="text-[11px] text-muted">/ person</div>
+        </div>
+        <button
+          disabled={sold}
+          onClick={() => onRegister(d.iso)}
+          aria-label={sold ? `${d.label} sold out` : `Register for ${d.label}`}
+          className={`rounded-full px-4 py-2 text-sm font-bold transition active:scale-95 ${
+            sold ? "bg-gray-200 dark:bg-white/10 text-gray-400 cursor-not-allowed" : "bg-emerald-600 text-white hover:bg-emerald-700"
+          }`}
+        >
+          {sold ? "Sold Out" : "Register"}
+        </button>
       </div>
     </div>
   );

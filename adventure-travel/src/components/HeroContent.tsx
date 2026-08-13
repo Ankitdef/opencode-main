@@ -63,6 +63,14 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
         <br className="hidden sm:block" /> <span className="text-gradient">Wild Frontiers</span>
       </motion.h1>
 
+      <motion.p
+        {...rise(0.12)}
+        className="text-shine-mountain mt-4 font-heading text-xl font-bold leading-snug tracking-tight sm:text-2xl [text-shadow:0_2px_14px_rgba(0,0,0,0.35)]"
+      >
+        <span className="block">Chhod do duniya ki saari <span className="italic opacity-80">bhasad</span>,</span>
+        <span className="block">bula rahe hain tujhe <span className="font-extrabold">pahaad</span>.</span>
+      </motion.p>
+
       <motion.p {...rise(0.16)} className={`mt-5 max-w-lg text-base leading-relaxed sm:text-lg ${body}`}>
         Precision-guided treks across the most dramatic alpine passes and sacred valleys of the
         Indian Himalayas — small groups, certified leaders, permits handled.

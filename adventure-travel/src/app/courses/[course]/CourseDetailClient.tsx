@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { createActivityBooking } from "@/lib/auth";
 import type { Course } from "@/data/courses";
 
-type Tab = "overview" | "itinerary" | "gallery" | "included" | "book";
+type Tab = "overview" | "dates" | "itinerary" | "gallery" | "included" | "book";
 
 const TAB_LIST: { key: Tab; label: string }[] = [
   { key: "overview", label: "Overview" },
+  { key: "dates", label: "Dates" },
   { key: "itinerary", label: "Itinerary" },
   { key: "gallery", label: "Photo Gallery" },
   { key: "included", label: "What's Included" },
@@ -36,6 +37,127 @@ const TYPE_COLORS: Record<string, { gradient: string; badge: string }> = {
 
 const WA_BASE = "https://wa.me/917817912062?text=";
 
+/* ─── Availability / batch schedule (derived from the course season + duration) ─── */
+type CAvail = "available" | "few" | "sold";
+type CourseBatch = { id: string; label: string; iso: string; days: number; price: number; availability: CAvail };
+
+const CMONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const CAVAIL: Record<CAvail, { color: string; label: string }> = {
+  available: { color: "#16A34A", label: "Available" },
+  few: { color: "#D97706", label: "Filling Fast" },
+  sold: { color: "#DC2626", label: "Sold Out" },
+};
+const C_CYCLE: CAvail[] = ["available", "available", "few", "available", "few", "sold"];
+
+function courseDays(duration: string): number {
+  const m = duration.match(/\d+/);
+  return m ? parseInt(m[0], 10) : 7;
+}
+
+function fmtCourseDate(year: number, monthIdx: number, day: number): string {
+  const d = new Date(year, monthIdx, day); // fixed inputs → deterministic (no hydration mismatch)
+  return `${d.getDate()} ${CMONTHS[d.getMonth()]}`;
+}
+
+// Parse the season string (e.g. "Dec 2026 — Mar 2027") + duration into upcoming batches.
+function getCourseBatches(course: Course): CourseBatch[] {
+  const monthTokens = (course.dates.match(/[A-Za-z]{3,}/g) ?? [])
+    .map((t) => CMONTHS.findIndex((x) => x.toLowerCase() === t.slice(0, 3).toLowerCase()))
+    .filter((i) => i >= 0);
+  const years = (course.dates.match(/20\d{2}/g) ?? []).map(Number);
+  const days = courseDays(course.duration);
+
+  const startM = monthTokens[0] ?? 11;
+  const startY = years[0] ?? 2026;
+  const endM = monthTokens[1] ?? (startM + 2) % 12;
+  const endY = years[years.length - 1] ?? startY;
+
+  const months: { m: number; y: number }[] = [];
+  let m = startM;
+  let y = startY;
+  for (let guard = 0; guard < 24; guard++) {
+    months.push({ m, y });
+    if (m === endM && y === endY) break;
+    m += 1;
+    if (m > 11) { m = 0; y += 1; }
+  }
+
+  const startDays = [8, 22];
+  const out: CourseBatch[] = [];
+  let ci = 0;
+  for (const mo of months) {
+    for (const sd of startDays) {
+      const end = new Date(mo.y, mo.m, sd + days - 1);
+      out.push({
+        id: `${course.slug}-${mo.y}-${mo.m}-${sd}`,
+        label: `${fmtCourseDate(mo.y, mo.m, sd)} – ${fmtCourseDate(end.getFullYear(), end.getMonth(), end.getDate())} ${end.getFullYear()}`,
+        iso: new Date(mo.y, mo.m, sd).toISOString().slice(0, 10),
+        days,
+        price: course.price,
+        availability: C_CYCLE[ci++ % C_CYCLE.length],
+      });
+      if (out.length >= 6) break;
+    }
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+
+function AvailabilityView({ batches, currency, onBook }: { batches: CourseBatch[]; currency: string; onBook: (iso: string) => void }) {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">Upcoming Batches</h2>
+      <p className="text-gray-600 mb-6">Live availability for this course — pick a batch and reserve your spot.</p>
+      <div className="flex flex-wrap items-center gap-4 mb-5 text-xs">
+        {(Object.keys(CAVAIL) as CAvail[]).map((k) => (
+          <span key={k} className="inline-flex items-center gap-1.5 text-gray-500">
+            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CAVAIL[k].color }} />
+            {CAVAIL[k].label}
+          </span>
+        ))}
+      </div>
+      <div className="space-y-2.5">
+        {batches.map((b) => (
+          <CourseBatchRow key={b.id} b={b} currency={currency} onBook={onBook} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CourseBatchRow({ b, currency, onBook }: { b: CourseBatch; currency: string; onBook: (iso: string) => void }) {
+  const a = CAVAIL[b.availability];
+  const sold = b.availability === "sold";
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3.5">
+      <div className="flex-1 min-w-0">
+        <div className="font-semibold text-gray-900 text-sm">{b.label}</div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
+          <span>{b.days} Days</span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: a.color }} />
+            <span style={{ color: a.color }} className="font-medium">{a.label}</span>
+          </span>
+        </div>
+      </div>
+      <div className="flex items-center justify-between sm:justify-end gap-3">
+        <div className="text-right">
+          <div className="font-bold text-gray-900 text-sm">{currency}{b.price.toLocaleString("en-IN")}</div>
+          <div className="text-[11px] text-gray-500">/ person</div>
+        </div>
+        <button
+          disabled={sold}
+          onClick={() => onBook(b.iso)}
+          aria-label={sold ? `${b.label} sold out` : `Book ${b.label}`}
+          className={`rounded-full px-4 py-2 text-sm font-bold transition active:scale-95 ${sold ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-sky-500 text-white hover:bg-sky-600"}`}
+        >
+          {sold ? "Sold Out" : "Book"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 interface Props {
   course: Course;
 }
@@ -58,6 +180,21 @@ export default function CourseDetailClient({ course }: Props) {
   const colors = TYPE_COLORS[course.type];
   const images = course.gallery || [course.image];
 
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  // Switch tab, center it in the strip, and jump the panel just below the sticky bar.
+  const goToTab = (key: Tab) => {
+    setTab(key);
+    const idx = TAB_LIST.findIndex((t) => t.key === key);
+    tabRefs.current[idx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    document.getElementById("course-tabpanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // Book a specific batch → prefill the date and jump to the booking form.
+  const registerForBatch = (iso: string) => {
+    setBookingForm((f) => ({ ...f, date: iso }));
+    goToTab("book");
+  };
+
   useEffect(() => {
     if (lightbox === null) return;
     const onKey = (e: KeyboardEvent) => {
@@ -76,7 +213,8 @@ export default function CourseDetailClient({ course }: Props) {
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
-      window.location.href = "/login";
+      // new / signed-out visitors go straight to sign-up to create an account
+      window.location.href = "/signup";
       return;
     }
     setSubmitting(true);
@@ -145,34 +283,39 @@ export default function CourseDetailClient({ course }: Props) {
           {/* Main Content */}
           <div className="flex-1">
             {/* Tab Navigation */}
-            <div className="flex gap-1 border-b border-gray-200 mb-8 overflow-x-auto">
-              {TAB_LIST.map((t) => (
-                <button
-                  key={t.key}
-                  onClick={() => setTab(t.key)}
-                  className={`px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors relative ${
-                    tab === t.key
-                      ? "text-sky-600"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  {t.label}
-                  {tab === t.key && (
-                    <motion.div
-                      layoutId="tab-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-600"
-                    />
-                  )}
-                </button>
-              ))}
+            <div className="sticky top-16 z-30 mb-8 border-b border-gray-200 bg-white/90 backdrop-blur-md">
+              <div className="flex gap-1 overflow-x-auto">
+                {TAB_LIST.map((t, i) => (
+                  <button
+                    key={t.key}
+                    ref={(el) => { tabRefs.current[i] = el; }}
+                    onClick={() => goToTab(t.key)}
+                    className={`px-4 py-2.5 text-xs sm:px-6 sm:py-3 sm:text-sm font-medium whitespace-nowrap transition-colors relative active:scale-95 ${
+                      tab === t.key
+                        ? "text-sky-600"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    {t.label}
+                    {tab === t.key && (
+                      <motion.div
+                        layoutId="tab-indicator"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-600"
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Tab Content */}
             <motion.div
               key={tab}
+              id="course-tabpanel"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
+              className="scroll-mt-36"
             >
               {tab === "overview" && (
                 <div>
@@ -233,6 +376,10 @@ export default function CourseDetailClient({ course }: Props) {
                     ))}
                   </div>
                 </div>
+              )}
+
+              {tab === "dates" && (
+                <AvailabilityView batches={getCourseBatches(course)} currency={course.currency} onBook={registerForBatch} />
               )}
 
               {tab === "itinerary" && (
@@ -486,7 +633,7 @@ export default function CourseDetailClient({ course }: Props) {
                 Book on WhatsApp
               </a>
               <button
-                onClick={() => setTab("book")}
+                onClick={() => goToTab("book")}
                 className="block w-full py-3 border-2 border-sky-500 text-sky-600 text-center font-semibold rounded-lg hover:bg-sky-50 transition-colors"
               >
                 Book Online
