@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { Trek } from "@/data/treks";
 import ContactPopup from "@/components/ContactPopup";
+import TermsConditions from "@/components/TermsConditions";
 import SmartImage from "@/components/SmartImage";
 import { useAuth } from "@/contexts/AuthContext";
 import { createTrekBooking } from "@/lib/auth";
@@ -544,6 +545,9 @@ function OverviewTab({ trek }: { trek: Trek }) {
             <span className="text-sm">{h}</span>
           </div>
         ))}
+      </div>
+      <div className="mt-10 pt-8 border-t border-gray-100 dark:border-white/10">
+        <TermsConditions />
       </div>
     </div>
   );

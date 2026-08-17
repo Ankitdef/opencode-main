@@ -1,13 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { treks } from "@/data/treks";
 import ContactPopup from "./ContactPopup";
-
-const searchDestinations = treks.map((t) => t.name);
-const searchDifficulties = ["Easy", "Moderate", "Challenging", "Strenuous"];
 
 const trustMetrics = [
   { value: "5,000+", label: "Happy Trekkers" },
@@ -18,14 +15,18 @@ const trustMetrics = [
 
 export default function HeroContent({ variant }: { variant: "split" | "scene" }) {
   const [showPopup, setShowPopup] = useState(false);
-  const [destination, setDestination] = useState("");
-  const [difficulty, setDifficulty] = useState("");
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  const searchQuery = new URLSearchParams();
-  if (destination) searchQuery.set("search", destination);
-  if (difficulty) searchQuery.set("difficulty", difficulty);
-  const searchHref = `/treks${searchQuery.toString() ? `?${searchQuery.toString()}` : ""}`;
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return treks
+      .filter((t) => `${t.name} ${t.region} ${t.difficulty}`.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [query]);
 
   const rise = (delay: number) =>
     reduceMotion
@@ -36,11 +37,11 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
           transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as const },
         };
 
-  const selectClass =
-    "w-full rounded-xl border px-4 py-3 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30 cursor-pointer " +
+  const inputClass =
+    "w-full rounded-xl border px-4 py-3 pr-11 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30 " +
     (variant === "scene"
-      ? "border-white/25 bg-white/15 text-white placeholder-white/70 [&>option]:text-foreground"
-      : "border-gray-200 bg-white text-foreground");
+      ? "border-white/25 bg-white/15 text-white placeholder-white/70 backdrop-blur-sm"
+      : "border-gray-200 bg-white text-foreground placeholder-gray-400");
 
   const headline = "text-white" + (variant === "scene" ? "" : " lg:text-foreground");
   const body = "text-white/85" + (variant === "scene" ? "" : " lg:text-muted");
@@ -77,34 +78,71 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
       </motion.p>
 
       <motion.div {...rise(0.24)} className={`mt-8 ${panel}`}>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto]">
-          <div>
-            <label htmlFor="hero-destination" className="sr-only">Destination</label>
-            <select id="hero-destination" value={destination} onChange={(e) => setDestination(e.target.value)} className={selectClass}>
-              <option value="">Destination</option>
-              {searchDestinations.map((d) => (
-                <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="hero-difficulty" className="sr-only">Difficulty</label>
-            <select id="hero-difficulty" value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className={selectClass}>
-              <option value="">Difficulty</option>
-              {searchDifficulties.map((d) => (
-                <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-          </div>
-          <Link
-            href={searchHref}
-            className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25"
+        <div ref={wrapRef} className="relative">
+          <form
+            action="/treks"
+            className="grid grid-cols-[1fr_auto] gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              window.location.href = `/treks${query.trim() ? `?search=${encodeURIComponent(query.trim())}` : ""}`;
+            }}
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            Search
-          </Link>
+            <label htmlFor="hero-search" className="sr-only">Search for Treks / Trips</label>
+            <div className="relative">
+              <input
+                id="hero-search"
+                type="search"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setOpen(true);
+                }}
+                onFocus={() => setOpen(true)}
+                onBlur={() => wrapRef.current?.contains(document.activeElement) || setTimeout(() => setOpen(false), 120)}
+                placeholder="Search for Treks / Trips..."
+                autoComplete="off"
+                className={inputClass}
+              />
+              <svg className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <button
+              type="submit"
+              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              Search
+            </button>
+          </form>
+
+          {open && query.trim() && (
+            <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl">
+              {results.length > 0 ? (
+                results.map((t) => (
+                  <Link
+                    key={t.slug}
+                    href={`/treks/${t.slug}`}
+                    className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-foreground transition-colors hover:bg-primary/5"
+                  >
+                    <span className="font-medium">{t.name}</span>
+                    <span className="flex-shrink-0 text-xs text-muted">
+                      {t.region} · {t.difficulty}
+                    </span>
+                  </Link>
+                ))
+              ) : (
+                <Link
+                  href={`/treks?search=${encodeURIComponent(query.trim())}`}
+                  className="block px-4 py-3 text-sm text-muted transition-colors hover:bg-primary/5"
+                >
+                  No matches — see all treks filtered by &ldquo;{query.trim()}&rdquo;
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </motion.div>
 

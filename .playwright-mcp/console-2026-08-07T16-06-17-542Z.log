@@ -1,7 +1,0 @@
-[   10455ms] [LOG] Browser detection: {name: Chrome, version: 151, min: 93} @ https://chat.qwen.ai/:56
-[   10458ms] [LOG] Modern features support: true @ https://chat.qwen.ai/:56
-[   13395ms] [LOG] Fri Aug 07 2026 21:36:30 GMT+0530 (India Standard Time) @ https://o.alicdn.com/frontend-lib/common-lib/jquery.min.js:0
-[   13442ms] [LOG] %c [APLUS] -- APLUS INIT SUCCESS background:#3B82FE; padding: 4px; padding-right: 8px; border-radius: 4px; color: #fff; @ :1
-[   19237ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ https://chat.qwen.ai/api/v1/auths/:0
-[   23360ms] [LOG] Fri Aug 07 2026 21:36:40 GMT+0530 (India Standard Time) @ https://assets.alicdn.com/g/AWSC/et/1.83.41/et_f.js:1
-[  193775ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ https://assets.alicdn.com/g/AWSC/fireyejs/1.231.67/fireyejs.js:0

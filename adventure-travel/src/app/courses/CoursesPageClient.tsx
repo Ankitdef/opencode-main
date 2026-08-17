@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import { courses } from "@/data/courses";
+import TermsConditions from "@/components/TermsConditions";
+
+// skiing course gallery upscaled to wallpaper size
+const WALLPAPERS = (courses.find((c) => c.slug === "skiing-course")?.gallery ?? []).map((u) =>
+  u.replace("w=800", "w=1920")
+);
 
 const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   Skiing: { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200" },
@@ -10,12 +18,33 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> 
 };
 
 export default function CoursesPageClient() {
+  const [wallpaper, setWallpaper] = useState(0);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion || WALLPAPERS.length < 2) return;
+    const t = setInterval(() => setWallpaper((i) => (i + 1) % WALLPAPERS.length), 5000);
+    return () => clearInterval(t);
+  }, [reduceMotion]);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-sky-600 via-blue-600 to-cyan-500 py-20 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1920&h=600&fit=crop')] bg-cover bg-center" />
+          {WALLPAPERS.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              aria-hidden
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+                i === wallpaper ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 text-white text-sm font-medium mb-6 backdrop-blur-sm">
@@ -158,6 +187,13 @@ export default function CoursesPageClient() {
             Book on WhatsApp
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           </a>
+        </div>
+      </section>
+
+      {/* Terms & Conditions */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TermsConditions />
         </div>
       </section>
     </div>

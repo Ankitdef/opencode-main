@@ -12,6 +12,7 @@ import CallToActionV2 from "@/components/CallToActionV2";
 import FooterV2 from "@/components/FooterV2";
 import FeaturedAdventuresV2 from "@/components/FeaturedAdventuresV2";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import MobileSearchButton from "@/components/MobileSearchButton";
 import SnowParticles from "@/components/SnowParticles";
 import ScrollDepth from "@/components/ScrollDepth";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
@@ -95,6 +96,7 @@ export default function Home() {
           <FooterV2 />
         </div>
         <FloatingWhatsApp />
+        <MobileSearchButton />
       </main>
     </SmoothScrollProvider>
   );
