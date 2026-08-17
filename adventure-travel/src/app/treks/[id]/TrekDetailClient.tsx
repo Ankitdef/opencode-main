@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { Trek } from "@/data/treks";
 import ContactPopup from "@/components/ContactPopup";
 import TermsConditions from "@/components/TermsConditions";
+import { QuickInfoModal, type QuickInfoId } from "@/components/QuickInfoModal";
 import SmartImage from "@/components/SmartImage";
 import { useAuth } from "@/contexts/AuthContext";
 import { createTrekBooking } from "@/lib/auth";
@@ -24,7 +25,7 @@ const AVAIL: Record<Availability, { color: string; label: string }> = {
   sold: { color: "#DC2626", label: "Sold Out" },
 };
 
-const TABS = ["Overview", "Dates", "Day by Day", "Photo Gallery", "What's Included", "Make Reservation"] as const;
+const TABS = ["Overview", "Dates", "Day by Day", "T&C", "Photo Gallery", "What's Included", "Make Reservation"] as const;
 type Tab = (typeof TABS)[number];
 
 const GALLERY_IMAGES = [
@@ -387,6 +388,7 @@ export default function TrekDetailClient({ trek }: { trek: Trek }) {
                 {activeTab === "Overview" && <OverviewTab trek={trek} />}
                 {activeTab === "Dates" && <DatesTab departures={departures} currency={trek.currency} onRegister={registerForDate} />}
                 {activeTab === "Day by Day" && <ItineraryTab trek={trek} />}
+                {activeTab === "T&C" && <TermsConditions />}
                 {activeTab === "Photo Gallery" && <GalleryTab trek={trek} />}
                 {activeTab === "What's Included" && <IncludedTab />}
                 {activeTab === "Make Reservation" && (
@@ -514,6 +516,184 @@ function StatCard({ icon, label, value, sub }: { icon: string; label: string; va
 }
 
 /* ─── Overview Tab ─── */
+/* ─── Quick Info strip (IndiaHikes-style) ─── */
+function QuickInfo({ trek }: { trek: Trek }) {
+  const totalHours = trek.itinerary.reduce((sum, d) => sum + d.hours, 0);
+  const ft = Math.round(trek.maxAltitude * 3.28084);
+  // ponytail: age/fitness heuristics keyed off difficulty — replace with per-trek data if it ever matters
+  const AGE_BY_DIFFICULTY: Record<string, string> = {
+    Easy: "8 – 62 years",
+    Moderate: "10 – 60 years",
+    Challenging: "14 – 55 years",
+    Strenuous: "16 – 50 years",
+  };
+  const FITNESS_BY_DIFFICULTY: Record<string, string> = {
+    Easy: "5 km in 45 mins",
+    Moderate: "5 km in 40 mins",
+    Challenging: "5 km in 35 mins",
+    Strenuous: "10 km in 60 mins",
+  };
+  const [openModal, setOpenModal] = useState<QuickInfoId | null>(null);
+
+  const items: { id: QuickInfoId; label: string; value: string; color?: string; icon: ReactNode }[] = [
+    {
+      id: "difficulty",
+      label: "Trek Difficulty",
+      value: trek.difficulty,
+      color: DIFFICULTY_COLORS[trek.difficulty],
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 20L9 8l4 6 3-4 5 10H3z" />
+        </svg>
+      ),
+    },
+    {
+      id: "duration",
+      label: "Trek Duration",
+      value: `${trek.days} Days · ${totalHours}h Trekking`,
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4.5 2.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+    },
+    {
+      id: "altitude",
+      label: "Highest Altitude",
+      value: `${trek.maxAltitude.toLocaleString("en-IN")} m (${ft.toLocaleString("en-IN")} ft)`,
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2 25h20L14.5 8l-2.5 4L8 6 2 18z" transform="scale(0.9) translate(1.5,-1)" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v3m0-3l1.5 1.5M12 3l-1.5 1.5" />
+        </svg>
+      ),
+    },
+    {
+      id: "season",
+      label: "Best Season",
+      value: trek.bestSeason,
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636" />
+        </svg>
+      ),
+    },
+    {
+      id: "group",
+      label: "Group Size",
+      value: trek.groupSize ? `Max ${trek.groupSize} Trekkers` : "Small Groups",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.128 9.128 0 002.625-.372M12 15a3 3 0 110-6 3 3 0 010 6zm6.874 4.124A5.998 5.998 0 0018.714 15m-1.028-6.418a5.99 5.99 0 00-1.929-.5M15 6.128a5.998 5.998 0 00-7.462 2.04M6.002 15.9a5.998 5.998 0 00-1.929.5" />
+        </svg>
+      ),
+    },
+    {
+      id: "basecamp",
+      label: "Basecamp",
+      value: trek.location ?? trek.region,
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+        </svg>
+      ),
+    },
+    {
+      id: "age",
+      label: "Suitable For",
+      value: AGE_BY_DIFFICULTY[trek.difficulty],
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+        </svg>
+      ),
+    },
+    {
+      id: "accommodation",
+      label: "Accommodation",
+      value: "Tents & Mountain Lodges",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+        </svg>
+      ),
+    },
+    {
+      id: "fitness",
+      label: "Fitness Criteria",
+      value: FITNESS_BY_DIFFICULTY[trek.difficulty],
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
+      ),
+    },
+    {
+      id: "offloading",
+      label: "Offloading",
+      value: "Available",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 7.5V4.5A2.25 2.25 0 0012.75 2.25h-1.5A2.25 2.25 0 009 4.5v3m6 0a3 3 0 013 3v9a1.5 1.5 0 01-1.5 1.5H7.5A1.5 1.5 0 016 19.5v-9a3 3 0 013-3m0 0h6m-6 0l-.75-3H6.75M15 7.5l.75-3h1.5" />
+        </svg>
+      ),
+    },
+    {
+      id: "cloakroom",
+      label: "Cloakroom",
+      value: "Available at Basecamp",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 5.25h4a1 1 0 011 1v1h-6v-1a1 1 0 011-1zm-6.25 2.25h16.5" />
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {items.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setOpenModal(item.id)}
+            className="group rounded-xl border border-gray-100 bg-white p-4 text-left transition-all hover:border-emerald-300 hover:shadow-md active:scale-[0.98] dark:border-white/10 dark:bg-card dark:hover:border-emerald-700"
+          >
+            <div className="flex items-start justify-between">
+              <div
+                className="mb-2 flex h-9 w-9 items-center justify-center rounded-full"
+                style={{ backgroundColor: `${item.color ?? "#10b981"}1a`, color: item.color ?? "#10b981" }}
+              >
+                {item.icon}
+              </div>
+              <svg
+                className="mt-1 h-3.5 w-3.5 text-muted opacity-40 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-600 group-hover:opacity-100"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-muted">{item.label}</h4>
+            <p className="mt-0.5 text-sm font-bold leading-snug text-foreground">{item.value}</p>
+            <span className="mt-1 block text-[10px] font-medium text-emerald-600 opacity-0 transition-opacity group-hover:opacity-100">
+              Know more
+            </span>
+          </button>
+        ))}
+      </div>
+      {openModal && (
+        <QuickInfoModal
+          id={openModal}
+          label={items.find((i) => i.id === openModal)?.label ?? ""}
+          trek={trek}
+          onClose={() => setOpenModal(null)}
+        />
+      )}
+    </div>
+  );
+}
+
 function OverviewTab({ trek }: { trek: Trek }) {
   // Generic, trek-agnostic highlights (avoids showing one trek's specifics on every page).
   const highlights = [
@@ -528,8 +708,9 @@ function OverviewTab({ trek }: { trek: Trek }) {
   ];
   return (
     <div>
-      <h2 className="text-2xl font-bold text-foreground mb-4">About This Trek</h2>
-      <p className="text-muted leading-relaxed mb-6">{trek.blurb}</p>
+      <h2 className="text-2xl font-bold text-foreground mb-6">About This Trek</h2>
+      <QuickInfo trek={trek} />
+      <p className="text-muted leading-relaxed mt-6 mb-6">{trek.blurb}</p>
       <p className="text-muted leading-relaxed mb-8">
         This trek offers an unparalleled experience through some of the most pristine landscapes in the Indian Himalayas.
         From lush rhododendron forests to high-altitude meadows, every day brings new vistas and cultural encounters.
@@ -545,9 +726,6 @@ function OverviewTab({ trek }: { trek: Trek }) {
             <span className="text-sm">{h}</span>
           </div>
         ))}
-      </div>
-      <div className="mt-10 pt-8 border-t border-gray-100 dark:border-white/10">
-        <TermsConditions />
       </div>
     </div>
   );

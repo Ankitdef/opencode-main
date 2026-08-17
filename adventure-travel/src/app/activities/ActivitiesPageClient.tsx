@@ -356,38 +356,6 @@ export default function ActivitiesPage() {
             </div>
           </div>
         </div>
-
-        {/* Video Showcase */}
-        <div className="relative mx-auto max-w-7xl px-6 pb-16 md:pb-24 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground">
-              See the Slopes in Action
-            </h2>
-            <p className="mt-4 text-lg text-muted max-w-2xl mx-auto">
-              Real footage from our courses — see what your first day on snow actually looks like.
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="overflow-hidden rounded-3xl shadow-xl">
-              <div className="relative aspect-video">
-                <iframe src="https://www.youtube.com/embed/sqK0ngy9vWg" title="Skiing in Auli - Himalayan Adventure" className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-              </div>
-              <div className="bg-white p-5">
-                <h3 className="font-heading text-lg font-bold text-foreground">Skiing in Auli — Your First Day</h3>
-                <p className="mt-1 text-sm text-muted">Nursery slopes, cable car views, and what beginner lessons look like.</p>
-              </div>
-            </div>
-            <div className="overflow-hidden rounded-3xl shadow-xl">
-              <div className="relative aspect-video">
-                <iframe src="https://www.youtube.com/embed/2NnC4kFzEcM" title="Snowboarding in Auli - Learn to Ride" className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-              </div>
-              <div className="bg-white p-5">
-                <h3 className="font-heading text-lg font-bold text-foreground">Snowboarding — Balance to Turns</h3>
-                <p className="mt-1 text-sm text-muted">From first slides to linked turns on Auli&apos;s blue runs.</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Activity Cards */}

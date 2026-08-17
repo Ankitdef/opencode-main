@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { treks } from "@/data/treks";
+import { searchAll } from "@/lib/searchIndex";
 import ContactPopup from "./ContactPopup";
 
 const trustMetrics = [
@@ -20,13 +20,7 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return treks
-      .filter((t) => `${t.name} ${t.region} ${t.difficulty}`.toLowerCase().includes(q))
-      .slice(0, 6);
-  }, [query]);
+  const results = useMemo(() => searchAll(query), [query]);
 
   const rise = (delay: number) =>
     reduceMotion
@@ -68,8 +62,9 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
         {...rise(0.12)}
         className="text-shine-mountain mt-4 font-heading text-xl font-bold leading-snug tracking-tight sm:text-2xl [text-shadow:0_2px_14px_rgba(0,0,0,0.35)]"
       >
-        <span className="block">Chhod do duniya ki saari <span className="italic opacity-80">bhasad</span>,</span>
-        <span className="block">bula rahe hain tujhe <span className="font-extrabold">pahaad</span>.</span>
+        <span lang="hi" className="mt-2 block text-base font-medium tracking-widest opacity-75">
+          अङ्गेन गात्रं नयनेन वक्त्रं न्यायेन राज्यं लवणेन भोज्यम्
+        </span>
       </motion.p>
 
       <motion.p {...rise(0.16)} className={`mt-5 max-w-lg text-base leading-relaxed sm:text-lg ${body}`}>
@@ -121,16 +116,14 @@ export default function HeroContent({ variant }: { variant: "split" | "scene" })
           {open && query.trim() && (
             <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl">
               {results.length > 0 ? (
-                results.map((t) => (
+                results.map((r) => (
                   <Link
-                    key={t.slug}
-                    href={`/treks/${t.slug}`}
+                    key={r.href}
+                    href={r.href}
                     className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-foreground transition-colors hover:bg-primary/5"
                   >
-                    <span className="font-medium">{t.name}</span>
-                    <span className="flex-shrink-0 text-xs text-muted">
-                      {t.region} · {t.difficulty}
-                    </span>
+                    <span className="font-medium">{r.name}</span>
+                    <span className="flex-shrink-0 text-xs text-muted">{r.sub}</span>
                   </Link>
                 ))
               ) : (

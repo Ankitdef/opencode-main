@@ -6,8 +6,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { createActivityBooking } from "@/lib/auth";
 import type { Course } from "@/data/courses";
+import CourseVideoBackdrop from "@/components/CourseVideoBackdrop";
 
 type Tab = "overview" | "dates" | "itinerary" | "gallery" | "included" | "book";
+
+/* Verified free-license Pexels stock footage — one cinematic loop per course type. */
+/* ponytail: snowboard type also uses the skiing loop (client: 7-day + 2-week snowboard courses use it, so all Snowboarding courses stay uniform). */
+const TYPE_VIDEOS: Record<string, string> = {
+  Skiing: "https://videos.pexels.com/video-files/5526230/5526230-sd_960_540_25fps.mp4",
+  Snowboarding: "https://videos.pexels.com/video-files/5526230/5526230-sd_960_540_25fps.mp4",
+  Backcountry: "https://videos.pexels.com/video-files/11270206/11270206-sd_960_540_30fps.mp4",
+};
 
 const TAB_LIST: { key: Tab; label: string }[] = [
   { key: "overview", label: "Overview" },
@@ -241,44 +250,64 @@ export default function CourseDetailClient({ course }: Props) {
   )}`;
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className={`relative bg-gradient-to-br ${colors.gradient} py-20 overflow-hidden`}>
-        <div className="absolute inset-0 opacity-20">
-          <img src={course.image} alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen">
+      {/* Shared cinematic video template behind every course sub-page */}
+      <CourseVideoBackdrop video={TYPE_VIDEOS[course.type] ?? TYPE_VIDEOS.Skiing} poster={course.image} />
+
+      {/* Cinematic hero over the footage */}
+      <section className="relative z-10 flex min-h-[92vh] items-end overflow-hidden">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 pt-32">
           <Link href="/courses" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             All Courses
           </Link>
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 text-white text-sm font-medium mb-4 backdrop-blur-sm">
-            AULI SNOW SPORTS ACADEMY
-          </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-heading">
-            {course.name}
-          </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl mb-8">
-            {course.description}
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", label: course.duration },
-              { icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z", label: course.location },
-              { icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", label: course.level },
-              { icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", label: "Certified" },
-            ].map((item) => (
-              <span key={item.label} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 text-white text-sm backdrop-blur-sm">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
-                {item.label}
-              </span>
-            ))}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-white/15 text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 backdrop-blur-sm border border-white/20">
+              Auli Snow Sports Academy · The Experience
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-5 font-heading leading-[1.02] [text-shadow:0_2px_30px_rgba(2,6,23,0.6)]">
+              {course.name}
+            </h1>
+            <p className="text-base sm:text-lg text-white/85 max-w-2xl mb-8 line-clamp-3 [text-shadow:0_1px_12px_rgba(2,6,23,0.7)]">
+              {course.shortDescription}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {[
+                { icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", label: course.duration },
+                { icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z", label: course.location },
+                { icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", label: course.level },
+                { icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", label: "Certified" },
+              ].map((item) => (
+                <span key={item.label} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white text-sm backdrop-blur-sm border border-white/15">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} /></svg>
+                  {item.label}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Scroll cue */}
+          <motion.a
+            href="#course-content"
+            className="mt-12 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          >
+            <span className="text-[10px] font-semibold uppercase tracking-[0.25em]">Scroll</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+            </svg>
+          </motion.a>
         </div>
       </section>
 
-      {/* Tabs + Content */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Tabs + Content — glass card floating over the footage */}
+      <section id="course-content" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 -mt-6">
+        <div className="rounded-3xl bg-white/95 backdrop-blur-xl shadow-2xl shadow-slate-950/40 ring-1 ring-white/40 p-4 sm:p-8">
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Main Content */}
           <div className="flex-1">
@@ -659,6 +688,7 @@ export default function CourseDetailClient({ course }: Props) {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </section>
     </div>

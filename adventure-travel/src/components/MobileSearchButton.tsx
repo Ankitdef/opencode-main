@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { treks } from "@/data/treks";
+import { searchAll } from "@/lib/searchIndex";
 
 export default function MobileSearchButton() {
   const [visible, setVisible] = useState(false);
@@ -21,13 +21,7 @@ export default function MobileSearchButton() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return treks
-      .filter((t) => `${t.name} ${t.region} ${t.difficulty}`.toLowerCase().includes(q))
-      .slice(0, 6);
-  }, [query]);
+  const results = searchAll(query);
 
   return (
     <div className="md:hidden">
@@ -73,15 +67,15 @@ export default function MobileSearchButton() {
           {query.trim() && (
             <div className="absolute bottom-full left-0 right-0 mb-2 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
               {results.length > 0 ? (
-                results.map((t) => (
+                results.map((r) => (
                   <Link
-                    key={t.slug}
-                    href={`/treks/${t.slug}`}
+                    key={r.href}
+                    href={r.href}
                     onClick={() => setOpen(false)}
                     className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-foreground transition-colors hover:bg-primary/5"
                   >
-                    <span className="font-medium">{t.name}</span>
-                    <span className="flex-shrink-0 text-xs text-muted">{t.region} · {t.difficulty}</span>
+                    <span className="font-medium">{r.name}</span>
+                    <span className="flex-shrink-0 text-xs text-muted">{r.sub}</span>
                   </Link>
                 ))
               ) : (
