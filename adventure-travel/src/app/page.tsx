@@ -13,7 +13,6 @@ import FooterV2 from "@/components/FooterV2";
 import FeaturedAdventuresV2 from "@/components/FeaturedAdventuresV2";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import MobileSearchButton from "@/components/MobileSearchButton";
-import SnowParticles from "@/components/SnowParticles";
 import ScrollDepth from "@/components/ScrollDepth";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import MountainPass from "@/components/MountainPass";
@@ -74,7 +73,6 @@ export default function Home() {
     <SmoothScrollProvider>
       <main className="relative overflow-x-hidden">
         <ScrollProgress />
-        <SnowParticles />
         <ElevationGauge />
         <ValleyHero />
         <div className="relative z-10">

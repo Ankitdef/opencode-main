@@ -17,23 +17,20 @@ const CAMERA_PATH = new THREE.CatmullRomCurve3([
 
 // ── Device quality tiers ──────────────────────────────────────────────
 // Scale object counts + pixel ratio to the hardware so weaker laptops/phones
-// stay smooth while capable machines get the full, lively scene.
+// stay smooth while capable machines get the full scene.
 type Tier = "low" | "mid" | "high";
 
 type TierConfig = {
   forest: number;
-  snow: number;
   clouds: number;
-  birds: number;
   caps: boolean;
-  snowSize: number;
   dpr: [number, number];
 };
 
 const TIERS: Record<Tier, TierConfig> = {
-  low: { forest: 800, snow: 350, clouds: 6, birds: 2, caps: false, snowSize: 6, dpr: [1, 1.25] },
-  mid: { forest: 1400, snow: 700, clouds: 9, birds: 3, caps: true, snowSize: 7, dpr: [1, 1.5] },
-  high: { forest: 2200, snow: 1100, clouds: 12, birds: 4, caps: true, snowSize: 7, dpr: [1, 2] },
+  low: { forest: 800, clouds: 6, caps: false, dpr: [1, 1.25] },
+  mid: { forest: 1400, clouds: 9, caps: true, dpr: [1, 1.5] },
+  high: { forest: 2200, clouds: 12, caps: true, dpr: [1, 2] },
 };
 
 function detectTier(): Tier {
@@ -52,7 +49,7 @@ function detectTier(): Tier {
 
 function buildForest(count: number, withCaps: boolean): THREE.Group {
   const g = new THREE.Group();
-  const geo = new THREE.ConeGeometry(0.9, 3.2, 6);
+  const geo = new THREE.ConeGeometry(0.72, 3.6, 7);
   // white base material so per-instance colours carry the true tint (frost + green variation)
   const mat = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 1 });
   const trees = new THREE.InstancedMesh(geo, mat, count);
@@ -76,12 +73,12 @@ function buildForest(count: number, withCaps: boolean): THREE.Group {
     dummy.updateMatrix();
     trees.setMatrixAt(placed, dummy.matrix);
 
-    // deep green low down, frosted paler green as altitude climbs
+    // deep desaturated green low down, frosted paler as altitude climbs
     const frost = THREE.MathUtils.clamp((y - 7) / 7, 0, 1);
     col.setHSL(
-      0.33 + (Math.random() - 0.5) * 0.05,
-      0.5 - frost * 0.28,
-      0.26 + Math.random() * 0.08 + frost * 0.28,
+      0.31 + (Math.random() - 0.5) * 0.04,
+      0.42 - frost * 0.22,
+      0.16 + Math.random() * 0.07 + frost * 0.22,
     );
     trees.setColorAt(placed, col);
 
@@ -100,7 +97,7 @@ function buildForest(count: number, withCaps: boolean): THREE.Group {
   g.add(trees);
 
   if (capMatrices.length) {
-    const capGeo = new THREE.ConeGeometry(0.5, 1.1, 6);
+    const capGeo = new THREE.ConeGeometry(0.5, 1.1, 7);
     const capMat = new THREE.MeshStandardMaterial({ color: "#eef4ff", roughness: 0.85 });
     const caps = new THREE.InstancedMesh(capGeo, capMat, capMatrices.length);
     capMatrices.forEach((m, i) => caps.setMatrixAt(i, m));
@@ -124,6 +121,23 @@ function makeSoftCircleTexture(): THREE.CanvasTexture {
   ctx.fillRect(0, 0, size, size);
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
+  return tex;
+}
+
+function makeSkyTexture(): THREE.CanvasTexture {
+  const c = document.createElement("canvas");
+  c.width = 2;
+  c.height = 512;
+  const ctx = c.getContext("2d")!;
+  const g = ctx.createLinearGradient(0, 0, 0, 512);
+  g.addColorStop(0, "#2b5f96"); // zenith deep blue
+  g.addColorStop(0.45, "#6ea2cf"); // mid sky
+  g.addColorStop(0.75, "#b9d3e8"); // haze
+  g.addColorStop(1, "#e8f1f8"); // pale horizon
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 2, 512);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
 }
 
@@ -154,121 +168,23 @@ function buildClouds(count: number): THREE.Group {
   return g;
 }
 
-function makeWingGeometry(dir: 1 | -1): THREE.BufferGeometry {
-  const L = 2.2;
-  const g = new THREE.BufferGeometry();
-  const verts = new Float32Array([0, 0, -0.16, 0, 0, 0.16, dir * L, 0, 0]);
-  g.setAttribute("position", new THREE.BufferAttribute(verts, 3));
-  g.computeVertexNormals();
-  return g;
-}
-
-function buildBirds(count: number): THREE.Group {
-  const container = new THREE.Group();
-  const wingMat = new THREE.MeshBasicMaterial({
-    color: "#3a4653",
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.9,
-  });
-  const leftGeo = makeWingGeometry(-1);
-  const rightGeo = makeWingGeometry(1);
-  for (let i = 0; i < count; i++) {
-    const group = new THREE.Group();
-    const left = new THREE.Mesh(leftGeo, wingMat);
-    const right = new THREE.Mesh(rightGeo, wingMat);
-    group.add(left, right);
-    group.scale.setScalar(1.4 + Math.random() * 1.1);
-    // per-bird flight params ride on userData so the frame loop can read them
-    group.userData = {
-      left,
-      right,
-      phase: Math.random() * Math.PI * 2,
-      flap: 8 + Math.random() * 4,
-      cx: (Math.random() - 0.5) * 40,
-      cz: -30 - Math.random() * 60,
-      prevX: 0,
-      prevZ: 0,
-    };
-    container.add(group);
-  }
-  return container;
-}
-
-// GPU-animated soft snow: fall + wind sway happen in the vertex shader, so the
-// frame loop only advances one uniform instead of looping over every flake.
-const SNOW_VERT = `
-  uniform float uTime;
-  uniform float uHeight;
-  uniform float uSize;
-  uniform float uDpr;
-  attribute float aSeed;
-  attribute float aSpeed;
-  attribute float aSway;
-  varying float vAlpha;
-  void main() {
-    vec3 p = position;
-    float fall = mod(uTime * aSpeed + aSeed * uHeight, uHeight);
-    p.y = uHeight - fall - 2.0;
-    float phase = aSeed * 6.2831853;
-    p.x += sin(uTime * 0.5 + phase) * aSway;
-    p.z += cos(uTime * 0.35 + phase) * aSway * 0.6;
-    vec4 mv = modelViewMatrix * vec4(p, 1.0);
-    gl_Position = projectionMatrix * mv;
-    gl_PointSize = clamp(uSize * (34.0 / -mv.z), 1.0, 9.0) * uDpr;
-    vAlpha = clamp(1.0 - (-mv.z) / 320.0, 0.0, 1.0);
-  }
-`;
-
-const SNOW_FRAG = `
-  precision mediump float;
-  varying float vAlpha;
-  void main() {
-    vec2 c = gl_PointCoord - vec2(0.5);
-    float d = dot(c, c);
-    if (d > 0.25) discard;
-    float a = smoothstep(0.25, 0.02, d);
-    gl_FragColor = vec4(1.0, 1.0, 1.0, a * 0.9 * vAlpha);
-  }
-`;
-
-function buildSnow(count: number, size: number): THREE.Points {
-  const pos = new Float32Array(count * 3);
-  const seed = new Float32Array(count);
-  const speed = new Float32Array(count);
-  const sway = new Float32Array(count);
-  for (let i = 0; i < count; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * 170;
-    pos[i * 3 + 1] = Math.random() * 45;
-    pos[i * 3 + 2] = (Math.random() - 0.5) * 320;
-    seed[i] = Math.random();
-    speed[i] = 2 + Math.random() * 4;
-    sway[i] = 0.6 + Math.random() * 2.2;
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute("aSeed", new THREE.BufferAttribute(seed, 1));
-  geo.setAttribute("aSpeed", new THREE.BufferAttribute(speed, 1));
-  geo.setAttribute("aSway", new THREE.BufferAttribute(sway, 1));
-  const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
-  const mat = new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uHeight: { value: 47 },
-      uSize: { value: size },
-      uDpr: { value: dpr },
-    },
-    vertexShader: SNOW_VERT,
-    fragmentShader: SNOW_FRAG,
-    transparent: true,
-    depthWrite: false,
-  });
-  const p = new THREE.Points(geo, mat);
-  p.frustumCulled = false;
-  return p;
-}
-
 // ── Components ─────────────────────────────────────────────────────────
+
+// Natural vertical sky gradient (deep blue zenith → pale haze horizon).
+function SkyGradient() {
+  const scene = useThree((s) => s.scene);
+  useEffect(() => {
+    const tex = makeSkyTexture();
+    // eslint-disable-next-line react-hooks/immutability -- scene is a live R3F object; assigning background is the intended side effect
+    scene.background = tex;
+    return () => {
+      scene.background = null;
+      tex.dispose();
+    };
+  }, [scene]);
+  return null;
+}
+
 function Rig({
   progressRef,
   staticView,
@@ -322,55 +238,6 @@ function Clouds({ count, staticView }: { count: number; staticView: boolean }) {
     }
   });
   return <primitive ref={ref} object={group} />;
-}
-
-function Birds({ count, staticView }: { count: number; staticView: boolean }) {
-  const container = useMemo(() => buildBirds(count), [count]);
-  const ref = useRef<THREE.Group | null>(null);
-  const t = useRef(0);
-  useFrame((_, delta) => {
-    const g = ref.current;
-    if (!g || document.hidden || staticView) return;
-    t.current += delta;
-    const time = t.current;
-    for (const grp of g.children) {
-      const d = grp.userData;
-      const x = d.cx + Math.sin(time * 0.15 + d.phase) * 62;
-      const z = d.cz + Math.sin(time * 0.11 + d.phase * 1.3) * 92;
-      const y = 54 + Math.sin(time * 0.22 + d.phase) * 6;
-      const vx = x - d.prevX;
-      const vz = z - d.prevZ;
-      grp.position.set(x, y, z);
-      if (vx * vx + vz * vz > 1e-5) grp.rotation.y = Math.atan2(vx, vz);
-      d.prevX = x;
-      d.prevZ = z;
-      const wing = Math.sin(time * d.flap + d.phase) * 0.6;
-      (d.right as THREE.Object3D).rotation.z = wing;
-      (d.left as THREE.Object3D).rotation.z = -wing;
-    }
-  });
-  return <primitive ref={ref} object={container} />;
-}
-
-function Snow({
-  count,
-  size,
-  staticView,
-}: {
-  count: number;
-  size: number;
-  staticView: boolean;
-}) {
-  const points = useMemo(() => buildSnow(count, size), [count, size]);
-  const ref = useRef<THREE.Points | null>(null);
-  const t = useRef(0);
-  useFrame((_, delta) => {
-    const p = ref.current;
-    if (!p || document.hidden || staticView) return;
-    t.current += delta;
-    (p.material as THREE.ShaderMaterial).uniforms.uTime.value = t.current;
-  });
-  return <primitive ref={ref} object={points} />;
 }
 
 // Redraw on scroll/resize when the frame loop is paused (reduced motion).
@@ -439,16 +306,15 @@ export default function ValleyScene() {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       className="absolute inset-0"
     >
-      <color attach="background" args={["#cfe4f7"]} />
-      <fog attach="fog" args={["#cfe4f7", 60, 320]} />
-      <ambientLight intensity={0.55} />
-      <directionalLight position={[30, 60, 40]} intensity={1.4} />
+      <SkyGradient />
+      <fog attach="fog" args={["#c6dbe9", 60, 320]} />
+      <hemisphereLight args={["#d3e3f5", "#6b5f4d", 0.65]} />
+      <directionalLight position={[35, 70, 45]} intensity={1.7} color="#fff1d6" />
+      <directionalLight position={[-40, 30, -40]} intensity={0.35} color="#bcd6f2" />
       <primitive object={terrain} />
       <primitive object={trail} />
       <Forest count={cfg.forest} withCaps={cfg.caps} />
       <Clouds count={cfg.clouds} staticView={staticView} />
-      <Birds count={cfg.birds} staticView={staticView} />
-      <Snow count={cfg.snow} size={cfg.snowSize} staticView={staticView} />
       <Rig progressRef={progressRef} staticView={staticView} />
       <DemandInvalidator active={frameloop === "demand"} />
     </Canvas>

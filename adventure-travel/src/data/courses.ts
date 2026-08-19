@@ -36,6 +36,8 @@ export interface Course {
   testimonials: CourseTestimonial[];
   image: string;
   gallery?: string[];
+  /** Cinematic backdrop video for the course page (real course footage). */
+  video?: string;
   featured?: boolean;
   /** ponytail: optional SIA-style fields */
   levelRequirement?: string;
@@ -161,12 +163,14 @@ export const courses: Course[] = [
       { name: "Meera J.", location: "Chennai", text: "Auli's powder is something else! The 20+ hours of coaching meant I improved every single day. The après sessions with other riders were a highlight. Best investment in a new skill.", rating: 5 },
       { name: "Rahul P.", location: "Delhi", text: "The structured progression from nursery slopes to intermediate runs was exactly what I needed. The small group size meant real personal attention. Professional setup all the way.", rating: 5 },
     ],
-    image: "https://images.pexels.com/photos/352092/pexels-photo-352092.jpeg?w=800&q=80",
+    image: "/assets/snowboarding/IMG_5472.jpg",
+    video: "/assets/snowboarding/IMG_5201.MOV",
     gallery: [
-      "https://images.pexels.com/photos/352092/pexels-photo-352092.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/848591/pexels-photo-848591.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/30309572/pexels-photo-30309572.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/6815358/pexels-photo-6815358.jpeg?w=800&q=80",
+      "/assets/snowboarding/IMG_5472.jpg",
+      "/assets/snowboarding/IMG_4063.jpg",
+      "/assets/snowboarding/IMG_5455.jpg",
+      "/assets/snowboarding/IMG_5201.MOV",
+      "/assets/snowboarding/IMG_0942.MOV",
     ],
     featured: true,
   },
@@ -228,13 +232,16 @@ export const courses: Course[] = [
       { name: "Rohan D.", location: "Mumbai", text: "This is the real deal. 25+ hours a week of coaching, small groups, theory sessions — it's like a proper snow school, not a holiday course. The avalanche awareness seminar was eye-opening.", rating: 5 },
       { name: "Ananya S.", location: "Delhi", text: "Best two weeks of my life. The instructors pushed me just enough, the après sessions were amazing, and I left with a proper skill. Already planning my return for the advanced course.", rating: 5 },
     ],
-    image: "https://images.pexels.com/photos/6815358/pexels-photo-6815358.jpeg?w=800&q=80",
+    image: "/assets/snowboarding/IMG_4063.jpg",
+    video: "/assets/snowboarding/IMG_4222.MOV",
     gallery: [
-      "https://images.pexels.com/photos/6815358/pexels-photo-6815358.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/352092/pexels-photo-352092.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/30309572/pexels-photo-30309572.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/848591/pexels-photo-848591.jpeg?w=800&q=80",
-      "https://images.pexels.com/photos/6575867/pexels-photo-6575867.jpeg?w=800&q=80",
+      "/assets/snowboarding/IMG_4063.jpg",
+      "/assets/snowboarding/IMG_5455.jpg",
+      "/assets/snowboarding/IMG_5472.jpg",
+      "/assets/snowboarding/IMG_4222.MOV",
+      "/assets/snowboarding/IMG_3983.MOV",
+      "/assets/snowboarding/IMG_5220.MOV",
+      "/assets/snowboarding/IMG_5272.MOV",
     ],
   },
   {

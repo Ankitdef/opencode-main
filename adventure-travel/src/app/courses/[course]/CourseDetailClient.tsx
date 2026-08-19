@@ -10,8 +10,8 @@ import CourseVideoBackdrop from "@/components/CourseVideoBackdrop";
 
 type Tab = "overview" | "dates" | "itinerary" | "gallery" | "included" | "book";
 
-/* Verified free-license Pexels stock footage — one cinematic loop per course type. */
-/* ponytail: snowboard type also uses the skiing loop (client: 7-day + 2-week snowboard courses use it, so all Snowboarding courses stay uniform). */
+/* Stock footage fallback for course types without their own footage. */
+/* Courses with real footage carry a `video` field (e.g. /assets/snowboarding/*.MOV). */
 const TYPE_VIDEOS: Record<string, string> = {
   Skiing: "https://videos.pexels.com/video-files/5526230/5526230-sd_960_540_25fps.mp4",
   Snowboarding: "https://videos.pexels.com/video-files/5526230/5526230-sd_960_540_25fps.mp4",
@@ -251,8 +251,8 @@ export default function CourseDetailClient({ course }: Props) {
 
   return (
     <div className="min-h-screen">
-      {/* Shared cinematic video template behind every course sub-page */}
-      <CourseVideoBackdrop video={TYPE_VIDEOS[course.type] ?? TYPE_VIDEOS.Skiing} poster={course.image} />
+      {/* Cinematic video template behind every course sub-page — real course footage when available */}
+      <CourseVideoBackdrop video={course.video ?? TYPE_VIDEOS[course.type] ?? TYPE_VIDEOS.Skiing} poster={course.image} />
 
       {/* Cinematic hero over the footage */}
       <section className="relative z-10 flex min-h-[92vh] items-end overflow-hidden">
@@ -441,19 +441,29 @@ export default function CourseDetailClient({ course }: Props) {
                         key={i}
                         type="button"
                         onClick={() => setLightbox(i)}
-                        aria-label={`View photo ${i + 1} of ${images.length}`}
+                        aria-label={`View ${/\.(mp4|mov)$/i.test(img) ? "video" : "photo"} ${i + 1} of ${images.length}`}
                         className="relative aspect-[4/3] rounded-xl overflow-hidden group cursor-pointer"
                       >
-                        <img
-                          src={img}
-                          alt={`${course.name} — photo ${i + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        {/\.(mp4|mov)$/i.test(img) ? (
+                          <video src={img} muted preload="metadata" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        ) : (
+                          <img
+                            src={img}
+                            alt={`${course.name} — photo ${i + 1}`}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <svg className="w-8 h-8 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 7.5v6m3-3h-6M21 21l-5.2-5.2" />
-                          </svg>
+                          {/\.(mp4|mov)$/i.test(img) ? (
+                            <svg className="w-10 h-10 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                          ) : (
+                            <svg className="w-8 h-8 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 7.5v6m3-3h-6M21 21l-5.2-5.2" />
+                            </svg>
+                          )}
                         </div>
                       </button>
                     ))}
@@ -497,11 +507,23 @@ export default function CourseDetailClient({ course }: Props) {
                           className="max-w-4xl max-h-[80vh] relative"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <img
-                            src={images[lightbox]}
-                            alt={`${course.name} — photo ${lightbox + 1}`}
-                            className="max-w-full max-h-[80vh] object-contain rounded-lg"
-                          />
+                          {/\.(mp4|mov)$/i.test(images[lightbox]) ? (
+                            <video
+                              src={images[lightbox]}
+                              controls
+                              autoPlay
+                              muted
+                              playsInline
+                              preload="metadata"
+                              className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+                            />
+                          ) : (
+                            <img
+                              src={images[lightbox]}
+                              alt={`${course.name} — photo ${lightbox + 1}`}
+                              className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                            />
+                          )}
                         </motion.div>
 
                         <button
