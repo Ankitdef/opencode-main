@@ -2,14 +2,21 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { courses } from "@/data/courses";
 import TermsConditions from "@/components/TermsConditions";
 
-// skiing course gallery upscaled to wallpaper size
-const WALLPAPERS = (courses.find((c) => c.slug === "skiing-course")?.gallery ?? []).map((u) =>
+// Hero media — skiing gallery + snowboarding videos, mixed carousel
+const GALLERY_WALLPAPERS = (courses.find((c) => c.slug === "skiing-course")?.gallery ?? []).map((u) =>
   u.replace("w=800", "w=1920")
 );
+const HERO_MEDIA: { type: "image" | "video"; src: string }[] = [
+  ...GALLERY_WALLPAPERS.map((src) => ({ type: "image" as const, src })),
+  { type: "video", src: "/assets/snowboarding/IMG_5201.MOV" },
+  { type: "video", src: "/assets/snowboarding/IMG_4222.MOV" },
+  { type: "video", src: "/assets/snowboarding/IMG_5198.MOV" },
+  { type: "video", src: "/assets/snowboarding/IMG_5272.MOV" },
+];
 
 const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   Skiing: { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200" },
@@ -18,31 +25,59 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> 
 };
 
 export default function CoursesPageClient() {
-  const [wallpaper, setWallpaper] = useState(0);
+  const [idx, setIdx] = useState(0);
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (reduceMotion || WALLPAPERS.length < 2) return;
-    const t = setInterval(() => setWallpaper((i) => (i + 1) % WALLPAPERS.length), 5000);
-    return () => clearInterval(t);
-  }, [reduceMotion]);
+    if (reduceMotion || HERO_MEDIA.length < 2) return;
+    const cur = HERO_MEDIA[idx];
+    const delay = cur.type === "video" ? 6000 : 4000;
+    const t = setTimeout(() => setIdx((i) => (i + 1) % HERO_MEDIA.length), delay);
+    return () => clearTimeout(t);
+  }, [reduceMotion, idx]);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero */}
+      {/* Hero — image + video carousel */}
       <section className="relative bg-gradient-to-br from-sky-600 via-blue-600 to-cyan-500 py-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          {WALLPAPERS.map((src, i) => (
-            <img
-              key={src}
-              src={src}
-              alt=""
-              aria-hidden
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
-                i === wallpaper ? "opacity-100" : "opacity-0"
-              }`}
+        <div className="absolute inset-0">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={idx}
+              initial={reduceMotion ? undefined : { opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 0.45, scale: 1 }}
+              exit={reduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
+              transition={reduceMotion ? { duration: 0.2 } : { duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
+              className="absolute inset-0"
+            >
+              {HERO_MEDIA[idx].type === "video" ? (
+                <video
+                  key={HERO_MEDIA[idx].src}
+                  src={HERO_MEDIA[idx].src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="h-full w-full object-cover"
+                  aria-hidden
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={HERO_MEDIA[idx].src} alt="" aria-hidden className="h-full w-full object-cover" />
+              )}
+            </motion.div>
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-600/60 via-blue-600/50 to-cyan-500/60" />
+        </div>
+        {/* Dots */}
+        <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+          {HERO_MEDIA.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIdx(i)}
+              className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"}`}
             />
           ))}
         </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeUp, StaggerContainer, StaggerItem } from "./MotionWrapper";
 import SmartImage from "./SmartImage";
+import { LogoMark } from "./Logo";
 
 const quickLinks = [
   { label: "All Treks", href: "/treks" },
@@ -111,13 +112,12 @@ export default function FooterV2() {
         <StaggerContainer className="hidden md:grid md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8" staggerDelay={0.05}>
           {/* Brand */}
           <StaggerItem className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 21l7.5-7.5L15 18l6-9 4.5 3L18 21H3z" />
-                </svg>
-              </div>
-              <span className="font-heading text-xl font-bold">Expedition Happiness</span>
+            <div className="flex items-center gap-3 mb-4">
+              <LogoMark variant="light" size={40} />
+              <span className="flex flex-col leading-none">
+                <span className="font-nav text-[10px] font-bold uppercase tracking-[0.22em] text-white/60">Expedition</span>
+                <span className="font-display text-[18px] font-[800] tracking-[-0.02em] text-white">Happiness Treks</span>
+              </span>
             </div>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs mb-6">
               Your trusted partner for epic Himalayan trekking adventures. Creating unforgettable memories since 2010.

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { LogoMark } from "./Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 
@@ -118,11 +119,7 @@ export default function Navbar() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "h-16" : "h-20"}`}>
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="h-10 w-10 rounded-xl bg-gradient-accent flex items-center justify-center shadow-md shadow-emerald-500/20 transition-transform group-hover:scale-105">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
+              <LogoMark variant="light" size={40} className="transition-transform group-hover:scale-[1.02]" />
               <span className="flex flex-col leading-none">
                 <span className="font-display text-[10px] font-bold uppercase tracking-[0.22em] text-white/60">Expedition</span>
                 <span className="font-display text-lg sm:text-[22px] font-[800] tracking-[-0.02em] text-white">Happiness Treks</span>
