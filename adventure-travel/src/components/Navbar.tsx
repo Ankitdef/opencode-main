@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 
@@ -59,9 +60,11 @@ const activities = [
 export default function Navbar() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const shouldReduceMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activityOpen, setActivityOpen] = useState(false);
+  const [mobileActivityOpen, setMobileActivityOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
@@ -91,6 +94,18 @@ export default function Navbar() {
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
+  }, [mobileOpen]);
+
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
@@ -230,105 +245,457 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile Toggle */}
+            {/* Mobile Toggle — morphing hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              className="md:hidden p-2 rounded-lg text-white"
+              aria-expanded={mobileOpen}
+              className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white backdrop-blur-sm transition-colors hover:bg-white/10 active:scale-95 md:hidden"
             >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-                  {mobileOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
-              </button>
+              <span className="relative block h-4 w-5">
+                <motion.span
+                  className="absolute left-0 top-0 block h-0.5 w-5 rounded-full bg-white"
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : mobileOpen
+                        ? { rotate: 45, y: 7 }
+                        : { rotate: 0, y: 0 }
+                  }
+                  transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+                />
+                <motion.span
+                  className="absolute left-0 top-[7px] block h-0.5 w-5 rounded-full bg-white"
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : mobileOpen
+                        ? { opacity: 0, scaleX: 0 }
+                        : { opacity: 1, scaleX: 1 }
+                  }
+                  transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+                  style={{ transformOrigin: "center" }}
+                />
+                <motion.span
+                  className="absolute left-0 top-[14px] block h-0.5 w-5 rounded-full bg-white"
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : mobileOpen
+                        ? { rotate: -45, y: -7 }
+                        : { rotate: 0, y: 0 }
+                  }
+                  transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+                />
+              </span>
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-[#0F172A]/95 backdrop-blur-xl pt-20 px-4 md:hidden overflow-y-auto">
-          <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-xl font-heading font-semibold text-white py-2.5 border-b border-white/10"
+      {/* Mobile Menu — spring drawer with stagger */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0.15 }
+                  : { duration: 0.25, ease: [0.23, 1, 0.32, 1] }
+              }
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 z-40 bg-[#020617]/60 backdrop-blur-sm md:hidden"
+              aria-hidden
+            />
+
+            {/* Panel */}
+            <motion.div
+              initial={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { transform: "translateX(100%)", opacity: 0 }
+              }
+              animate={
+                shouldReduceMotion
+                  ? { opacity: 1 }
+                  : { transform: "translateX(0%)", opacity: 1 }
+              }
+              exit={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { transform: "translateX(100%)", opacity: 0 }
+              }
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0.15 }
+                  : {
+                      type: "spring",
+                      duration: 0.45,
+                      bounce: 0.15,
+                    }
+              }
+              drag={shouldReduceMotion ? false : "x"}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.x > 80 || info.velocity.x > 300) {
+                  setMobileOpen(false);
+                }
+              }}
+              className="fixed inset-y-0 right-0 z-40 flex w-[88%] max-w-[360px] flex-col overflow-y-auto bg-[#0F172A] px-5 pb-8 pt-[72px] shadow-2xl shadow-black/50 md:hidden"
+              style={{ willChange: "transform" }}
+            >
+              {/* Drag handle hint */}
+              <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/15 md:hidden" />
+
+              <motion.div
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                variants={{
+                  hidden: {},
+                  show: {
+                    transition: {
+                      staggerChildren: shouldReduceMotion ? 0 : 0.045,
+                      delayChildren: shouldReduceMotion ? 0 : 0.08,
+                    },
+                  },
+                }}
+                className="flex flex-col"
               >
-                {link.label}
-              </Link>
-            ))}
-
-            {/* Mobile Activities */}
-            <div className="py-3 border-b border-white/10">
-              <p className="text-xl font-heading font-semibold text-white mb-2">Activities</p>
-              <div className="flex flex-col gap-1 pl-4">
-                {activities.map((act) => (
-                  <Link
-                    key={act.label}
-                    href={act.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 text-base text-white/80 hover:text-white py-1.5 transition-colors"
+                {navLinks.map((link) => (
+                  <motion.div
+                    key={link.href}
+                    variants={{
+                      hidden: shouldReduceMotion
+                        ? { opacity: 0 }
+                        : { opacity: 0, transform: "translateY(10px)" },
+                      show: shouldReduceMotion
+                        ? { opacity: 1 }
+                        : { opacity: 1, transform: "translateY(0px)" },
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: [0.23, 1, 0.32, 1] as const,
+                    }}
                   >
-                    <span className="text-cyan-400">{act.icon}</span>
-                    {act.label}
-                  </Link>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center justify-between border-b border-white/10 py-4 text-[22px] font-heading font-bold tracking-tight transition-colors ${
+                        isActive(link.href)
+                          ? "text-white"
+                          : "text-white/90 hover:text-white"
+                      }`}
+                    >
+                      <span className="flex items-center gap-3">
+                        {isActive(link.href) && (
+                          <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
+                        )}
+                        {link.label}
+                      </span>
+                      <svg
+                        className="h-4 w-4 text-white/30"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        aria-hidden
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </Link>
+                  </motion.div>
                 ))}
-                <Link
-                  href="/activities"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 text-base text-cyan-400 font-semibold py-1.5"
+
+                {/* Mobile Activities — collapsible */}
+                <motion.div
+                  variants={{
+                    hidden: shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, transform: "translateY(10px)" },
+                    show: shouldReduceMotion
+                      ? { opacity: 1 }
+                      : { opacity: 1, transform: "translateY(0px)" },
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.23, 1, 0.32, 1] as const,
+                  }}
+                  className="border-b border-white/10 py-1"
                 >
-                  View All Activities
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
+                  <button
+                    onClick={() => setMobileActivityOpen((v) => !v)}
+                    aria-expanded={mobileActivityOpen}
+                    className="flex w-full items-center justify-between py-4 text-left"
+                  >
+                    <span className="text-[22px] font-heading font-bold tracking-tight text-white/90">
+                      Activities
+                    </span>
+                    <motion.span
+                      animate={{ rotate: mobileActivityOpen ? 180 : 0 }}
+                      transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+                      className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white"
+                    >
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        aria-hidden
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {mobileActivityOpen && (
+                      <motion.div
+                        initial={
+                          shouldReduceMotion
+                            ? { opacity: 0 }
+                            : { opacity: 0, height: 0 }
+                        }
+                        animate={
+                          shouldReduceMotion
+                            ? { opacity: 1 }
+                            : { opacity: 1, height: "auto" }
+                        }
+                        exit={
+                          shouldReduceMotion
+                            ? { opacity: 0 }
+                            : { opacity: 0, height: 0 }
+                        }
+                        transition={{
+                          duration: shouldReduceMotion ? 0.15 : 0.28,
+                          ease: [0.23, 1, 0.32, 1] as const,
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <div className="flex flex-col gap-1 pb-3">
+                          {activities.map((act) => (
+                            <Link
+                              key={act.label}
+                              href={act.href}
+                              onClick={() => setMobileOpen(false)}
+                              className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white active:scale-[0.98]"
+                            >
+                              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-400">
+                                {act.icon}
+                              </span>
+                              <span className="flex flex-col">
+                                <span className="font-semibold leading-none">
+                                  {act.label}
+                                </span>
+                                <span className="text-xs text-white/50">
+                                  {act.description}
+                                </span>
+                              </span>
+                            </Link>
+                          ))}
+                          <Link
+                            href="/activities"
+                            onClick={() => setMobileOpen(false)}
+                            className="mt-1 flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-cyan-400 active:scale-[0.98]"
+                          >
+                            View all activities
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              aria-hidden
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                              />
+                            </svg>
+                          </Link>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
 
-            <Link
-              href="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="text-xl font-heading font-semibold text-white py-2.5 border-b border-white/10"
-            >
-              Contact
-            </Link>
+                <motion.div
+                  variants={{
+                    hidden: shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, transform: "translateY(10px)" },
+                    show: shouldReduceMotion
+                      ? { opacity: 1 }
+                      : { opacity: 1, transform: "translateY(0px)" },
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.23, 1, 0.32, 1] as const,
+                  }}
+                >
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between border-b border-white/10 py-4 text-[22px] font-heading font-bold tracking-tight text-white/90 hover:text-white"
+                  >
+                    Contact
+                    <svg
+                      className="h-4 w-4 text-white/30"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </Link>
+                </motion.div>
 
-            <Link
-              href="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="mt-3 rounded-xl bg-cyan-500 px-5 py-3.5 text-center text-base font-semibold text-white"
-            >
-              Contact Us
-            </Link>
+                <motion.div
+                  variants={{
+                    hidden: shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, transform: "translateY(10px)" },
+                    show: shouldReduceMotion
+                      ? { opacity: 1 }
+                      : { opacity: 1, transform: "translateY(0px)" },
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.23, 1, 0.32, 1] as const,
+                  }}
+                  className="mt-6"
+                >
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-sky-500 px-6 py-4 text-base font-bold text-white shadow-lg shadow-cyan-500/20 transition-all hover:shadow-cyan-500/30 active:scale-[0.98]"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.36-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                      />
+                    </svg>
+                    Contact Us
+                  </Link>
+                </motion.div>
 
-            {user ? (
-              <>
-                <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="text-xl font-heading font-semibold text-white py-2.5 border-b border-white/10">
-                  My Dashboard
-                </Link>
-                <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="text-left text-xl font-heading font-semibold text-white/60 py-2.5">
-                  Log Out
-                </button>
-              </>
-            ) : (
-              <div className="flex gap-3 mt-2">
-                <Link href="/login" onClick={() => setMobileOpen(false)} className="flex-1 text-center rounded-xl border border-white/20 px-5 py-3 text-base font-semibold text-white">
-                  Log In
-                </Link>
-                <Link href="/signup" onClick={() => setMobileOpen(false)} className="flex-1 text-center rounded-xl bg-emerald-600 px-5 py-3 text-base font-semibold text-white">
-                  Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+                {user ? (
+                  <motion.div
+                    variants={{
+                      hidden: shouldReduceMotion
+                        ? { opacity: 0 }
+                        : { opacity: 0, transform: "translateY(10px)" },
+                      show: shouldReduceMotion
+                        ? { opacity: 1 }
+                        : { opacity: 1, transform: "translateY(0px)" },
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: [0.23, 1, 0.32, 1] as const,
+                    }}
+                    className="mt-4 flex flex-col gap-2"
+                  >
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white"
+                    >
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-sm">
+                        {(user.user_metadata?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
+                      </span>
+                      My Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setMobileOpen(false);
+                      }}
+                      className="rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-white/60"
+                    >
+                      Log Out
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    variants={{
+                      hidden: shouldReduceMotion
+                        ? { opacity: 0 }
+                        : { opacity: 0, transform: "translateY(10px)" },
+                      show: shouldReduceMotion
+                        ? { opacity: 1 }
+                        : { opacity: 1, transform: "translateY(0px)" },
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: [0.23, 1, 0.32, 1] as const,
+                    }}
+                    className="mt-4 flex gap-3"
+                  >
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex flex-1 items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10 active:scale-[0.98]"
+                    >
+                      Log In
+                    </Link>
+                    <Link
+                      href="/signup"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex flex-1 items-center justify-center rounded-full bg-white px-5 py-3.5 text-sm font-bold text-[#0F172A] shadow-lg transition-colors hover:bg-white/90 active:scale-[0.98]"
+                    >
+                      Sign Up
+                    </Link>
+                  </motion.div>
+                )}
+
+                {/* Footer hint — swipe to close */}
+                <motion.p
+                  variants={{
+                    hidden: { opacity: 0 },
+                    show: { opacity: 1 },
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    delay: shouldReduceMotion ? 0 : 0.4,
+                  }}
+                  className="mt-8 text-center text-[11px] font-medium uppercase tracking-widest text-white/25"
+                >
+                  Swipe right to close
+                </motion.p>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }
