@@ -7,6 +7,7 @@ import SummerTreksRail from "@/components/SummerTreksRail";
 import SnowSchool from "@/components/SnowSchool";
 import TheRange from "@/components/TheRange";
 import StoriesTestimonials from "@/components/StoriesTestimonials";
+import HimalayanMap from "@/components/HimalayanMap";
 import CallToActionV2 from "@/components/CallToActionV2";
 import FooterV2 from "@/components/FooterV2";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -34,6 +35,7 @@ export default function Home() {
           <SnowSchool />
           <TheRange />
           <StoriesTestimonials />
+          <HimalayanMap />
           <FAQV2 />
           <CallToActionV2 />
           <FooterV2 />
