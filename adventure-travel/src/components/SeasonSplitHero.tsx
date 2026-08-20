@@ -14,14 +14,14 @@ const SUMMER_SLIDES: Slide[] = [
   { type: "image", src: "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&q=80", alt: "Snow-capped Himalayan peaks trek view" },
 ];
 
-// Winter — snowboarding pics + vids
+// Winter — snowboarding videos only (right side = videos)
 const WINTER_SLIDES: Slide[] = [
-  { type: "image", src: "https://images.pexels.com/photos/848591/pexels-photo-848591.jpeg?w=1920&q=80", alt: "Skier carving fresh powder at Auli" },
   { type: "video", src: "/assets/snowboarding/IMG_5201.MOV", alt: "Snowboarding run at Auli — video" },
-  { type: "image", src: "/assets/snowboarding/IMG_5472.jpg", alt: "Snowboarder on Auli slope" },
   { type: "video", src: "/assets/snowboarding/IMG_4222.MOV", alt: "Snowboarding powder spray — video" },
-  { type: "image", src: "/assets/snowboarding/IMG_4063.jpg", alt: "Snowboarder carving turn" },
-  { type: "image", src: "https://images.pexels.com/photos/6575867/pexels-photo-6575867.jpeg?w=1920&q=80", alt: "Snowboarder in mountain snow" },
+  { type: "video", src: "/assets/snowboarding/IMG_5198.MOV", alt: "Snowboarder carving — video" },
+  { type: "video", src: "/assets/snowboarding/IMG_5272.MOV", alt: "Auli snow run — video" },
+  { type: "video", src: "/assets/snowboarding/IMG_5220.MOV", alt: "Snowboarding descent — video" },
+  { type: "video", src: "/assets/snowboarding/IMG_1477.MOV", alt: "Mountain snowboarding — video" },
 ];
 
 function CarouselLayer({
@@ -179,7 +179,7 @@ export default function SeasonSplitHero() {
     >
       {/* Summer base layer — carousel */}
       <div className="absolute inset-0">
-        <CarouselLayer slides={SUMMER_SLIDES} intervalMs={6000} gradient="bg-gradient-to-t from-emerald-950/70 via-emerald-950/15 to-transparent" reduceMotion={reduceMotion} paused={paused} fetchPriorityFirst />
+        <CarouselLayer slides={SUMMER_SLIDES} intervalMs={3000} gradient="bg-gradient-to-t from-emerald-950/70 via-emerald-950/15 to-transparent" reduceMotion={reduceMotion} paused={paused} fetchPriorityFirst />
       </div>
 
       {/* Winter layer — carousel, clipped */}
