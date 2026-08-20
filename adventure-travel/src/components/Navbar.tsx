@@ -117,14 +117,15 @@ export default function Navbar() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "h-16" : "h-20"}`}>
-            <Link href="/" className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-xl bg-gradient-accent flex items-center justify-center">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="h-10 w-10 rounded-xl bg-gradient-accent flex items-center justify-center shadow-md shadow-emerald-500/20 transition-transform group-hover:scale-105">
                 <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span className="font-heading text-lg sm:text-xl font-bold text-white">
-                Expedition Happiness Treks
+              <span className="flex flex-col leading-none">
+                <span className="font-display text-[10px] font-bold uppercase tracking-[0.22em] text-white/60">Expedition</span>
+                <span className="font-display text-lg sm:text-[22px] font-[800] tracking-[-0.02em] text-white">Happiness Treks</span>
               </span>
             </Link>
 
@@ -135,8 +136,8 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   aria-current={isActive(link.href) ? "page" : undefined}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors group ${
-                    isActive(link.href) ? "text-white" : "text-white/80 hover:text-white"
+                  className={`font-nav relative px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors group ${
+                    isActive(link.href) ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -156,8 +157,8 @@ export default function Navbar() {
                   onClick={() => setActivityOpen(!activityOpen)}
                   aria-expanded={activityOpen}
                   aria-haspopup="true"
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors group flex items-center gap-1 ${
-                    isActive("/activities") ? "text-white" : "text-white/80 hover:text-white"
+                  className={`font-nav relative flex items-center gap-1 px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors group ${
+                    isActive("/activities") ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
                   Activities
@@ -207,8 +208,8 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 aria-current={isActive("/contact") ? "page" : undefined}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors group ${
-                  isActive("/contact") ? "text-white" : "text-white/80 hover:text-white"
+                className={`font-nav relative px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors group ${
+                  isActive("/contact") ? "text-white" : "text-white/70 hover:text-white"
                 }`}
               >
                 Contact
@@ -226,19 +227,19 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-4">
               {user ? (
                 <>
-                  <Link href="/dashboard" className={`text-sm font-medium transition-colors ${scrolled ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"}`}>
+                  <Link href="/dashboard" className="font-nav text-[13px] font-medium tracking-wide text-white/70 hover:text-white transition-colors">
                     {user.user_metadata?.full_name?.split(" ")[0] || user.email}
                   </Link>
-                  <button onClick={handleLogout} className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+                  <button onClick={handleLogout} className="font-nav text-[13px] font-medium tracking-wide text-white/50 hover:text-white transition-colors">
                     Log Out
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className={`text-sm font-medium transition-colors ${scrolled ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"}`}>
+                  <Link href="/login" className="font-nav text-[13px] font-semibold tracking-wide text-white/70 hover:text-white transition-colors">
                     Log In
                   </Link>
-                  <Link href="/signup" className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors">
+                  <Link href="/signup" className="font-nav rounded-full bg-white px-5 py-2.5 text-[13px] font-bold tracking-wide text-[#0F172A] transition-all hover:bg-white/90 hover:shadow-lg active:scale-[0.98]">
                     Sign Up
                   </Link>
                 </>

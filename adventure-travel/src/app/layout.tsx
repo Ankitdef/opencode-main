@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins, Inter } from "next/font/google";
+import { Poppins, Inter, Fraunces, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
@@ -16,6 +16,20 @@ const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-nav",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -142,7 +156,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${poppins.variable} ${inter.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${poppins.variable} ${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable}`}>
       <head>
         <meta name="X-Content-Type-Options" content="nosniff" />
         <meta name="X-Frame-Options" content="DENY" />
