@@ -179,7 +179,7 @@ export default function SeasonSplitHero() {
     >
       {/* Summer base layer — carousel */}
       <div className="absolute inset-0">
-        <CarouselLayer slides={SUMMER_SLIDES} intervalMs={3800} gradient="bg-gradient-to-t from-emerald-950/70 via-emerald-950/15 to-transparent" reduceMotion={reduceMotion} paused={paused} fetchPriorityFirst />
+        <CarouselLayer slides={SUMMER_SLIDES} intervalMs={6000} gradient="bg-gradient-to-t from-emerald-950/70 via-emerald-950/15 to-transparent" reduceMotion={reduceMotion} paused={paused} fetchPriorityFirst />
       </div>
 
       {/* Winter layer — carousel, clipped */}
@@ -188,7 +188,7 @@ export default function SeasonSplitHero() {
         style={{ clipPath }}
         aria-hidden={reduceMotion ? undefined : true}
       >
-        <CarouselLayer slides={WINTER_SLIDES} intervalMs={4200} gradient="bg-gradient-to-t from-sky-950/70 via-sky-950/15 to-transparent" reduceMotion={reduceMotion} paused={paused} />
+        <CarouselLayer slides={WINTER_SLIDES} intervalMs={6000} gradient="bg-gradient-to-t from-sky-950/70 via-sky-950/15 to-transparent" reduceMotion={reduceMotion} paused={paused} />
       </div>
 
       {/* Divider */}
