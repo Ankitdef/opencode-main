@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeUp, StaggerContainer, StaggerItem } from "./MotionWrapper";
 import SmartImage from "./SmartImage";
-import { LogoMark } from "./Logo";
+
 
 const quickLinks = [
   { label: "All Treks", href: "/treks" },
@@ -113,7 +113,8 @@ export default function FooterV2() {
           {/* Brand */}
           <StaggerItem className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <LogoMark variant="light" size={40} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/logo-gem.png" alt="Expedition Happiness Treks" width={40} height={40} className="h-10 w-10 rounded-full object-cover bg-white" />
               <span className="flex flex-col leading-none">
                 <span className="font-nav text-[10px] font-bold uppercase tracking-[0.22em] text-white/60">Expedition</span>
                 <span className="font-display text-[18px] font-[800] tracking-[-0.02em] text-white">Happiness Treks</span>
