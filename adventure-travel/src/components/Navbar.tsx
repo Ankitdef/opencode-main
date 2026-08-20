@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { LogoMark } from "./Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 
@@ -119,7 +118,8 @@ export default function Navbar() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "h-16" : "h-20"}`}>
             <Link href="/" className="flex items-center gap-3 group">
-              <LogoMark variant="light" size={40} className="transition-transform group-hover:scale-[1.02]" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/logo-gem.png" alt="Expedition Happiness Treks" width={44} height={44} className="h-11 w-11 rounded-full object-cover shadow-md shadow-black/20 transition-transform group-hover:scale-[1.02] bg-white" />
               <span className="flex flex-col leading-none">
                 <span className="font-display text-[10px] font-bold uppercase tracking-[0.22em] text-white/60">Expedition</span>
                 <span className="font-display text-lg sm:text-[22px] font-[800] tracking-[-0.02em] text-white">Happiness Treks</span>
