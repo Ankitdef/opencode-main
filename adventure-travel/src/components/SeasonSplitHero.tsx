@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion, useScroll } from "framer-motion";
 
@@ -49,23 +49,24 @@ function CarouselLayer({
 
   return (
     <>
-      <AnimatePresence initial={false}>
+      <AnimatePresence initial={false} mode="popLayout">
         <motion.div
           key={idx}
-          initial={reduceMotion ? undefined : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={reduceMotion ? undefined : { opacity: 0 }}
-          transition={reduceMotion ? { duration: 0.2 } : { duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+          initial={reduceMotion ? undefined : { opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={reduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
+          transition={reduceMotion ? { duration: 0.2 } : { duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
           className="absolute inset-0"
         >
           {slides[idx].type === "video" ? (
             <video
+              key={slides[idx].src}
               src={slides[idx].src}
               autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               className="h-full w-full object-cover object-center"
               aria-label={slides[idx].alt}
             />
@@ -101,7 +102,7 @@ function CarouselLayer({
 export default function SeasonSplitHero() {
   const reduceMotion = useReducedMotion();
   const [pos, setPos] = useState(50);
-  const [paused, setPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
@@ -110,8 +111,7 @@ export default function SeasonSplitHero() {
     offset: ["start start", "end start"],
   });
 
-  const onPause = useCallback(() => setPaused(true), []);
-  const onResume = useCallback(() => setPaused(false), []);
+  const paused = isDragging;
 
   // Pointer-drag divider (desktop)
   useEffect(() => {
@@ -125,6 +125,7 @@ export default function SeasonSplitHero() {
     };
     const onDown = (e: PointerEvent) => {
       draggingRef.current = true;
+      setIsDragging(true);
       el.setPointerCapture(e.pointerId);
       update(e.clientX);
     };
@@ -138,6 +139,7 @@ export default function SeasonSplitHero() {
     };
     const onUp = () => {
       draggingRef.current = false;
+      setIsDragging(false);
     };
     el.addEventListener("pointerdown", onDown);
     el.addEventListener("pointermove", onMove);
@@ -174,8 +176,6 @@ export default function SeasonSplitHero() {
     <section
       ref={heroRef}
       className="relative isolate min-h-[100svh] overflow-hidden bg-background"
-      onMouseEnter={onPause}
-      onMouseLeave={onResume}
     >
       {/* Summer base layer — carousel */}
       <div className="absolute inset-0">
