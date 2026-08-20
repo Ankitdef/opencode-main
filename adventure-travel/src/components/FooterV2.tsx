@@ -57,9 +57,35 @@ const legalLinks = [
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function MobileAccordion({ title, children, id, openId, setOpenId }: { title: string; children: React.ReactNode; id: string; openId: string | null; setOpenId: (v: string | null) => void }) {
+  const open = openId === id;
+  return (
+    <div className="border-b border-white/10">
+      <button
+        onClick={() => setOpenId(open ? null : id)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between py-3.5 text-left"
+      >
+        <span className="font-nav text-[13px] font-semibold uppercase tracking-[0.08em] text-white/90">{title}</span>
+        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }} className="text-white/40">
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+        </motion.span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }} className="overflow-hidden">
+            <div className="pb-4">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function FooterV2() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
   const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,8 +106,9 @@ export default function FooterV2() {
         </svg>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-24 pb-8">
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8" staggerDelay={0.05}>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-12 md:pt-24 pb-6 md:pb-8">
+        {/* Desktop grid */}
+        <StaggerContainer className="hidden md:grid md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8" staggerDelay={0.05}>
           {/* Brand */}
           <StaggerItem className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
@@ -308,6 +335,68 @@ export default function FooterV2() {
             </form>
           </StaggerItem>
         </StaggerContainer>
+
+        {/* Mobile — compact accordion */}
+        <div className="md:hidden">
+          {/* Brand row — always visible, condensed */}
+          <div className="flex items-center gap-3 pb-5">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shrink-0">
+              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 21l7.5-7.5L15 18l6-9 4.5 3L18 21H3z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-display text-[15px] font-[800] tracking-[-0.02em] text-white leading-none">Happiness Treks</p>
+              <p className="font-nav text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">Himalayan Expeditions · Est. 2010</p>
+            </div>
+          </div>
+          <p className="text-sm leading-relaxed text-white/50 pb-4">Your trusted partner for epic Himalayan treks.</p>
+          <div className="flex gap-2 pb-5">
+            {socials.map((social) => (
+              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="h-9 w-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden><path d={social.icon} /></svg>
+              </a>
+            ))}
+          </div>
+
+          <MobileAccordion title="Quick Links" id="quick" openId={openSection} setOpenId={setOpenSection}>
+            <ul className="grid grid-cols-2 gap-2">
+              {quickLinks.map((l) => (
+                <li key={l.label}><Link href={l.href} className="text-sm text-white/60 hover:text-white transition-colors">{l.label}</Link></li>
+              ))}
+            </ul>
+          </MobileAccordion>
+          <MobileAccordion title="Popular Treks" id="treks" openId={openSection} setOpenId={setOpenSection}>
+            <ul className="space-y-2.5">
+              {popularTreks.map((t) => (
+                <li key={t.name}><Link href={t.href} className="text-sm text-white/60 hover:text-white transition-colors">{t.name}</Link></li>
+              ))}
+            </ul>
+          </MobileAccordion>
+          <MobileAccordion title="Destinations" id="dest" openId={openSection} setOpenId={setOpenSection}>
+            <ul className="space-y-2">
+              {destinations.map((d) => (
+                <li key={d}><Link href="/destinations" className="text-sm text-white/60 hover:text-white transition-colors">{d}</Link></li>
+              ))}
+            </ul>
+            <div className="grid grid-cols-3 gap-1.5 mt-4">
+              {instagramImages.slice(0, 3).map((img, i) => (
+                <a key={i} href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="rounded-lg overflow-hidden aspect-square"><SmartImage src={img} alt="" className="w-full h-full object-cover" /></a>
+              ))}
+            </div>
+          </MobileAccordion>
+          <MobileAccordion title="Contact & Newsletter" id="contact" openId={openSection} setOpenId={setOpenSection}>
+            <div className="space-y-3 text-sm text-white/60">
+              <p>M3M Marina, Sec 68, Gurugram · Chamoli, Joshimath</p>
+              <a href="tel:+918650561564" className="block text-white/80">+91 86505 61564 · +91 78179 12062</a>
+              <a href="mailto:expeditionhappiness07@gmail.com" className="block text-white/60 text-xs break-all">expeditionhappiness07@gmail.com</a>
+              <form onSubmit={handleNewsletter} noValidate className="flex gap-2 pt-2">
+                <input value={email} onChange={(e) => { setEmail(e.target.value); if (status !== "idle") setStatus("idle"); }} placeholder="Your email" aria-label="Email" className={`flex-1 min-w-0 rounded-xl bg-white/5 border px-3 py-2.5 text-sm text-white placeholder-white/30 outline-none ${status === "error" ? "border-red-400/60" : "border-white/10"}`} />
+                <button type="submit" className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white">Join</button>
+              </form>
+            </div>
+          </MobileAccordion>
+        </div>
 
         {/* Bottom */}
         <FadeUp>
